@@ -153,7 +153,7 @@ export default function Landing() {
               className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6"
             >
               <span className="font-sans text-xs font-semibold text-[#3B2F3E] uppercase tracking-widest">
-                Youth Startup Weekend — YSWS
+                Hack Club presents
               </span>
             </motion.div>
 
