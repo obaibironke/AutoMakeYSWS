@@ -328,7 +328,7 @@ const integrationLogos = [
   { slug: "brevo",        name: "Brevo",          top: "81%", left: "71%", size: 56, rot: -6  },
 ];
 
-function IntegrationsSection({ dir }: { dir: number }) {
+function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -344,7 +344,8 @@ function IntegrationsSection({ dir }: { dir: number }) {
           position: "absolute",
           inset: "-10% 0",
           willChange: "transform",
-          transform: "translateZ(0)",
+          transform: `translateY(${logoY}px) translateZ(0)`,
+          transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
         {integrationLogos.map((item, i) => (
@@ -433,12 +434,24 @@ function IntegrationsSection({ dir }: { dir: number }) {
 
 const TOTAL = 6;
 const TRANSITION_MS = 900;
+const INTEG_SECTION = 2;
+const INTEG_HOLD = 3;
 
 export default function Landing() {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
   const transitioning = useRef(false);
   const touchStartY = useRef(0);
+  const intScrollCount = useRef(0);
+  const [integLogoY, setIntegLogoY] = useState(0);
+
+  /* Reset integration parallax when leaving that section */
+  useEffect(() => {
+    if (current !== INTEG_SECTION) {
+      intScrollCount.current = 0;
+      setIntegLogoY(0);
+    }
+  }, [current]);
 
   /* Mouse parallax motion values */
   const mouseX = useMotionValue(0);
@@ -472,7 +485,31 @@ export default function Landing() {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       if (Math.abs(e.deltaY) < 8) return;
-      go(e.deltaY > 0 ? current + 1 : current - 1);
+      if (transitioning.current) return;
+
+      const scrollDir = e.deltaY > 0 ? 1 : -1;
+
+      if (current === INTEG_SECTION) {
+        intScrollCount.current += 1;
+        /* Droplets move opposite to scroll direction */
+        setIntegLogoY((prev) =>
+          Math.max(-140, Math.min(140, prev + scrollDir * -60))
+        );
+
+        if (intScrollCount.current >= INTEG_HOLD) {
+          /* Enough holds — navigate away */
+          intScrollCount.current = 0;
+          transitioning.current = true;
+          setTimeout(() => { transitioning.current = false; }, TRANSITION_MS);
+          go(current + scrollDir);
+        } else {
+          /* Still holding — shorter lock so next scroll registers cleanly */
+          transitioning.current = true;
+          setTimeout(() => { transitioning.current = false; }, 480);
+        }
+      } else {
+        go(current + scrollDir);
+      }
     };
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
@@ -553,7 +590,7 @@ export default function Landing() {
           >
             {current === 0 && <HeroSection dir={dir} {...blobProps} />}
             {current === 1 && <HowItWorksSection dir={dir} />}
-            {current === 2 && <IntegrationsSection dir={dir} />}
+            {current === 2 && <IntegrationsSection dir={dir} logoY={integLogoY} />}
             {current === 3 && <ProjectsSection dir={dir} />}
             {current === 4 && <FaqSectionContent dir={dir} />}
             {current === 5 && <N8nVideoSection dir={dir} />}
