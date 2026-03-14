@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Automake brand colors */
+  --eucalyptus: #D1DCCF;
+  --midnight-plum: #3B2F3E;
+  --pencil-lead: #424242;
+
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+  --opaque-button-border-intensity: -8;
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
+
+  /* HSL values for the theme system */
+  --background: 95 15% 90%; /* eucalyptus tinted */
+  --foreground: 280 15% 21%; /* midnight plum */
+  --border: 95 15% 80%;
+  --card: 0 0% 100%;
+  --card-foreground: 280 15% 21%;
+  --card-border: 95 15% 80%;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 280 15% 21%;
+  --sidebar-border: 95 15% 80%;
+  --sidebar-primary: 280 15% 21%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 95 15% 85%;
+  --sidebar-accent-foreground: 280 15% 21%;
+  --sidebar-ring: 280 15% 21%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 280 15% 21%;
+  --popover-border: 95 15% 80%;
+  --primary: 280 15% 21%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 95 15% 85%;
+  --secondary-foreground: 280 15% 21%;
+  --muted: 95 15% 88%;
+  --muted-foreground: 0 0% 26%;
+  --accent: 95 15% 82%;
+  --accent-foreground: 280 15% 21%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 95 15% 75%;
+  --ring: 280 15% 21%;
+  --chart-1: 280 15% 21%;
+  --chart-2: 95 15% 55%;
+  --chart-3: 0 0% 26%;
+  --chart-4: 280 30% 40%;
+  --chart-5: 95 25% 70%;
+
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'DM Serif Display', serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: .5rem;
+
+  --shadow-2xs: 0px 1px 2px 0px rgba(59, 47, 62, 0.06);
+  --shadow-xs: 0px 1px 3px 0px rgba(59, 47, 62, 0.08);
+  --shadow-sm: 0px 1px 3px 0px rgba(59, 47, 62, 0.10), 0px 1px 2px -1px rgba(59, 47, 62, 0.06);
+  --shadow: 0px 2px 4px 0px rgba(59, 47, 62, 0.10), 0px 1px 2px -1px rgba(59, 47, 62, 0.06);
+  --shadow-md: 0px 4px 6px -1px rgba(59, 47, 62, 0.10), 0px 2px 4px -2px rgba(59, 47, 62, 0.06);
+  --shadow-lg: 0px 10px 15px -3px rgba(59, 47, 62, 0.10), 0px 4px 6px -4px rgba(59, 47, 62, 0.06);
+  --shadow-xl: 0px 20px 25px -5px rgba(59, 47, 62, 0.12), 0px 8px 10px -6px rgba(59, 47, 62, 0.06);
+  --shadow-2xl: 0px 25px 50px -12px rgba(59, 47, 62, 0.18);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-white text-foreground;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Serif Display', serif;
+  }
+}
+
+@layer utilities {
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+}

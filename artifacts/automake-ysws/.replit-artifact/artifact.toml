@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Automake YSWS"
+version = "1.0.0"
+id = "artifacts/automake-ysws"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 20138
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/automake-ysws run dev"
+
+[services.env]
+PORT = "20138"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/automake-ysws", "run", "build"]
+publicDir = "artifacts/automake-ysws/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

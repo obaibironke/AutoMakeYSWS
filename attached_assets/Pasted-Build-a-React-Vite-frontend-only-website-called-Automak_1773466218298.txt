@@ -1,0 +1,267 @@
+Build a React + Vite frontend-only website called **Automake YSWS** from scratch. No backend, no API, no auth, no database, no monorepo, no workspaces.
+
+---
+
+## LAYOUT & DESIGN INSPIRATION
+
+Model the layout, feel, and structure closely after https://blueprint.hackclub.com. Specifically:
+- Big, bold hero section with a large program logo/title, tagline, and CTA buttons
+- "Here's How It Works" section with icon + step cards in a horizontal row
+- A scrolling marquee/carousel strip showing participant project cards (name, age, location style)
+- A "Join our community" style section with image + text side by side
+- A "Already a pro?" or showcase section with a grid of project cards linking to GitHub/details
+- An FAQ accordion section at the bottom
+- A rich footer with multi-column links, program description, and nonprofit-style copy
+- Sticky navbar at top with logo left, nav links right
+- Full-width alternating sections with generous padding
+- Playful but clean — uses big images, bold type, flag/divider SVG decorations between sections
+
+Adapt all of this to Automake YSWS content and branding (not Hack Club branding).
+
+---
+
+## PROJECT STRUCTURE
+automake-ysws/
+├── client/
+│   ├── index.html
+│   └── src/
+│       ├── main.tsx              ← NO React.StrictMode, just renders <App />
+│       ├── App.tsx               ← React Router routes
+│       ├── index.css             ← Global styles, CSS variables, Google Fonts import
+│       ├── components/
+│       │   ├── Navbar.tsx
+│       │   ├── Footer.tsx
+│       │   ├── ProjectCard.tsx
+│       │   ├── GuideCard.tsx
+│       │   ├── ShopItemCard.tsx
+│       │   └── MarqueeStrip.tsx
+│       ├── pages/
+│       │   ├── Landing.tsx
+│       │   ├── Showcase.tsx
+│       │   ├── ProjectDetail.tsx
+│       │   ├── Guides.tsx
+│       │   ├── GuideDetail.tsx
+│       │   ├── Shop.tsx
+│       │   └── NotFound.tsx
+│       └── data/
+│           ├── projects.ts
+│           ├── guides.ts
+│           └── shopItems.ts
+├── vite.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+├── package.json
+└── vercel.json
+
+---
+
+## VITE CONFIG
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  root: "client",
+  build: {
+    outDir: "../dist",
+    emptyOutDir: true,
+  },
+  define: {
+    "global.React": "React",
+  },
+});
+```
+
+---
+
+## VERCEL CONFIG
+
+`vercel.json` at root:
+```json
+{
+  "buildCommand": "vite build",
+  "outputDirectory": "dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
+
+---
+
+## PACKAGE.JSON
+```json
+{
+  "name": "automake-ysws",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4"
+  }
+}
+```
+
+No bcrypt, no express, no drizzle, no sessions, no workspace packages.
+
+---
+
+## TAILWIND CONFIG
+```ts
+content: ["./client/index.html", "./client/src/**/*.{ts,tsx}"]
+```
+
+---
+
+## BRANDING
+
+**CSS variables in `client/src/index.css`:**
+```css
+:root {
+  --eucalyptus: #D1DCCF;
+  --midnight-plum: #3B2F3E;
+  --pencil-lead: #424242;
+}
+```
+
+**Google Fonts** (import in index.css):
+- `DM Serif Display` — all headings
+- `DM Sans` — all body text
+
+**Design rules:**
+- Hero and alternating sections: Eucalyptus (`#D1DCCF`) background
+- Headings, all buttons, CTAs, logo text: Midnight Plum (`#3B2F3E`)
+- Body text, borders, card details: Pencil Lead Grey (`#424242`)
+- All buttons: Midnight Plum bg, white text, rounded-lg, px-6 py-3
+- Cards: white bg, soft shadow, Midnight Plum border + lift on hover
+- Sections alternate: Eucalyptus → white → Eucalyptus → white
+- Decorative SVG dividers between major sections (wavy or flag-style, like blueprint.hackclub.com)
+- Sticky navbar, full-width sections, generous vertical padding
+- Fully mobile responsive — 1 col mobile → 2 col tablet → 3 col desktop
+
+---
+
+## PAGES & CONTENT
+
+### Landing (`/`)
+
+**Navbar** — sticky, white bg:
+- Left: "Automake" logo text in Midnight Plum, DM Serif Display
+- Right: nav links — Showcase, Guides, Shop — in DM Sans
+- Mobile: hamburger menu
+
+**Hero section** (Eucalyptus bg, centered):
+- Large program title: "Automake YSWS"
+- Tagline: "Build automation projects. Earn currency. Unlock rewards."
+- Two CTA buttons: "Explore Projects" → /showcase, "Browse Guides" → /guides
+- Large illustration or placeholder image below (use a colorful SVG placeholder)
+
+**How It Works** (white bg):
+- Section heading: "Here's How It Works"
+- 4 horizontal step cards with icon + label:
+  1. 🔧 Build an automation project
+  2. 📋 Log your hours & submit
+  3. ✅ Get reviewed & approved
+  4. 🪙 Earn currency & shop rewards
+- CTA below: "Follow the Guides →" linking to /guides
+
+**Marquee strip** (Midnight Plum bg):
+- Continuously scrolling horizontal strip of participant cards (CSS animation, no JS library)
+- Each card: name, age, location — e.g. "Amara · 16 · Nigeria", "Jake · 15 · USA"
+- Hardcode ~12 participant entries, loop them
+
+**Featured Projects** (Eucalyptus bg):
+- Heading: "Projects shipped so far"
+- Grid of 3 project cards pulled from projects.ts
+- "See all projects →" link to /showcase
+
+**Join the Community** (white bg, image left + text right):
+- Heading: "Join a community of young builders"
+- Body: "Automake YSWS is a program for teens who want to build real automation projects and get rewarded for it. Submit your work, earn currency, and unlock tools, gadgets, and more."
+- CTA button: "Get Started" → /guides
+
+**FAQ accordion** (Eucalyptus bg):
+- Heading: "FAQ"
+- 6 hardcoded questions with expand/collapse toggle (pure React state, no library):
+  1. Who can participate? — Any teen aged 13–18 anywhere in the world.
+  2. How do I earn currency? — Submit an automation project, log your build hours, and get approved by an organizer.
+  3. What can I buy in the shop? — Automation tools, tech gadgets, fun items, learning resources, and high-tier milestone rewards.
+  4. Do I need prior experience? — Not at all! Starter guides are available to help you build your first project.
+  5. How many projects can I submit? — As many as you like! Each approved project earns you currency.
+  6. When does the program end? — Check back for updates — the program runs on a rolling basis.
+
+**Footer** (Midnight Plum bg, white text, multi-column):
+- Left: "Automake YSWS" logo + 1-line description
+- Columns: Program links (Showcase, Guides, Shop), Resources (FAQ, About), Community
+- Bottom bar: "A program for teen builders."
+
+---
+
+### Showcase (`/showcase`)
+
+- Page hero: heading "Project Showcase", subheading
+- Filter pills: All / Automation / AI / IoT / API / Other
+- Grid of ~8 hardcoded project cards from projects.ts
+- Each card: title, creator, category badge, description, hours logged (🕐), "View Project →" button
+
+### Project Detail (`/projects/:id`)
+
+- Full detail: title, creator, category, description, hours, concepts learned
+- Screenshot placeholder (styled gray box with label)
+- Video URL placeholder
+- Full documentation text
+- "← Back to Showcase" link
+
+### Guides (`/guides`)
+
+- Page hero: heading "Starter Guides", subheading explaining guides are starting points to remix
+- Filter pills: All / Beginner / Intermediate / Advanced
+- Grid of ~6 guide cards from guides.ts: title, difficulty badge (green/yellow/orange), description, "View Guide →"
+
+### Guide Detail (`/guides/:id`)
+
+- Title, difficulty badge
+- Intro paragraph
+- Numbered step-by-step instructions
+- "Ways to Make It Your Own" section — bullet list of modification prompts
+- Example project cards at bottom
+
+### Shop (`/shop`)
+
+- Page hero: heading "Shop", note: "Earn currency by submitting approved projects, then spend it here"
+- Category filter pills: All / Automation Tools / Tech & Gadgets / Fun & Quirky / Learning / Milestone Rewards
+- Grid of item cards from shopItems.ts: name, category badge, description, cost (🪙 + number in bold), greyed-out "Locked" button (visual only, not interactive)
+
+### 404 (`*`)
+
+- Friendly message, link back home
+
+---
+
+## HARDCODED DATA (`client/src/data/`)
+
+**projects.ts** — 8 projects, each with: id, title, creator, age, location, category, description, hours, concepts, documentation
+
+**guides.ts** — 6 guides, each with: id, title, difficulty (Beginner/Intermediate/Advanced), description, steps (array of strings), modifications (array of strings)
+
+**shopItems.ts** — all items with: id, name, category, description, cost
+Categories and items:
+- Automation Tools: Make.com subscription (150), Airtable credits (100), WhatsApp Business API credits (200), AI credits pack (120), Paid automation course (180)
+- Tech & Gadgets: AirPods (800), Mechanical keyboard (600), Mouse (350), Chromebook (2000), iPad (2500), Apple Pencil (400), Smartwatch (1200)
+- Fun & Quirky: Plushie (80), Sticker pack (40), Signed photo (60), Hot chocolate kit (50), Mystery object (100)
+- Learning: Book of your choice (120), PICO-8 license (200), IoT starter course (250), AI/API course bundle (300)
+- Milestone Rewards: Framework laptop (5000), MacBook (7000), VR headset (4000), Camera kit (3500), Travel stipend (6000)
