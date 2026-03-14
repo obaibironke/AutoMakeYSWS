@@ -1,14 +1,6 @@
 import { Link } from "wouter";
 import type { Project } from "../data/projects";
 
-const categoryColors: Record<Project["category"], string> = {
-  Automation: "bg-purple-100 text-purple-800",
-  AI: "bg-blue-100 text-blue-800",
-  IoT: "bg-green-100 text-green-800",
-  API: "bg-orange-100 text-orange-800",
-  Other: "bg-gray-100 text-gray-800",
-};
-
 interface ProjectCardProps {
   project: Project;
 }
@@ -16,15 +8,10 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="bg-white border border-[#D1DCCF] rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col">
-      <div className="flex items-start justify-between gap-3 mb-3">
+      <div className="mb-3">
         <h3 className="font-serif text-lg font-bold text-[#3B2F3E] leading-tight">
           {project.title}
         </h3>
-        <span
-          className={`font-sans text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${categoryColors[project.category]}`}
-        >
-          {project.category}
-        </span>
       </div>
 
       <p className="font-sans text-sm text-[#424242] leading-relaxed flex-1 mb-4">

@@ -25,18 +25,6 @@ export const projects: Project[] = [
     documentation: "This project automates email handling by connecting Gmail to Make.com. Incoming emails are parsed, categorized by keywords, and routed to different response templates. The system handles support queries, scheduling requests, and newsletter signups automatically.\n\nThe workflow was built using Make.com's drag-and-drop interface with custom filters and multi-branch routing. Each branch triggers a different Gmail template and logs the interaction to a connected Airtable database for tracking."
   },
   {
-    id: "2",
-    title: "Plant Watering Robot",
-    creator: "Jake M.",
-    age: 15,
-    location: "USA",
-    category: "IoT",
-    description: "An Arduino-based system that monitors soil moisture and automatically waters plants when levels drop below a threshold.",
-    hours: 18,
-    concepts: ["Arduino", "Sensors", "C++", "Automation Logic"],
-    documentation: "Built with an Arduino Uno and a soil moisture sensor, this project reads soil levels every 30 minutes and activates a small water pump when the moisture drops below 30%. A green LED indicates watering in progress.\n\nThe code was written in C++ using the Arduino IDE. A small relay module controls the pump power, and all readings are logged to a serial monitor for debugging."
-  },
-  {
     id: "3",
     title: "Slack Daily Digest Bot",
     creator: "Priya K.",
@@ -71,18 +59,6 @@ export const projects: Project[] = [
     hours: 8,
     concepts: ["Make.com", "Google Sheets", "Social APIs", "Scheduling"],
     documentation: "Using Make.com, I connected a Google Sheets content calendar to Twitter, Instagram, and LinkedIn APIs. The automation checks the sheet for posts scheduled for the current day and publishes them at the right time.\n\nThe project handles image uploads, character limits per platform, and tracks published status back in the sheet."
-  },
-  {
-    id: "6",
-    title: "Home Security Camera Alert",
-    creator: "Kwame A.",
-    age: 15,
-    location: "Ghana",
-    category: "IoT",
-    description: "A Raspberry Pi camera system that detects motion and sends WhatsApp alerts with a photo snapshot.",
-    hours: 20,
-    concepts: ["Raspberry Pi", "Python", "Motion Detection", "WhatsApp API"],
-    documentation: "This project uses a Raspberry Pi with a camera module and Python's OpenCV library to detect motion. When movement is detected, it captures a photo and sends it via the WhatsApp Business API to a specified number.\n\nI set up the motion detection algorithm to only trigger during certain hours and added a cooldown to avoid spam alerts."
   },
   {
     id: "7",

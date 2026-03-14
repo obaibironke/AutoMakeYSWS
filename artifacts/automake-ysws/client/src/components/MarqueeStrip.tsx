@@ -1,13 +1,5 @@
 import { projects } from "../data/projects";
 
-const categoryEmoji: Record<string, string> = {
-  Automation: "⚙️",
-  AI: "🤖",
-  IoT: "📡",
-  API: "🔗",
-  Other: "✨",
-};
-
 export default function MarqueeStrip() {
   const doubled = [...projects, ...projects];
 
@@ -23,14 +15,10 @@ export default function MarqueeStrip() {
         {doubled.map((p, i) => (
           <div
             key={i}
-            className="bg-[#D1DCCF]/40 border border-[#3B2F3E]/10 rounded-full px-5 py-2.5 shrink-0 flex items-center gap-2"
+            className="bg-[#D1DCCF]/40 border border-[#3B2F3E]/10 rounded-full px-5 py-2.5 shrink-0 flex items-center"
           >
-            <span className="text-sm">{categoryEmoji[p.category]}</span>
             <span className="font-sans text-[#3B2F3E]/70 font-medium text-sm whitespace-nowrap">
               {p.title}
-            </span>
-            <span className="font-sans text-[#3B2F3E]/30 text-xs whitespace-nowrap">
-              {p.category}
             </span>
           </div>
         ))}
