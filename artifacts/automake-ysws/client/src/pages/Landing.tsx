@@ -105,7 +105,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* ─── Section content variants (parallax offset vs container) */
+/* ─── Section content variants ────────────────────────────── */
 
 const contentVariants = {
   enter: (d: number) => ({ y: d > 0 ? 90 : -90, opacity: 0 }),
@@ -187,7 +187,7 @@ function HeroSection({
         }}
       />
 
-      {/* Content — offset from container for parallax feel */}
+      {/* Content */}
       <motion.div
         className="relative z-10 max-w-5xl mx-auto px-6"
         custom={dir}
@@ -196,7 +196,7 @@ function HeroSection({
         animate="center"
         exit="exit"
       >
-        {/* Sticker badges — positioned in corners away from the heading */}
+        {/* Sticker badges */}
         <motion.div
           initial={{ opacity: 0, rotate: 8, scale: 0.8 }}
           animate={{ opacity: 1, rotate: 12, scale: 1 }}
@@ -470,7 +470,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
                   border: "2px solid #0F1923",
                 }}
               >
-                {/* Watermark number */}
                 <div
                   style={{
                     position: "absolute",
@@ -632,131 +631,26 @@ const integrationLogos = [
   },
   { slug: "notion", name: "Notion", top: "5%", left: "40%", size: 64, rot: 3 },
   { slug: "github", name: "GitHub", top: "7%", left: "70%", size: 56, rot: -6 },
-  {
-    slug: "huggingface",
-    name: "Hugging Face",
-    top: "19%",
-    left: "3%",
-    size: 72,
-    rot: 5,
-  },
-  {
-    slug: "discord",
-    name: "Discord",
-    top: "17%",
-    left: "27%",
-    size: 56,
-    rot: -3,
-  },
-  {
-    slug: "airtable",
-    name: "Airtable",
-    top: "21%",
-    left: "57%",
-    size: 64,
-    rot: 7,
-  },
-  {
-    slug: "cloudflare",
-    name: "Cloudflare",
-    top: "18%",
-    left: "82%",
-    size: 56,
-    rot: -5,
-  },
+  { slug: "huggingface", name: "Hugging Face", top: "19%", left: "3%", size: 72, rot: 5 },
+  { slug: "discord", name: "Discord", top: "17%", left: "27%", size: 56, rot: -3 },
+  { slug: "airtable", name: "Airtable", top: "21%", left: "57%", size: 64, rot: 7 },
+  { slug: "cloudflare", name: "Cloudflare", top: "18%", left: "82%", size: 56, rot: -5 },
   { slug: "google", name: "Gemini", top: "33%", left: "16%", size: 64, rot: 4 },
-  {
-    slug: "whatsapp",
-    name: "WhatsApp",
-    top: "31%",
-    left: "44%",
-    size: 56,
-    rot: -7,
-  },
+  { slug: "whatsapp", name: "WhatsApp", top: "31%", left: "44%", size: 56, rot: -7 },
   { slug: "meta", name: "Meta", top: "35%", left: "68%", size: 72, rot: 6 },
-  {
-    slug: "anthropic",
-    name: "Claude",
-    top: "47%",
-    left: "7%",
-    size: 56,
-    rot: -3,
-  },
+  { slug: "anthropic", name: "Claude", top: "47%", left: "7%", size: 56, rot: -3 },
   { slug: "gmail", name: "Gmail", top: "45%", left: "31%", size: 64, rot: 5 },
-  {
-    slug: "mailchimp",
-    name: "Mailchimp",
-    top: "49%",
-    left: "54%",
-    size: 56,
-    rot: -6,
-  },
-  {
-    slug: "supabase",
-    name: "Supabase",
-    top: "45%",
-    left: "79%",
-    size: 64,
-    rot: 4,
-  },
-  {
-    slug: "facebook",
-    name: "Facebook",
-    top: "59%",
-    left: "13%",
-    size: 56,
-    rot: 7,
-  },
-  {
-    slug: "googledrive",
-    name: "Google Drive",
-    top: "61%",
-    left: "39%",
-    size: 64,
-    rot: -4,
-  },
+  { slug: "mailchimp", name: "Mailchimp", top: "49%", left: "54%", size: 56, rot: -6 },
+  { slug: "supabase", name: "Supabase", top: "45%", left: "79%", size: 64, rot: 4 },
+  { slug: "facebook", name: "Facebook", top: "59%", left: "13%", size: 56, rot: 7 },
+  { slug: "googledrive", name: "Google Drive", top: "61%", left: "39%", size: 64, rot: -4 },
   { slug: "vonage", name: "Vonage", top: "57%", left: "64%", size: 56, rot: 5 },
-  {
-    slug: "instagram",
-    name: "Instagram",
-    top: "71%",
-    left: "4%",
-    size: 72,
-    rot: -5,
-  },
-  {
-    slug: "googlesheets",
-    name: "Google Sheets",
-    top: "69%",
-    left: "27%",
-    size: 56,
-    rot: 3,
-  },
-  {
-    slug: "clickup",
-    name: "ClickUp",
-    top: "73%",
-    left: "51%",
-    size: 64,
-    rot: -7,
-  },
+  { slug: "instagram", name: "Instagram", top: "71%", left: "4%", size: 72, rot: -5 },
+  { slug: "googlesheets", name: "Google Sheets", top: "69%", left: "27%", size: 56, rot: 3 },
+  { slug: "clickup", name: "ClickUp", top: "73%", left: "51%", size: 64, rot: -7 },
   { slug: "stripe", name: "Stripe", top: "69%", left: "78%", size: 56, rot: 6 },
-  {
-    slug: "calendly",
-    name: "Calendly",
-    top: "83%",
-    left: "17%",
-    size: 56,
-    rot: -3,
-  },
-  {
-    slug: "googleads",
-    name: "Google Ads",
-    top: "85%",
-    left: "44%",
-    size: 64,
-    rot: 5,
-  },
+  { slug: "calendly", name: "Calendly", top: "83%", left: "17%", size: 56, rot: -3 },
+  { slug: "googleads", name: "Google Ads", top: "85%", left: "44%", size: 64, rot: 5 },
   { slug: "brevo", name: "Brevo", top: "81%", left: "71%", size: 56, rot: -6 },
 ];
 
@@ -827,7 +721,7 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
         ))}
       </div>
 
-      {/* Centered text — sits above logos */}
+      {/* Centered text */}
       <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
         <motion.div
           custom={dir}
@@ -836,15 +730,13 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
           animate="center"
           exit="exit"
         >
-          {/* Frosted backdrop behind text only */}
           <div
             style={{
               background: "rgba(15,25,35,0.55)",
               backdropFilter: "blur(4px)",
               WebkitBackdropFilter: "blur(4px)",
               border: "1px solid rgba(255,255,255,0.18)",
-              boxShadow:
-                "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
               borderRadius: "20px",
               padding: "2.5rem 3rem",
               maxWidth: "640px",
@@ -861,8 +753,7 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
               className="font-sans text-base sm:text-lg leading-relaxed"
               style={{ color: "rgba(245,240,232,0.8)" }}
             >
-              Get sponsored for any integration your automation requires — no
-              cost to you.
+              Get sponsored for any integration your automation requires — no cost to you.
             </p>
           </div>
         </motion.div>
@@ -871,198 +762,7 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
   );
 }
 
-/* ─── Main: scrolljacking orchestrator ───────────────────── */
-
-const TOTAL = 6;
-const TRANSITION_MS = 900;
-const INTEG_SECTION = 2;
-const INTEG_HOLD = 2;
-
-export default function Landing() {
-  const [current, setCurrent] = useState(0);
-  const [dir, setDir] = useState(1);
-  const transitioning = useRef(false);
-  const touchStartY = useRef(0);
-  const intScrollCount = useRef(0);
-  const [integLogoY, setIntegLogoY] = useState(0);
-
-  /* Reset integration parallax when leaving that section */
-  useEffect(() => {
-    if (current !== INTEG_SECTION) {
-      intScrollCount.current = 0;
-      setIntegLogoY(0);
-    }
-  }, [current]);
-
-  /* Mouse parallax motion values */
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const smoothX = useSpring(mouseX, { stiffness: 38, damping: 18 });
-  const smoothY = useSpring(mouseY, { stiffness: 38, damping: 18 });
-
-  /* Each blob at a different rate + direction */
-  const b1x = useTransform(smoothX, (v) => v * 0.75);
-  const b1y = useTransform(smoothY, (v) => v * 0.55);
-  const b2x = useTransform(smoothX, (v) => v * -0.45);
-  const b2y = useTransform(smoothY, (v) => v * 0.65);
-  const b3x = useTransform(smoothX, (v) => v * 0.3);
-  const b3y = useTransform(smoothY, (v) => v * -0.4);
-  const b4x = useTransform(smoothX, (v) => v * -0.6);
-  const b4y = useTransform(smoothY, (v) => v * -0.35);
-
-  const go = useCallback(
-    (next: number) => {
-      if (transitioning.current || next < 0 || next >= TOTAL) return;
-      setDir(next > current ? 1 : -1);
-      setCurrent(next);
-      transitioning.current = true;
-      setTimeout(() => {
-        transitioning.current = false;
-      }, TRANSITION_MS);
-    },
-    [current],
-  );
-
-  /* Wheel */
-  useEffect(() => {
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (Math.abs(e.deltaY) < 8) return;
-      if (transitioning.current) return;
-
-      const scrollDir = e.deltaY > 0 ? 1 : -1;
-
-      if (current === INTEG_SECTION) {
-        intScrollCount.current += 1;
-        /* Droplets move opposite to scroll direction */
-        setIntegLogoY((prev) =>
-          Math.max(-70, Math.min(70, prev + scrollDir * -35)),
-        );
-
-        if (intScrollCount.current >= INTEG_HOLD) {
-          /* Enough holds — navigate away, let go() handle the lock */
-          intScrollCount.current = 0;
-          go(current + scrollDir);
-        } else {
-          /* Still holding — shorter lock so next scroll registers cleanly */
-          transitioning.current = true;
-          setTimeout(() => {
-            transitioning.current = false;
-          }, 460);
-        }
-      } else {
-        go(current + scrollDir);
-      }
-    };
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [current, go]);
-
-  /* Touch swipe */
-  useEffect(() => {
-    const onStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY;
-    };
-    const onEnd = (e: TouchEvent) => {
-      const diff = touchStartY.current - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
-    };
-    window.addEventListener("touchstart", onStart, { passive: true });
-    window.addEventListener("touchend", onEnd, { passive: true });
-    return () => {
-      window.removeEventListener("touchstart", onStart);
-      window.removeEventListener("touchend", onEnd);
-    };
-  }, [current, go]);
-
-  /* Arrow / Page keys */
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown") go(current + 1);
-      if (e.key === "ArrowUp" || e.key === "PageUp") go(current - 1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [current, go]);
-
-  /* Mouse move for blob parallax */
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouseX.set((e.clientX / window.innerWidth - 0.5) * 90);
-      mouseY.set((e.clientY / window.innerHeight - 0.5) * 70);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  /* Container transition variants — full-screen slide in, slight scale-back on exit */
-  const containerVariants = {
-    enter: (d: number) => ({
-      y: d > 0 ? "100%" : "-100%",
-      scale: 1,
-    }),
-    center: {
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.88, ease: [0.22, 1, 0.36, 1] },
-    },
-    exit: (d: number) => ({
-      y: d > 0 ? "-18%" : "18%",
-      scale: 0.9,
-      opacity: 0,
-      transition: { duration: 0.6, ease: [0.4, 0, 1, 1] },
-    }),
-  };
-
-  const blobProps = {
-    blobX: { b1: b1x, b2: b2x, b3: b3x, b4: b4x },
-    blobY: { b1: b1y, b2: b2y, b3: b3y, b4: b4y },
-  };
-
-  return (
-    <div>
-      {/* Scrolljacking sections */}
-      <div
-        style={{
-          height: "calc(100vh - 64px)",
-          overflow: "hidden",
-          position: "relative",
-        }}
-      >
-        <AnimatePresence mode="popLayout" custom={dir}>
-          <motion.div
-            key={current}
-            custom={dir}
-            variants={containerVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            style={{ position: "absolute", inset: 0 }}
-          >
-            {current === 0 && <HeroSection dir={dir} {...blobProps} />}
-            {current === 1 && <HowItWorksSection dir={dir} />}
-            {current === 2 && (
-              <IntegrationsSection dir={dir} logoY={integLogoY} />
-            )}
-            {current === 3 && <ProjectsSection dir={dir} />}
-            {current === 4 && <FaqSectionContent dir={dir} />}
-            {current === 5 && <N8nVideoSection dir={dir} />}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Minimal section indicator — thin progress line at bottom */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
-          style={{ background: "rgba(0,229,160,0.15)" }}
-        >
-          <motion.div
-            className="h-full"
-            style={{ background: "#00E5A0" }}
-            animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </div>
-      </div>
+/* ─── N8n Video Section ──────────────────────────────────── */
 
 function N8nVideoSection({ dir }: { dir: number }) {
   return (
@@ -1101,6 +801,190 @@ function N8nVideoSection({ dir }: { dir: number }) {
           Your browser does not support the video tag.
         </video>
       </motion.div>
+    </div>
+  );
+}
+
+/* ─── Main: scrolljacking orchestrator ───────────────────── */
+
+const TOTAL = 6;
+const TRANSITION_MS = 900;
+const INTEG_SECTION = 2;
+const INTEG_HOLD = 2;
+
+export default function Landing() {
+  const [current, setCurrent] = useState(0);
+  const [dir, setDir] = useState(1);
+  const transitioning = useRef(false);
+  const touchStartY = useRef(0);
+  const intScrollCount = useRef(0);
+  const [integLogoY, setIntegLogoY] = useState(0);
+
+  useEffect(() => {
+    if (current !== INTEG_SECTION) {
+      intScrollCount.current = 0;
+      setIntegLogoY(0);
+    }
+  }, [current]);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { stiffness: 38, damping: 18 });
+  const smoothY = useSpring(mouseY, { stiffness: 38, damping: 18 });
+
+  const b1x = useTransform(smoothX, (v) => v * 0.75);
+  const b1y = useTransform(smoothY, (v) => v * 0.55);
+  const b2x = useTransform(smoothX, (v) => v * -0.45);
+  const b2y = useTransform(smoothY, (v) => v * 0.65);
+  const b3x = useTransform(smoothX, (v) => v * 0.3);
+  const b3y = useTransform(smoothY, (v) => v * -0.4);
+  const b4x = useTransform(smoothX, (v) => v * -0.6);
+  const b4y = useTransform(smoothY, (v) => v * -0.35);
+
+  const go = useCallback(
+    (next: number) => {
+      if (transitioning.current || next < 0 || next >= TOTAL) return;
+      setDir(next > current ? 1 : -1);
+      setCurrent(next);
+      transitioning.current = true;
+      setTimeout(() => {
+        transitioning.current = false;
+      }, TRANSITION_MS);
+    },
+    [current],
+  );
+
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 8) return;
+      if (transitioning.current) return;
+
+      const scrollDir = e.deltaY > 0 ? 1 : -1;
+
+      if (current === INTEG_SECTION) {
+        intScrollCount.current += 1;
+        setIntegLogoY((prev) =>
+          Math.max(-70, Math.min(70, prev + scrollDir * -35)),
+        );
+
+        if (intScrollCount.current >= INTEG_HOLD) {
+          intScrollCount.current = 0;
+          go(current + scrollDir);
+        } else {
+          transitioning.current = true;
+          setTimeout(() => {
+            transitioning.current = false;
+          }, 460);
+        }
+      } else {
+        go(current + scrollDir);
+      }
+    };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [current, go]);
+
+  useEffect(() => {
+    const onStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY;
+    };
+    const onEnd = (e: TouchEvent) => {
+      const diff = touchStartY.current - e.changedTouches[0].clientY;
+      if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
+    };
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchend", onEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchend", onEnd);
+    };
+  }, [current, go]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "PageDown") go(current + 1);
+      if (e.key === "ArrowUp" || e.key === "PageUp") go(current - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [current, go]);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth - 0.5) * 90);
+      mouseY.set((e.clientY / window.innerHeight - 0.5) * 70);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  const containerVariants = {
+    enter: (d: number) => ({
+      y: d > 0 ? "100%" : "-100%",
+      scale: 1,
+    }),
+    center: {
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.88, ease: [0.22, 1, 0.36, 1] },
+    },
+    exit: (d: number) => ({
+      y: d > 0 ? "-18%" : "18%",
+      scale: 0.9,
+      opacity: 0,
+      transition: { duration: 0.6, ease: [0.4, 0, 1, 1] },
+    }),
+  };
+
+  const blobProps = {
+    blobX: { b1: b1x, b2: b2x, b3: b3x, b4: b4x },
+    blobY: { b1: b1y, b2: b2y, b3: b3y, b4: b4y },
+  };
+
+  return (
+    <div>
+      <div
+        style={{
+          height: "calc(100vh - 64px)",
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
+        <AnimatePresence mode="popLayout" custom={dir}>
+          <motion.div
+            key={current}
+            custom={dir}
+            variants={containerVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            style={{ position: "absolute", inset: 0 }}
+          >
+            {current === 0 && <HeroSection dir={dir} {...blobProps} />}
+            {current === 1 && <HowItWorksSection dir={dir} />}
+            {current === 2 && (
+              <IntegrationsSection dir={dir} logoY={integLogoY} />
+            )}
+            {current === 3 && <ProjectsSection dir={dir} />}
+            {current === 4 && <FaqSectionContent dir={dir} />}
+            {current === 5 && <N8nVideoSection dir={dir} />}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Progress bar */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
+          style={{ background: "rgba(0,229,160,0.15)" }}
+        >
+          <motion.div
+            className="h-full"
+            style={{ background: "#00E5A0" }}
+            animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
