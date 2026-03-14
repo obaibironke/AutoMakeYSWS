@@ -435,7 +435,7 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
 const TOTAL = 6;
 const TRANSITION_MS = 900;
 const INTEG_SECTION = 2;
-const INTEG_HOLD = 3;
+const INTEG_HOLD = 2;
 
 export default function Landing() {
   const [current, setCurrent] = useState(0);
@@ -493,19 +493,17 @@ export default function Landing() {
         intScrollCount.current += 1;
         /* Droplets move opposite to scroll direction */
         setIntegLogoY((prev) =>
-          Math.max(-140, Math.min(140, prev + scrollDir * -60))
+          Math.max(-70, Math.min(70, prev + scrollDir * -35))
         );
 
         if (intScrollCount.current >= INTEG_HOLD) {
-          /* Enough holds — navigate away */
+          /* Enough holds — navigate away, let go() handle the lock */
           intScrollCount.current = 0;
-          transitioning.current = true;
-          setTimeout(() => { transitioning.current = false; }, TRANSITION_MS);
           go(current + scrollDir);
         } else {
           /* Still holding — shorter lock so next scroll registers cleanly */
           transitioning.current = true;
-          setTimeout(() => { transitioning.current = false; }, 480);
+          setTimeout(() => { transitioning.current = false; }, 460);
         }
       } else {
         go(current + scrollDir);
