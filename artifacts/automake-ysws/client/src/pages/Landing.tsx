@@ -1064,24 +1064,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Footer sign-off */}
-      <div
-        style={{
-          textAlign: "center",
-          padding: "6px 0",
-          fontSize: "11px",
-          color: "rgba(245,240,232,0.5)",
-          background: "#0F1923",
-          fontFamily: "DM Sans, sans-serif",
-          letterSpacing: "0.02em",
-        }}
-      >
-        Made by teen builders. No adults were harmed.
-      </div>
-    </div>
-  );
-}
-
 function N8nVideoSection({ dir }: { dir: number }) {
   return (
     <div
