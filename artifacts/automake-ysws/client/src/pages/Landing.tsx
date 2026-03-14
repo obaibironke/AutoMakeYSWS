@@ -21,11 +21,26 @@ const steps = [
 ];
 
 const faqItems = [
-  { q: "Who can join?", a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at." },
-  { q: "How do I get coins?", a: "Build an automation, log your hours, submit it, and get approved. Simple. The cooler and more complex your project, the more coins you earn." },
-  { q: "What can I actually buy?", a: "Automation tools, tech gadgets, fun stuff, learning resources — and big milestone rewards like laptops and travel stipends." },
-  { q: "Do I need to know how to code?", a: "Nope! Our guides walk you through everything from zero. If you can follow steps, you can build your first automation." },
-  { q: "How many projects can I submit?", a: "As many as you want. Each approved project earns more coins. Build more, earn more. No limit." },
+  {
+    q: "Who can join?",
+    a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at.",
+  },
+  {
+    q: "How do I get coins?",
+    a: "Build an automation, log your hours, submit it, and get approved. Simple. The cooler and more complex your project, the more coins you earn.",
+  },
+  {
+    q: "What can I actually buy?",
+    a: "Coins can be used to buy automation tools, gadgets, and more. Check out the shop to see what you can get!",
+  },
+  {
+    q: "Do I need to know how to code?",
+    a: "Nope! Making automations is one of the best ways to learn how to code. Most nodes do not require code and the few that do are not very complex.",
+  },
+  {
+    q: "How many projects can I submit?",
+    a: "You can submit as many projects as you would like. The more you ship, the more you earn!",
+  },
 ];
 
 /* ─── Accordion ───────────────────────────────────────────── */
@@ -33,17 +48,34 @@ const faqItems = [
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-xl overflow-hidden" style={{ border: "2px solid #0F1923", borderLeft: open ? "4px solid #00E5A0" : "2px solid #0F1923" }}>
+    <div
+      className="rounded-xl overflow-hidden"
+      style={{
+        border: "2px solid #0F1923",
+        borderLeft: open ? "4px solid #00E5A0" : "2px solid #0F1923",
+      }}
+    >
       <button
         className="w-full text-left flex items-center justify-between px-6 py-4 transition-colors"
         style={{ background: open ? "white" : "rgba(255,255,255,0.8)" }}
         onClick={() => setOpen(!open)}
       >
-        <span className="font-sans font-bold text-sm pr-4" style={{ color: "#0F1923" }}>{q}</span>
+        <span
+          className="font-sans font-bold text-sm pr-4"
+          style={{ color: "#0F1923" }}
+        >
+          {q}
+        </span>
         <span
           className="text-lg font-bold shrink-0 inline-block"
-          style={{ color: "#0F1923", transform: open ? "rotate(45deg)" : "none", transition: "transform .2s ease" }}
-        >+</span>
+          style={{
+            color: "#0F1923",
+            transform: open ? "rotate(45deg)" : "none",
+            transition: "transform .2s ease",
+          }}
+        >
+          +
+        </span>
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -55,8 +87,16 @@ function FaqItem({ q, a }: { q: string; a: string }) {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-6 py-4 bg-white" style={{ borderTop: "1px solid rgba(15,25,35,0.1)" }}>
-              <p className="font-sans text-sm leading-relaxed" style={{ color: "#0F1923" }}>{a}</p>
+            <div
+              className="px-6 py-4 bg-white"
+              style={{ borderTop: "1px solid rgba(15,25,35,0.1)" }}
+            >
+              <p
+                className="font-sans text-sm leading-relaxed"
+                style={{ color: "#0F1923" }}
+              >
+                {a}
+              </p>
             </div>
           </motion.div>
         )}
@@ -93,16 +133,59 @@ function HeroSection({
   blobY: { b1: any; b2: any; b3: any; b4: any };
 }) {
   return (
-    <div className="relative w-full h-full flex items-center justify-center text-center overflow-hidden" style={{ background: "#0F1923" }}>
+    <div
+      className="relative w-full h-full flex items-center justify-center text-center overflow-hidden"
+      style={{ background: "#0F1923" }}
+    >
       {/* Parallax blobs */}
-      <motion.div className="blob blob-1"
-        style={{ width: 500, height: 500, background: "#00E5A0", top: "5%", left: "0%", x: blobX.b1, y: blobY.b1 }} />
-      <motion.div className="blob blob-2"
-        style={{ width: 380, height: 380, background: "#FF5733", top: "20%", right: "2%", x: blobX.b2, y: blobY.b2 }} />
-      <motion.div className="blob blob-3"
-        style={{ width: 300, height: 300, background: "#00E5A0", bottom: "10%", left: "25%", x: blobX.b3, y: blobY.b3 }} />
-      <motion.div className="blob blob-4"
-        style={{ width: 220, height: 220, background: "#FF5733", bottom: "15%", right: "15%", x: blobX.b4, y: blobY.b4 }} />
+      <motion.div
+        className="blob blob-1"
+        style={{
+          width: 500,
+          height: 500,
+          background: "#00E5A0",
+          top: "5%",
+          left: "0%",
+          x: blobX.b1,
+          y: blobY.b1,
+        }}
+      />
+      <motion.div
+        className="blob blob-2"
+        style={{
+          width: 380,
+          height: 380,
+          background: "#FF5733",
+          top: "20%",
+          right: "2%",
+          x: blobX.b2,
+          y: blobY.b2,
+        }}
+      />
+      <motion.div
+        className="blob blob-3"
+        style={{
+          width: 300,
+          height: 300,
+          background: "#00E5A0",
+          bottom: "10%",
+          left: "25%",
+          x: blobX.b3,
+          y: blobY.b3,
+        }}
+      />
+      <motion.div
+        className="blob blob-4"
+        style={{
+          width: 220,
+          height: 220,
+          background: "#FF5733",
+          bottom: "15%",
+          right: "15%",
+          x: blobX.b4,
+          y: blobY.b4,
+        }}
+      />
 
       {/* Content — offset from container for parallax feel */}
       <motion.div
@@ -115,59 +198,148 @@ function HeroSection({
       >
         {/* Sticker badges — positioned in corners away from the heading */}
         <motion.div
-          initial={{ opacity: 0, rotate: 8, scale: 0.8 }} animate={{ opacity: 1, rotate: 12, scale: 1 }}
+          initial={{ opacity: 0, rotate: 8, scale: 0.8 }}
+          animate={{ opacity: 1, rotate: 12, scale: 1 }}
           transition={{ delay: 0.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "absolute", top: "6%", right: "3%", background: "#00E5A0", color: "#0F1923", borderRadius: "50%", width: 84, height: 84, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "0.65rem", lineHeight: 1.3, letterSpacing: "0.05em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20, flexDirection: "column" }}
+          style={{
+            position: "absolute",
+            top: "6%",
+            right: "3%",
+            background: "#00E5A0",
+            color: "#0F1923",
+            borderRadius: "50%",
+            width: 84,
+            height: 84,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            fontWeight: 800,
+            fontSize: "0.65rem",
+            lineHeight: 1.3,
+            letterSpacing: "0.05em",
+            boxShadow: "3px 3px 0px rgba(0,0,0,0.3)",
+            zIndex: 20,
+            flexDirection: "column",
+          }}
         >
-          FREE<br />TOOLS
+          FREE
+          <br />
+          TOOLS
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, rotate: -4, scale: 0.8 }} animate={{ opacity: 1, rotate: -8, scale: 1 }}
+          initial={{ opacity: 0, rotate: -4, scale: 0.8 }}
+          animate={{ opacity: 1, rotate: -8, scale: 1 }}
           transition={{ delay: 1.0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "absolute", bottom: "8%", right: "3%", background: "#FF5733", color: "white", borderRadius: "50px", padding: "10px 16px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20 }}
+          style={{
+            position: "absolute",
+            bottom: "8%",
+            right: "3%",
+            background: "#FF5733",
+            color: "white",
+            borderRadius: "50px",
+            padding: "10px 16px",
+            fontWeight: 800,
+            fontSize: "0.6rem",
+            lineHeight: 1.4,
+            textAlign: "center",
+            letterSpacing: "0.06em",
+            boxShadow: "3px 3px 0px rgba(0,0,0,0.3)",
+            zIndex: 20,
+          }}
         >
-          OPEN TO<br />ALL TEENS
+          OPEN TO
+          <br />
+          ALL TEENS
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, rotate: 2, scale: 0.8 }} animate={{ opacity: 1, rotate: -5, scale: 1 }}
+          initial={{ opacity: 0, rotate: 2, scale: 0.8 }}
+          animate={{ opacity: 1, rotate: -5, scale: 1 }}
           transition={{ delay: 1.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "absolute", top: "6%", left: "3%", background: "#00E5A0", color: "#0F1923", borderRadius: "12px", padding: "8px 14px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20 }}
+          style={{
+            position: "absolute",
+            top: "6%",
+            left: "3%",
+            background: "#00E5A0",
+            color: "#0F1923",
+            borderRadius: "12px",
+            padding: "8px 14px",
+            fontWeight: 800,
+            fontSize: "0.6rem",
+            lineHeight: 1.4,
+            textAlign: "center",
+            letterSpacing: "0.06em",
+            boxShadow: "3px 3px 0px rgba(0,0,0,0.3)",
+            zIndex: 20,
+          }}
         >
-          EARN<br />COINS
+          EARN
+          <br />
+          COINS
         </motion.div>
 
         <motion.div
-          className="inline-block rounded-full px-4 py-1.5 mb-5" style={{ background: "rgba(245,240,232,0.1)", border: "1px solid rgba(245,240,232,0.2)" }}
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="inline-block rounded-full px-4 py-1.5 mb-5"
+          style={{
+            background: "rgba(245,240,232,0.1)",
+            border: "1px solid rgba(245,240,232,0.2)",
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.5 }}
         >
-          <span className="font-sans text-xs font-semibold uppercase tracking-widest" style={{ color: "#F5F0E8" }}>
+          <span
+            className="font-sans text-xs font-semibold uppercase tracking-widest"
+            style={{ color: "#F5F0E8" }}
+          >
             Hack Club presents
           </span>
         </motion.div>
 
-        <h1 className="font-sans font-extrabold leading-none mb-5 flex flex-col items-center" style={{ color: "#F5F0E8" }}>
+        <h1
+          className="font-sans font-extrabold leading-none mb-5 flex flex-col items-center"
+          style={{ color: "#F5F0E8" }}
+        >
           <motion.span
             className="inline-block relative text-8xl sm:text-9xl pb-5"
             style={{ transform: "rotate(-2deg)", display: "inline-block" }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              delay: 0.45,
+              duration: 0.55,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             Automake
-            <svg viewBox="0 0 440 14" xmlns="http://www.w3.org/2000/svg"
-              style={{ position: "absolute", bottom: 4, left: 0, width: "100%", height: 14 }}
+            <svg
+              viewBox="0 0 440 14"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                position: "absolute",
+                bottom: 4,
+                left: 0,
+                width: "100%",
+                height: 14,
+              }}
               preserveAspectRatio="none"
             >
-              <path d="M4 7 C34 1, 74 13, 114 7 S194 1, 234 7 S314 13, 354 7 S414 2, 438 7"
-                fill="none" stroke="#F5F0E8" strokeWidth="3.5" strokeLinecap="round" />
+              <path
+                d="M4 7 C34 1, 74 13, 114 7 S194 1, 234 7 S314 13, 354 7 S414 2, 438 7"
+                fill="none"
+                stroke="#F5F0E8"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
             </svg>
           </motion.span>
         </h1>
 
         <motion.p
-          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-9 leading-relaxed" style={{ color: "rgba(245,240,232,0.8)" }}
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-9 leading-relaxed"
+          style={{ color: "rgba(245,240,232,0.8)" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
           Ship automations. Stack coins. Get free stuff.
@@ -175,27 +347,54 @@ function HeroSection({
 
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75, duration: 0.5 }}
         >
           <Link href="/showcase">
             <motion.span
-              whileHover={{ rotate: -1, y: 2 }} whileTap={{ scale: 0.97 }}
+              whileHover={{ rotate: -1, y: 2 }}
+              whileTap={{ scale: 0.97 }}
               className="font-sans font-bold px-8 py-4 rounded-lg text-base cursor-pointer inline-block transition-all"
-              style={{ background: "#00E5A0", color: "#0F1923", boxShadow: "3px 3px 0px #0F1923" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.transform = "translate(2px,2px)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #0F1923"; (e.currentTarget as HTMLElement).style.transform = ""; }}
+              style={{
+                background: "#00E5A0",
+                color: "#0F1923",
+                boxShadow: "3px 3px 0px #0F1923",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                (e.currentTarget as HTMLElement).style.transform =
+                  "translate(2px,2px)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow =
+                  "3px 3px 0px #0F1923";
+                (e.currentTarget as HTMLElement).style.transform = "";
+              }}
             >
               Explore Projects
             </motion.span>
           </Link>
           <Link href="/guides">
             <motion.span
-              whileHover={{ rotate: 1, y: 2 }} whileTap={{ scale: 0.97 }}
+              whileHover={{ rotate: 1, y: 2 }}
+              whileTap={{ scale: 0.97 }}
               className="font-sans font-bold px-8 py-4 rounded-lg text-base cursor-pointer inline-block transition-all"
-              style={{ background: "#FF5733", color: "white", boxShadow: "3px 3px 0px #0F1923" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.transform = "translate(2px,2px)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #0F1923"; (e.currentTarget as HTMLElement).style.transform = ""; }}
+              style={{
+                background: "#FF5733",
+                color: "white",
+                boxShadow: "3px 3px 0px #0F1923",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                (e.currentTarget as HTMLElement).style.transform =
+                  "translate(2px,2px)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow =
+                  "3px 3px 0px #0F1923";
+                (e.currentTarget as HTMLElement).style.transform = "";
+              }}
             >
               Browse Guides
             </motion.span>
@@ -205,10 +404,23 @@ function HeroSection({
 
       {/* Scroll hint */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
-        <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: "rgba(0,229,160,0.7)" }}>scroll</span>
-        <motion.svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="#00E5A0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-          animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        <span
+          className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em]"
+          style={{ color: "rgba(0,229,160,0.7)" }}
+        >
+          scroll
+        </span>
+        <motion.svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#00E5A0"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <path d="M12 5v14M5 12l7 7 7-7" />
         </motion.svg>
@@ -219,7 +431,10 @@ function HeroSection({
 
 function HowItWorksSection({ dir }: { dir: number }) {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ background: "#F5F0E8" }}>
+    <div
+      className="w-full h-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "#F5F0E8" }}
+    >
       <motion.div
         className="w-full flex flex-col"
         custom={dir}
@@ -230,27 +445,55 @@ function HowItWorksSection({ dir }: { dir: number }) {
       >
         <div className="max-w-6xl mx-auto px-6 w-full">
           <div className="text-center mb-12">
-            <h2 className="font-sans text-4xl sm:text-5xl font-extrabold mb-4" style={{ color: "#0F1923" }}>
+            <h2
+              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4"
+              style={{ color: "#0F1923" }}
+            >
               Here's <mark>How</mark> It Works
             </h2>
-            <p className="font-sans text-lg max-w-2xl mx-auto" style={{ color: "#0F1923" }}>
+            <p
+              className="font-sans text-lg max-w-2xl mx-auto"
+              style={{ color: "#0F1923" }}
+            >
               Four simple steps from idea to reward. Anyone can do it.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((step, i) => (
-              <motion.div key={i}
+              <motion.div
+                key={i}
                 whileHover={{ y: -6, rotate: 0, transition: { duration: 0.2 } }}
                 className="relative bg-white rounded-xl p-7 text-center overflow-hidden"
-                style={{ boxShadow: "3px 3px 0px #0F1923", border: "2px solid #0F1923" }}
+                style={{
+                  boxShadow: "3px 3px 0px #0F1923",
+                  border: "2px solid #0F1923",
+                }}
               >
                 {/* Watermark number */}
-                <div style={{ position: "absolute", top: -8, left: 6, fontSize: "5rem", fontWeight: 900, color: "rgba(15,25,35,0.07)", lineHeight: 1, userSelect: "none", pointerEvents: "none", zIndex: 0 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -8,
+                    left: 6,
+                    fontSize: "5rem",
+                    fontWeight: 900,
+                    color: "rgba(15,25,35,0.07)",
+                    lineHeight: 1,
+                    userSelect: "none",
+                    pointerEvents: "none",
+                    zIndex: 0,
+                  }}
+                >
                   {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="relative z-10">
-                  <p className="font-sans font-bold text-base" style={{ color: "#0F1923" }}>{step.label}</p>
+                  <p
+                    className="font-sans font-bold text-base"
+                    style={{ color: "#0F1923" }}
+                  >
+                    {step.label}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -258,7 +501,10 @@ function HowItWorksSection({ dir }: { dir: number }) {
 
           <div className="text-center mt-8">
             <Link href="/guides">
-              <span className="font-sans font-semibold text-base hover:underline cursor-pointer" style={{ color: "#0F1923" }}>
+              <span
+                className="font-sans font-semibold text-base hover:underline cursor-pointer"
+                style={{ color: "#0F1923" }}
+              >
                 Follow the Guides →
               </span>
             </Link>
@@ -276,7 +522,10 @@ function HowItWorksSection({ dir }: { dir: number }) {
 function ProjectsSection({ dir }: { dir: number }) {
   const featuredProjects = projects.slice(0, 3);
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ background: "#F5F0E8" }}>
+    <div
+      className="w-full h-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "#F5F0E8" }}
+    >
       <motion.div
         className="w-full max-w-6xl mx-auto px-6"
         custom={dir}
@@ -286,20 +535,31 @@ function ProjectsSection({ dir }: { dir: number }) {
         exit="exit"
       >
         <div className="text-center mb-10">
-          <h2 className="font-sans text-4xl sm:text-5xl font-extrabold mb-4" style={{ color: "#0F1923" }}>
+          <h2
+            className="font-sans text-4xl sm:text-5xl font-extrabold mb-4"
+            style={{ color: "#0F1923" }}
+          >
             Projects <mark>shipped</mark> so far
           </h2>
-          <p className="font-sans text-lg max-w-2xl mx-auto" style={{ color: "#0F1923" }}>
+          <p
+            className="font-sans text-lg max-w-2xl mx-auto"
+            style={{ color: "#0F1923" }}
+          >
             Real automation projects built by real teens, just like you.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {featuredProjects.map((p, i) => (
-            <motion.div key={p.id}
+            <motion.div
+              key={p.id}
               initial={{ opacity: 0, scale: 0.93 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                delay: 0.3 + i * 0.1,
+                duration: 0.5,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               style={{ transform: `rotate(${i % 2 === 0 ? "1deg" : "-1deg"})` }}
               whileHover={{ rotate: 0, y: -4, transition: { duration: 0.2 } }}
             >
@@ -310,7 +570,10 @@ function ProjectsSection({ dir }: { dir: number }) {
 
         <div className="text-center mt-8">
           <Link href="/showcase">
-            <span className="font-sans font-semibold text-base hover:underline cursor-pointer" style={{ color: "#0F1923" }}>
+            <span
+              className="font-sans font-semibold text-base hover:underline cursor-pointer"
+              style={{ color: "#0F1923" }}
+            >
               See all projects →
             </span>
           </Link>
@@ -322,7 +585,10 @@ function ProjectsSection({ dir }: { dir: number }) {
 
 function FaqSectionContent({ dir }: { dir: number }) {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center overflow-auto" style={{ background: "#F5F0E8" }}>
+    <div
+      className="w-full h-full flex flex-col items-center justify-center overflow-auto"
+      style={{ background: "#F5F0E8" }}
+    >
       <motion.div
         className="w-full max-w-2xl mx-auto px-6 py-10"
         custom={dir}
@@ -332,8 +598,15 @@ function FaqSectionContent({ dir }: { dir: number }) {
         exit="exit"
       >
         <div className="text-center mb-8">
-          <h2 className="font-sans text-4xl sm:text-5xl font-extrabold mb-3" style={{ color: "#0F1923" }}><mark>FAQ</mark></h2>
-          <p className="font-sans" style={{ color: "#0F1923" }}>Got questions? We've got answers.</p>
+          <h2
+            className="font-sans text-4xl sm:text-5xl font-extrabold mb-3"
+            style={{ color: "#0F1923" }}
+          >
+            <mark>FAQ</mark>
+          </h2>
+          <p className="font-sans" style={{ color: "#0F1923" }}>
+            Got questions? We've got answers.
+          </p>
         </div>
         <div className="flex flex-col gap-2.5">
           {faqItems.map((item, i) => (
@@ -348,30 +621,143 @@ function FaqSectionContent({ dir }: { dir: number }) {
 /* ─── Integrations Section ───────────────────────────────── */
 
 const integrationLogos = [
-  { slug: "slack",        name: "Slack",          top: "6%",  left: "10%", size: 56, rot: -4, src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png" },
-  { slug: "notion",       name: "Notion",         top: "5%",  left: "40%", size: 64, rot:  3  },
-  { slug: "github",       name: "GitHub",         top: "7%",  left: "70%", size: 56, rot: -6  },
-  { slug: "huggingface",  name: "Hugging Face",   top: "19%", left: "3%",  size: 72, rot:  5  },
-  { slug: "discord",      name: "Discord",        top: "17%", left: "27%", size: 56, rot: -3  },
-  { slug: "airtable",     name: "Airtable",       top: "21%", left: "57%", size: 64, rot:  7  },
-  { slug: "cloudflare",   name: "Cloudflare",     top: "18%", left: "82%", size: 56, rot: -5  },
-  { slug: "google",       name: "Gemini",         top: "33%", left: "16%", size: 64, rot:  4  },
-  { slug: "whatsapp",     name: "WhatsApp",       top: "31%", left: "44%", size: 56, rot: -7  },
-  { slug: "meta",         name: "Meta",           top: "35%", left: "68%", size: 72, rot:  6  },
-  { slug: "anthropic",    name: "Claude",         top: "47%", left: "7%",  size: 56, rot: -3  },
-  { slug: "gmail",        name: "Gmail",          top: "45%", left: "31%", size: 64, rot:  5  },
-  { slug: "mailchimp",    name: "Mailchimp",      top: "49%", left: "54%", size: 56, rot: -6  },
-  { slug: "supabase",     name: "Supabase",       top: "45%", left: "79%", size: 64, rot:  4  },
-  { slug: "facebook",     name: "Facebook",       top: "59%", left: "13%", size: 56, rot:  7  },
-  { slug: "googledrive",  name: "Google Drive",   top: "61%", left: "39%", size: 64, rot: -4  },
-  { slug: "vonage",       name: "Vonage",         top: "57%", left: "64%", size: 56, rot:  5  },
-  { slug: "instagram",    name: "Instagram",      top: "71%", left: "4%",  size: 72, rot: -5  },
-  { slug: "googlesheets", name: "Google Sheets",  top: "69%", left: "27%", size: 56, rot:  3  },
-  { slug: "clickup",      name: "ClickUp",        top: "73%", left: "51%", size: 64, rot: -7  },
-  { slug: "stripe",       name: "Stripe",         top: "69%", left: "78%", size: 56, rot:  6  },
-  { slug: "calendly",     name: "Calendly",       top: "83%", left: "17%", size: 56, rot: -3  },
-  { slug: "googleads",    name: "Google Ads",     top: "85%", left: "44%", size: 64, rot:  5  },
-  { slug: "brevo",        name: "Brevo",          top: "81%", left: "71%", size: 56, rot: -6  },
+  {
+    slug: "slack",
+    name: "Slack",
+    top: "6%",
+    left: "10%",
+    size: 56,
+    rot: -4,
+    src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png",
+  },
+  { slug: "notion", name: "Notion", top: "5%", left: "40%", size: 64, rot: 3 },
+  { slug: "github", name: "GitHub", top: "7%", left: "70%", size: 56, rot: -6 },
+  {
+    slug: "huggingface",
+    name: "Hugging Face",
+    top: "19%",
+    left: "3%",
+    size: 72,
+    rot: 5,
+  },
+  {
+    slug: "discord",
+    name: "Discord",
+    top: "17%",
+    left: "27%",
+    size: 56,
+    rot: -3,
+  },
+  {
+    slug: "airtable",
+    name: "Airtable",
+    top: "21%",
+    left: "57%",
+    size: 64,
+    rot: 7,
+  },
+  {
+    slug: "cloudflare",
+    name: "Cloudflare",
+    top: "18%",
+    left: "82%",
+    size: 56,
+    rot: -5,
+  },
+  { slug: "google", name: "Gemini", top: "33%", left: "16%", size: 64, rot: 4 },
+  {
+    slug: "whatsapp",
+    name: "WhatsApp",
+    top: "31%",
+    left: "44%",
+    size: 56,
+    rot: -7,
+  },
+  { slug: "meta", name: "Meta", top: "35%", left: "68%", size: 72, rot: 6 },
+  {
+    slug: "anthropic",
+    name: "Claude",
+    top: "47%",
+    left: "7%",
+    size: 56,
+    rot: -3,
+  },
+  { slug: "gmail", name: "Gmail", top: "45%", left: "31%", size: 64, rot: 5 },
+  {
+    slug: "mailchimp",
+    name: "Mailchimp",
+    top: "49%",
+    left: "54%",
+    size: 56,
+    rot: -6,
+  },
+  {
+    slug: "supabase",
+    name: "Supabase",
+    top: "45%",
+    left: "79%",
+    size: 64,
+    rot: 4,
+  },
+  {
+    slug: "facebook",
+    name: "Facebook",
+    top: "59%",
+    left: "13%",
+    size: 56,
+    rot: 7,
+  },
+  {
+    slug: "googledrive",
+    name: "Google Drive",
+    top: "61%",
+    left: "39%",
+    size: 64,
+    rot: -4,
+  },
+  { slug: "vonage", name: "Vonage", top: "57%", left: "64%", size: 56, rot: 5 },
+  {
+    slug: "instagram",
+    name: "Instagram",
+    top: "71%",
+    left: "4%",
+    size: 72,
+    rot: -5,
+  },
+  {
+    slug: "googlesheets",
+    name: "Google Sheets",
+    top: "69%",
+    left: "27%",
+    size: 56,
+    rot: 3,
+  },
+  {
+    slug: "clickup",
+    name: "ClickUp",
+    top: "73%",
+    left: "51%",
+    size: 64,
+    rot: -7,
+  },
+  { slug: "stripe", name: "Stripe", top: "69%", left: "78%", size: 56, rot: 6 },
+  {
+    slug: "calendly",
+    name: "Calendly",
+    top: "83%",
+    left: "17%",
+    size: 56,
+    rot: -3,
+  },
+  {
+    slug: "googleads",
+    name: "Google Ads",
+    top: "85%",
+    left: "44%",
+    size: 64,
+    rot: 5,
+  },
+  { slug: "brevo", name: "Brevo", top: "81%", left: "71%", size: 56, rot: -6 },
 ];
 
 function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
@@ -383,7 +769,10 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
   }, []);
 
   return (
-    <div className="w-full h-full relative overflow-hidden" style={{ background: "#0F1923" }}>
+    <div
+      className="w-full h-full relative overflow-hidden"
+      style={{ background: "#0F1923" }}
+    >
       {/* Scattered logo field */}
       <div
         style={{
@@ -454,7 +843,8 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
               backdropFilter: "blur(4px)",
               WebkitBackdropFilter: "blur(4px)",
               border: "1px solid rgba(255,255,255,0.18)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
               borderRadius: "20px",
               padding: "2.5rem 3rem",
               maxWidth: "640px",
@@ -462,7 +852,8 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
             }}
           >
             <h2
-              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4 leading-tight" style={{ color: "#00E5A0" }}
+              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
+              style={{ color: "#00E5A0" }}
             >
               We'll fund the tools you need
             </h2>
@@ -470,7 +861,8 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
               className="font-sans text-base sm:text-lg leading-relaxed"
               style={{ color: "rgba(245,240,232,0.8)" }}
             >
-              Get sponsored for any integration your automation requires — no cost to you.
+              Get sponsored for any integration your automation requires — no
+              cost to you.
             </p>
           </div>
         </motion.div>
@@ -524,9 +916,11 @@ export default function Landing() {
       setDir(next > current ? 1 : -1);
       setCurrent(next);
       transitioning.current = true;
-      setTimeout(() => { transitioning.current = false; }, TRANSITION_MS);
+      setTimeout(() => {
+        transitioning.current = false;
+      }, TRANSITION_MS);
     },
-    [current]
+    [current],
   );
 
   /* Wheel */
@@ -542,7 +936,7 @@ export default function Landing() {
         intScrollCount.current += 1;
         /* Droplets move opposite to scroll direction */
         setIntegLogoY((prev) =>
-          Math.max(-70, Math.min(70, prev + scrollDir * -35))
+          Math.max(-70, Math.min(70, prev + scrollDir * -35)),
         );
 
         if (intScrollCount.current >= INTEG_HOLD) {
@@ -552,7 +946,9 @@ export default function Landing() {
         } else {
           /* Still holding — shorter lock so next scroll registers cleanly */
           transitioning.current = true;
-          setTimeout(() => { transitioning.current = false; }, 460);
+          setTimeout(() => {
+            transitioning.current = false;
+          }, 460);
         }
       } else {
         go(current + scrollDir);
@@ -564,7 +960,9 @@ export default function Landing() {
 
   /* Touch swipe */
   useEffect(() => {
-    const onStart = (e: TouchEvent) => { touchStartY.current = e.touches[0].clientY; };
+    const onStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY;
+    };
     const onEnd = (e: TouchEvent) => {
       const diff = touchStartY.current - e.changedTouches[0].clientY;
       if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
@@ -624,7 +1022,13 @@ export default function Landing() {
   return (
     <div>
       {/* Scrolljacking sections */}
-      <div style={{ height: "calc(100vh - 64px)", overflow: "hidden", position: "relative" }}>
+      <div
+        style={{
+          height: "calc(100vh - 64px)",
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
         <AnimatePresence mode="popLayout" custom={dir}>
           <motion.div
             key={current}
@@ -637,7 +1041,9 @@ export default function Landing() {
           >
             {current === 0 && <HeroSection dir={dir} {...blobProps} />}
             {current === 1 && <HowItWorksSection dir={dir} />}
-            {current === 2 && <IntegrationsSection dir={dir} logoY={integLogoY} />}
+            {current === 2 && (
+              <IntegrationsSection dir={dir} logoY={integLogoY} />
+            )}
             {current === 3 && <ProjectsSection dir={dir} />}
             {current === 4 && <FaqSectionContent dir={dir} />}
             {current === 5 && <N8nVideoSection dir={dir} />}
@@ -645,9 +1051,13 @@ export default function Landing() {
         </AnimatePresence>
 
         {/* Minimal section indicator — thin progress line at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-[3px] z-50" style={{ background: "rgba(0,229,160,0.15)" }}>
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
+          style={{ background: "rgba(0,229,160,0.15)" }}
+        >
           <motion.div
-            className="h-full" style={{ background: "#00E5A0" }}
+            className="h-full"
+            style={{ background: "#00E5A0" }}
             animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           />
@@ -655,7 +1065,17 @@ export default function Landing() {
       </div>
 
       {/* Footer sign-off */}
-      <div style={{ textAlign: "center", padding: "6px 0", fontSize: "11px", color: "rgba(245,240,232,0.5)", background: "#0F1923", fontFamily: "DM Sans, sans-serif", letterSpacing: "0.02em" }}>
+      <div
+        style={{
+          textAlign: "center",
+          padding: "6px 0",
+          fontSize: "11px",
+          color: "rgba(245,240,232,0.5)",
+          background: "#0F1923",
+          fontFamily: "DM Sans, sans-serif",
+          letterSpacing: "0.02em",
+        }}
+      >
         Made by teen builders. No adults were harmed.
       </div>
     </div>
@@ -664,7 +1084,10 @@ export default function Landing() {
 
 function N8nVideoSection({ dir }: { dir: number }) {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center overflow-hidden" style={{ background: "#0F1923" }}>
+    <div
+      className="w-full h-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "#0F1923" }}
+    >
       <motion.div
         className="w-full max-w-4xl mx-auto px-6 flex flex-col items-center justify-center h-full"
         custom={dir}
@@ -674,10 +1097,16 @@ function N8nVideoSection({ dir }: { dir: number }) {
         exit="exit"
       >
         <div className="text-center mb-10">
-          <h2 className="font-sans text-4xl sm:text-5xl font-extrabold mb-3" style={{ color: "#00E5A0" }}>
+          <h2
+            className="font-sans text-4xl sm:text-5xl font-extrabold mb-3"
+            style={{ color: "#00E5A0" }}
+          >
             n8n Workflow Execution
           </h2>
-          <p className="font-sans text-lg" style={{ color: "rgba(245,240,232,0.8)" }}>
+          <p
+            className="font-sans text-lg"
+            style={{ color: "rgba(245,240,232,0.8)" }}
+          >
             Learn how to execute workflows with n8n automation
           </p>
         </div>
