@@ -14,10 +14,10 @@ import { projects } from "../data/projects";
 /* ─── Data ────────────────────────────────────────────────── */
 
 const steps = [
-  { icon: "🔧", label: "Build an automation project" },
-  { icon: "📋", label: "Log your hours & submit" },
-  { icon: "✅", label: "Get reviewed & approved" },
-  { icon: "🪙", label: "Earn currency & shop rewards" },
+  { label: "Build an automation project" },
+  { label: "Log your hours & submit" },
+  { label: "Get reviewed & approved" },
+  { label: "Earn currency & shop rewards" },
 ];
 
 const faqItems = [
@@ -113,27 +113,27 @@ function HeroSection({
         animate="center"
         exit="exit"
       >
-        {/* Sticker badges */}
+        {/* Sticker badges — positioned in corners away from the heading */}
         <motion.div
           initial={{ opacity: 0, rotate: 8, scale: 0.8 }} animate={{ opacity: 1, rotate: 12, scale: 1 }}
           transition={{ delay: 0.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "absolute", top: "12%", right: "7%", background: "#00E5A0", color: "#0F1923", borderRadius: "50%", width: 88, height: 88, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "0.65rem", lineHeight: 1.3, letterSpacing: "0.05em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20, flexDirection: "column" }}
+          style={{ position: "absolute", top: "6%", right: "3%", background: "#00E5A0", color: "#0F1923", borderRadius: "50%", width: 84, height: 84, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "0.65rem", lineHeight: 1.3, letterSpacing: "0.05em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20, flexDirection: "column" }}
         >
           FREE<br />TOOLS
         </motion.div>
         <motion.div
           initial={{ opacity: 0, rotate: -4, scale: 0.8 }} animate={{ opacity: 1, rotate: -8, scale: 1 }}
           transition={{ delay: 1.0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "absolute", bottom: "22%", left: "4%", background: "#FF5733", color: "white", borderRadius: "50px", padding: "10px 16px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20 }}
+          style={{ position: "absolute", bottom: "8%", right: "3%", background: "#FF5733", color: "white", borderRadius: "50px", padding: "10px 16px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20 }}
         >
           OPEN TO<br />ALL TEENS
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, rotate: 2, scale: 0.8 }} animate={{ opacity: 1, rotate: 5, scale: 1 }}
+          initial={{ opacity: 0, rotate: 2, scale: 0.8 }} animate={{ opacity: 1, rotate: -5, scale: 1 }}
           transition={{ delay: 1.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "absolute", top: "18%", left: "3%", background: "#00E5A0", color: "#0F1923", borderRadius: "12px", padding: "8px 14px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20 }}
+          style={{ position: "absolute", top: "6%", left: "3%", background: "#00E5A0", color: "#0F1923", borderRadius: "12px", padding: "8px 14px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.3)", zIndex: 20 }}
         >
-          🪙 EARN<br />COINS
+          EARN<br />COINS
         </motion.div>
 
         <motion.div
@@ -148,26 +148,18 @@ function HeroSection({
 
         <h1 className="font-sans font-extrabold leading-none mb-5 flex flex-col items-center" style={{ color: "#F5F0E8" }}>
           <motion.span
-            className="inline-block text-8xl sm:text-9xl"
+            className="inline-block relative text-8xl sm:text-9xl pb-5"
             style={{ transform: "rotate(-2deg)", display: "inline-block" }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
             Automake
-          </motion.span>
-          <motion.span
-            className="inline-block relative text-7xl sm:text-8xl mt-1 pb-4"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          >
-            YSWS
-            <svg viewBox="0 0 220 14" xmlns="http://www.w3.org/2000/svg"
-              style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 14 }}
+            <svg viewBox="0 0 440 14" xmlns="http://www.w3.org/2000/svg"
+              style={{ position: "absolute", bottom: 4, left: 0, width: "100%", height: 14 }}
               preserveAspectRatio="none"
             >
-              <path d="M4 7 C24 1, 44 13, 64 7 S104 1, 124 7 S164 13, 184 7 S204 2, 218 7"
+              <path d="M4 7 C34 1, 74 13, 114 7 S194 1, 234 7 S314 13, 354 7 S414 2, 438 7"
                 fill="none" stroke="#F5F0E8" strokeWidth="3.5" strokeLinecap="round" />
             </svg>
           </motion.span>
@@ -178,7 +170,7 @@ function HeroSection({
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
-          Ship automations. Stack coins. Get free stuff. 🪙
+          Ship automations. Stack coins. Get free stuff.
         </motion.p>
 
         <motion.div
@@ -258,7 +250,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
                   {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="relative z-10">
-                  <div className="text-5xl mb-3">{step.icon}</div>
                   <p className="font-sans font-bold text-base" style={{ color: "#0F1923" }}>{step.label}</p>
                 </div>
               </motion.div>
@@ -665,7 +656,7 @@ export default function Landing() {
 
       {/* Footer sign-off */}
       <div style={{ textAlign: "center", padding: "6px 0", fontSize: "11px", color: "rgba(245,240,232,0.5)", background: "#0F1923", fontFamily: "DM Sans, sans-serif", letterSpacing: "0.02em" }}>
-        Made with 🤖 by teen builders. No adults were harmed.
+        Made by teen builders. No adults were harmed.
       </div>
     </div>
   );

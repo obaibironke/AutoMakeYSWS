@@ -10,7 +10,7 @@ export default function ProjectDetail() {
       <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "#F5F0E8" }}>
         <h1 className="font-sans text-3xl font-extrabold" style={{ color: "#0F1923" }}>Project not found</h1>
         <Link href="/showcase">
-          <span className="font-sans cursor-pointer underline" style={{ color: "#0F1923" }}>← Back to Showcase</span>
+          <span className="font-sans cursor-pointer underline" style={{ color: "#0F1923" }}>Back to Showcase</span>
         </Link>
       </div>
     );
@@ -23,7 +23,7 @@ export default function ProjectDetail() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href="/showcase">
             <span className="font-sans text-sm hover:underline cursor-pointer mb-6 inline-block" style={{ color: "#0F1923" }}>
-              ← Back to Showcase
+              Back to Showcase
             </span>
           </Link>
           <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -31,7 +31,6 @@ export default function ProjectDetail() {
               {project.category}
             </span>
             <div className="flex items-center gap-1" style={{ color: "#0F1923" }}>
-              <span>🕐</span>
               <span className="font-sans text-sm font-medium">{project.hours} hours logged</span>
             </div>
           </div>
@@ -52,7 +51,6 @@ export default function ProjectDetail() {
               <h2 className="font-sans text-2xl font-extrabold mb-4" style={{ color: "#0F1923" }}>Screenshot</h2>
               <div className="w-full h-56 rounded-xl flex items-center justify-center" style={{ background: "white", border: "2px solid #0F1923" }}>
                 <div className="text-center">
-                  <div className="text-4xl mb-2">🖼️</div>
                   <p className="font-sans text-sm" style={{ color: "#0F1923" }}>Project screenshot placeholder</p>
                 </div>
               </div>
@@ -62,7 +60,6 @@ export default function ProjectDetail() {
               <h2 className="font-sans text-2xl font-extrabold mb-4" style={{ color: "#0F1923" }}>Demo Video</h2>
               <div className="w-full h-48 rounded-xl flex items-center justify-center" style={{ background: "white", border: "2px solid #0F1923" }}>
                 <div className="text-center">
-                  <div className="text-4xl mb-2">▶️</div>
                   <p className="font-sans text-sm" style={{ color: "#0F1923" }}>Video URL not provided</p>
                 </div>
               </div>

@@ -27,7 +27,6 @@ export default function Shop() {
             Earn currency by submitting approved projects, then spend it here on tools, gadgets, and once-in-a-lifetime rewards.
           </p>
           <div className="mt-6 inline-flex items-center gap-2 bg-white rounded-xl px-5 py-3" style={{ border: "2px solid #0F1923" }}>
-            <span className="text-xl">🪙</span>
             <span className="font-sans text-sm font-bold" style={{ color: "#0F1923" }}>Submit an approved project to earn your first coins</span>
           </div>
         </div>

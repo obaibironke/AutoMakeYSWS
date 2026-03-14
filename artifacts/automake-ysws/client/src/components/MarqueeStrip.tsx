@@ -1,16 +1,16 @@
 const marqueeItems = [
-  "⚡ Email Auto-Responder",
-  "🤖 WhatsApp Bot",
-  "📊 Auto-Report Generator",
-  "🔗 Zapier Clone",
-  "🧠 AI Flashcard Maker",
-  "💬 Slack Daily Digest",
-  "🪙 Crypto Price Notifier",
-  "📅 Social Media Scheduler",
-  "🎨 AI Recipe Generator",
-  "📬 Newsletter Bot",
-  "🔥 Notion Sync",
-  "💡 Discord Alerts",
+  "Email Auto-Responder",
+  "WhatsApp Bot",
+  "Auto-Report Generator",
+  "Zapier Clone",
+  "AI Flashcard Maker",
+  "Slack Daily Digest",
+  "Crypto Price Notifier",
+  "Social Media Scheduler",
+  "AI Recipe Generator",
+  "Newsletter Bot",
+  "Notion Sync",
+  "Discord Alerts",
 ];
 
 export default function MarqueeStrip() {

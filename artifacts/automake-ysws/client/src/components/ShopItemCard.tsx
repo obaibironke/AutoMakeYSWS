@@ -30,15 +30,14 @@ export default function ShopItemCard({ item }: ShopItemCardProps) {
 
       <div className="flex items-center justify-between mt-auto">
         <div className="flex items-center gap-1.5">
-          <span className="text-xl">🪙</span>
-          <span className="font-sans text-2xl font-bold" style={{ color: "#0F1923" }}>{item.cost.toLocaleString()}</span>
+          <span className="font-sans text-2xl font-bold" style={{ color: "#0F1923" }}>{item.cost.toLocaleString()} coins</span>
         </div>
         <button
           disabled
           className="font-sans text-sm font-semibold px-5 py-2.5 rounded-lg cursor-not-allowed"
           style={{ background: "#ccc", color: "#888", border: "1px solid #bbb" }}
         >
-          🔒 Locked
+          Locked
         </button>
       </div>
     </div>
