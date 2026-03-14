@@ -302,7 +302,7 @@ function FaqSectionContent({ dir }: { dir: number }) {
 /* ─── Integrations Section ───────────────────────────────── */
 
 const integrationLogos = [
-  { slug: "slack",        name: "Slack",          top: "6%",  left: "10%", size: 56, rot: -4  },
+  { slug: "slack",        name: "Slack",          top: "6%",  left: "10%", size: 56, rot: -4, src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png" },
   { slug: "notion",       name: "Notion",         top: "5%",  left: "40%", size: 64, rot:  3  },
   { slug: "github",       name: "GitHub",         top: "7%",  left: "70%", size: 56, rot: -6  },
   { slug: "huggingface",  name: "Hugging Face",   top: "19%", left: "3%",  size: 72, rot:  5  },
@@ -376,14 +376,15 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
               }}
             >
               <img
-                src={`https://cdn.simpleicons.org/${item.slug}`}
+                src={item.src ?? `https://cdn.simpleicons.org/${item.slug}`}
                 alt={item.name}
                 draggable={false}
                 style={{
                   width: item.size * 0.48,
                   height: item.size * 0.48,
-                  filter: "brightness(0) invert(1)",
+                  filter: item.src ? "none" : "brightness(0) invert(1)",
                   userSelect: "none",
+                  objectFit: "contain",
                 }}
               />
             </div>
