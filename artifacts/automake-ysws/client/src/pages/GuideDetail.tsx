@@ -3,12 +3,6 @@ import { guides } from "../data/guides";
 import ProjectCard from "../components/ProjectCard";
 import { projects } from "../data/projects";
 
-const difficultyColors: Record<string, string> = {
-  Beginner: "bg-green-100 text-green-800",
-  Intermediate: "bg-yellow-100 text-yellow-800",
-  Advanced: "bg-orange-100 text-orange-800",
-};
-
 export default function GuideDetail() {
   const { id } = useParams<{ id: string }>();
   const guide = guides.find((g) => g.id === id);
@@ -37,9 +31,6 @@ export default function GuideDetail() {
             </span>
           </Link>
           <div className="flex items-center gap-3 mb-4">
-            <span className={`font-sans text-xs font-semibold px-3 py-1 rounded-full ${difficultyColors[guide.difficulty]}`}>
-              {guide.difficulty}
-            </span>
             <span className="font-sans text-sm text-[#424242]">{guide.steps.length} steps</span>
           </div>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] leading-tight">

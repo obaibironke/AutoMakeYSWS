@@ -1,12 +1,6 @@
 import { Link } from "wouter";
 import type { Guide } from "../data/guides";
 
-const difficultyColors: Record<Guide["difficulty"], string> = {
-  Beginner: "bg-green-100 text-green-800",
-  Intermediate: "bg-yellow-100 text-yellow-800",
-  Advanced: "bg-orange-100 text-orange-800",
-};
-
 interface GuideCardProps {
   guide: Guide;
 }
@@ -14,15 +8,10 @@ interface GuideCardProps {
 export default function GuideCard({ guide }: GuideCardProps) {
   return (
     <div className="bg-white border border-[#D1DCCF] rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col">
-      <div className="flex items-start justify-between gap-3 mb-3">
+      <div className="flex items-start gap-3 mb-3">
         <h3 className="font-serif text-lg font-bold text-[#3B2F3E] leading-tight flex-1">
           {guide.title}
         </h3>
-        <span
-          className={`font-sans text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${difficultyColors[guide.difficulty]}`}
-        >
-          {guide.difficulty}
-        </span>
       </div>
 
       <p className="font-sans text-sm text-[#424242] leading-relaxed flex-1 mb-4">

@@ -56,30 +56,6 @@ export const guides: Guide[] = [
     ]
   },
   {
-    id: "3",
-    title: "Build an IoT Sensor Dashboard with Arduino",
-    difficulty: "Intermediate",
-    description: "Connect an Arduino to sensors, read real-world data, and display it on a live web dashboard.",
-    steps: [
-      "Gather your materials: Arduino Uno, USB cable, DHT11 temperature/humidity sensor, jumper wires.",
-      "Connect the DHT11 to the Arduino: VCC to 5V, GND to GND, DATA to digital pin 2.",
-      "Install the Arduino IDE and the DHT sensor library via the Library Manager.",
-      "Write a sketch that reads temperature and humidity from the sensor and prints them to Serial every 5 seconds.",
-      "Upload the sketch and verify readings in the Serial Monitor.",
-      "Install Node.js and the 'serialport' npm package to read serial data on your computer.",
-      "Write a Node.js script that reads the serial output and saves readings to a JSON file.",
-      "Create a simple HTML page with Chart.js that fetches the JSON file and displays a live-updating graph.",
-      "Run a local server with 'npx serve' and open the dashboard in your browser."
-    ],
-    modifications: [
-      "Add a soil moisture sensor and trigger a relay to water plants automatically.",
-      "Log all readings to a Google Sheet using the Sheets API for long-term tracking.",
-      "Add a buzzer alarm that sounds when temperature exceeds a threshold.",
-      "Build a mobile-friendly dashboard so you can check readings from your phone.",
-      "Add multiple sensors and display them as separate charts on the dashboard."
-    ]
-  },
-  {
     id: "4",
     title: "Create an AI Chatbot with OpenAI API",
     difficulty: "Intermediate",
