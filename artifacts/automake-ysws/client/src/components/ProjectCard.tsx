@@ -18,19 +18,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {project.description}
       </p>
 
-      <div className="flex items-center justify-between mt-auto">
-        <div>
-          <p className="font-sans text-sm font-semibold text-[#3B2F3E]">{project.creator}</p>
-          <p className="font-sans text-xs text-[#424242]">
-            {project.age} · {project.location}
-          </p>
-        </div>
-        <div className="flex items-center gap-1 text-[#424242]">
-          <span className="text-sm">🕐</span>
-          <span className="font-sans text-sm font-medium">{project.hours}h</span>
-        </div>
-      </div>
-
       <Link href={`/projects/${project.id}`}>
         <span className="mt-4 w-full inline-flex items-center justify-center font-sans text-sm font-semibold bg-[#3B2F3E] text-white px-5 py-2.5 rounded-lg hover:bg-[#2d2330] transition-colors cursor-pointer">
           View Project →
