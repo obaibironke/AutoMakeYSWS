@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const LABELS = ["Hero", "How It Works", "Projects", "FAQ"];
+const LABELS = ["Hero", "How It Works", "Integrations", "Projects", "FAQ", "n8n"];
 
 interface DotNavProps {
   containerRef: React.RefObject<HTMLDivElement | null>;

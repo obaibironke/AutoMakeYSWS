@@ -301,7 +301,7 @@ function FaqSectionContent({ dir }: { dir: number }) {
 
 /* ─── Main: scrolljacking orchestrator ───────────────────── */
 
-const TOTAL = 5;
+const TOTAL = 6;
 const TRANSITION_MS = 900;
 
 export default function Landing() {
@@ -423,9 +423,10 @@ export default function Landing() {
           >
             {current === 0 && <HeroSection dir={dir} {...blobProps} />}
             {current === 1 && <HowItWorksSection dir={dir} />}
-            {current === 2 && <ProjectsSection dir={dir} />}
-            {current === 3 && <FaqSectionContent dir={dir} />}
-            {current === 4 && <N8nVideoSection dir={dir} />}
+            {current === 2 && <IntegrationsSection dir={dir} />}
+            {current === 3 && <ProjectsSection dir={dir} />}
+            {current === 4 && <FaqSectionContent dir={dir} />}
+            {current === 5 && <N8nVideoSection dir={dir} />}
           </motion.div>
         </AnimatePresence>
 

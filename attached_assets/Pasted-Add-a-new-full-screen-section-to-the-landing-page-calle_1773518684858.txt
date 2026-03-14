@@ -1,0 +1,76 @@
+Add a new full-screen section to the landing page called the "Integrations" section. Add it after the "How It Works" section. Do not change any other sections or content.
+
+---
+
+## INTEGRATIONS SECTION
+
+### Content
+- Background: Midnight Plum (#3B2F3E)
+- Centered heading in white, DM Serif Display: "We'll fund the tools you need"
+- Subheading in semi-transparent white, DM Sans: "Get sponsored for any integration your automation requires — no cost to you."
+- Below the text, a full-width field of logos arranged in a raindrop/scattered pattern (see layout below)
+
+### Logos to include (use official SVG logos from https://simpleicons.org for each):
+Slack, Airtable, ChatGPT (OpenAI), Gemini (Google), Notion, Claude (Anthropic), AWS, Brevo, Discord, Calendly, WhatsApp, Facebook, Instagram, Meta, ClickUp, Cloudflare, GitHub, Google Ads, Gmail, Google Drive, Google Sheets, Mailchimp, Twilio, Fillout, Oracle
+
+Fetch each SVG from simpleicons.org like:
+https://cdn.simpleicons.org/slack
+https://cdn.simpleicons.org/airtable
+https://cdn.simpleicons.org/openai
+https://cdn.simpleicons.org/google
+https://cdn.simpleicons.org/notion
+https://cdn.simpleicons.org/anthropic
+https://cdn.simpleicons.org/amazonaws
+https://cdn.simpleicons.org/brevo
+https://cdn.simpleicons.org/discord
+https://cdn.simpleicons.org/calendly
+https://cdn.simpleicons.org/whatsapp
+https://cdn.simpleicons.org/facebook
+https://cdn.simpleicons.org/instagram
+https://cdn.simpleicons.org/meta
+https://cdn.simpleicons.org/clickup
+https://cdn.simpleicons.org/cloudflare
+https://cdn.simpleicons.org/github
+https://cdn.simpleicons.org/googleads
+https://cdn.simpleicons.org/gmail
+https://cdn.simpleicons.org/googledrive
+https://cdn.simpleicons.org/googlesheets
+https://cdn.simpleicons.org/mailchimp
+https://cdn.simpleicons.org/twilio
+https://cdn.simpleicons.org/oracle
+
+Display each as a white <img> tag (use CSS filter: brightness(0) invert(1) to make all logos white) inside a small rounded card with a subtle semi-transparent white border.
+
+### Raindrop Layout
+- Position the logo cards absolutely within the section using hardcoded `top` and `left` percentage values
+- Arrange them in a scattered vertical pattern that mimics raindrops — clustered more toward the top, spreading out toward the bottom, with slight horizontal variation (not a grid, not perfectly aligned)
+- Each card should be slightly different sizes — mix between 56px and 72px icon containers
+- Add a slight random rotation to each card between -8deg and 8deg using hardcoded transform: rotate() values
+
+### Parallax Scroll Effect
+- Use a `useRef` on the section and a `useEffect` with a `scroll` event listener on the snap scroll container div (give it an id of "scroll-container")
+- As the user scrolls DOWN, translate the entire logo field UP (negative Y) — as the user scrolls UP, translate the logo field DOWN (positive Y)
+- Use this formula: `translateY = (scrollTop - sectionOffsetTop) * -0.3`
+- Apply the transform to a wrapper div that contains all logo cards using `ref.current.style.transform = translateY(...)`
+- Use `will-change: transform` and `transform: translateZ(0)` on the wrapper for GPU acceleration
+- Make sure the parallax wrapper overflows the section bounds slightly (add overflow: hidden to the section, let the wrapper be position: absolute, inset: -10% 0)
+
+### On Enter Animation
+- When the section enters the viewport (use the existing useInView hook), each logo card fades in and drops into place from above
+- Stagger each card's animation by index * 40ms
+- Use this CSS:
+```css
+.logo-card {
+  opacity: 0;
+  transform: translateY(-30px) rotate(VAR_ROTATION);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.logo-card.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(VAR_ROTATION);
+}
+```
+Since each card has a hardcoded rotation, inline the final rotation as a CSS variable or just hardcode both the hidden and visible transform states per card using inline styles.
+
+### DotNav
+Add a dot for this new section to the existing DotNav component — it should now have one more dot than before. Update the section refs array accordingly.
