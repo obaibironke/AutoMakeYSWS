@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
 import MarqueeStrip from "../components/MarqueeStrip";
 import ProjectCard from "../components/ProjectCard";
 import { projects } from "../data/projects";
@@ -38,6 +39,50 @@ const steps = [
   { icon: "🪙", label: "Earn currency & shop rewards" },
 ];
 
+// Reusable animation variants
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  show: { opacity: 1, y: 0 },
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1 },
+};
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
+const staggerFast = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07 } },
+};
+
+function ScrollReveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-60px" }}
+      variants={fadeUp}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function WaveDivider({ flip = false, fill = "#D1DCCF" }: { flip?: boolean; fill?: string }) {
   return (
     <div className={`w-full overflow-hidden leading-none ${flip ? "rotate-180" : ""}`}>
@@ -60,13 +105,30 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
       >
         <span className="font-sans font-semibold text-[#3B2F3E] text-base pr-4">{q}</span>
-        <span className="text-[#3B2F3E] text-xl font-bold shrink-0">{open ? "−" : "+"}</span>
+        <motion.span
+          className="text-[#3B2F3E] text-xl font-bold shrink-0"
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          +
+        </motion.span>
       </button>
-      {open && (
-        <div className="px-6 py-5 bg-white border-t border-[#D1DCCF]">
-          <p className="font-sans text-[#424242] text-base leading-relaxed">{a}</p>
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 py-5 bg-white border-t border-[#D1DCCF]">
+              <p className="font-sans text-[#424242] text-base leading-relaxed">{a}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -76,115 +138,185 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="bg-[#D1DCCF] pt-20 pb-0 text-center">
+      {/* ── Hero ── */}
+      <section className="bg-[#D1DCCF] pt-20 pb-16 text-center">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6">
-            <span className="font-sans text-xs font-semibold text-[#3B2F3E] uppercase tracking-widest">
-              Youth Startup Weekend — YSWS
-            </span>
-          </div>
-          <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-[#3B2F3E] leading-tight mb-6">
-            Automake YSWS
-          </h1>
-          <p className="font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed">
-            Build automation projects. Earn currency. Unlock rewards.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/showcase">
-              <span className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block">
-                Explore Projects
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+          >
+            {/* Badge */}
+            <motion.div
+              variants={fadeUp}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6"
+            >
+              <span className="font-sans text-xs font-semibold text-[#3B2F3E] uppercase tracking-widest">
+                Youth Startup Weekend — YSWS
               </span>
-            </Link>
-            <Link href="/guides">
-              <span className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block">
-                Browse Guides
-              </span>
-            </Link>
-          </div>
+            </motion.div>
 
+            {/* Title */}
+            <motion.h1
+              variants={fadeUp}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-[#3B2F3E] leading-tight mb-6"
+            >
+              Automake YSWS
+            </motion.h1>
+
+            {/* Tagline */}
+            <motion.p
+              variants={fadeUp}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed"
+            >
+              Build automation projects. Earn currency. Unlock rewards.
+            </motion.p>
+
+            {/* CTA buttons */}
+            <motion.div
+              variants={fadeUp}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
+              <Link href="/showcase">
+                <motion.span
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block"
+                >
+                  Explore Projects
+                </motion.span>
+              </Link>
+              <Link href="/guides">
+                <motion.span
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block"
+                >
+                  Browse Guides
+                </motion.span>
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Wave divider */}
       <WaveDivider fill="#D1DCCF" />
 
-      {/* How It Works */}
+      {/* ── How It Works ── */}
       <section className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] text-center mb-4">
-            Here's How It Works
-          </h2>
-          <p className="font-sans text-[#424242] text-center text-lg mb-14 max-w-2xl mx-auto">
-            Four simple steps from idea to reward. Anyone can do it.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ScrollReveal className="text-center mb-14">
+            <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
+              Here's How It Works
+            </h2>
+            <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+              Four simple steps from idea to reward. Anyone can do it.
+            </p>
+          </ScrollReveal>
+
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+          >
             {steps.map((step, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-8 text-center hover:bg-[#D1DCCF]/50 transition-colors"
+                variants={fadeUp}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-8 text-center hover:bg-[#D1DCCF]/50 transition-colors cursor-default"
               >
                 <div className="text-4xl mb-4">{step.icon}</div>
                 <div className="font-sans text-xs font-bold text-[#3B2F3E]/50 uppercase tracking-widest mb-2">
                   Step {i + 1}
                 </div>
                 <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
-          <div className="text-center mt-10">
+          </motion.div>
+
+          <ScrollReveal className="text-center mt-10" delay={0.1}>
             <Link href="/guides">
               <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
                 Follow the Guides →
               </span>
             </Link>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* Marquee strip */}
+      {/* ── Marquee strip ── */}
       <MarqueeStrip />
 
       {/* Wave */}
       <WaveDivider fill="white" />
 
-      {/* Featured Projects */}
+      {/* ── Featured Projects ── */}
       <section className="bg-[#D1DCCF] py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] text-center mb-4">
-            Projects shipped so far
-          </h2>
-          <p className="font-sans text-[#424242] text-center text-lg mb-14 max-w-2xl mx-auto">
-            Real automation projects built by real teens, just like you.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ScrollReveal className="text-center mb-14">
+            <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
+              Projects shipped so far
+            </h2>
+            <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+              Real automation projects built by real teens, just like you.
+            </p>
+          </ScrollReveal>
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={staggerFast}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+          >
             {featuredProjects.map((p) => (
-              <ProjectCard key={p.id} project={p} />
+              <motion.div
+                key={p.id}
+                variants={fadeUp}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ProjectCard project={p} />
+              </motion.div>
             ))}
-          </div>
-          <div className="text-center mt-10">
+          </motion.div>
+
+          <ScrollReveal className="text-center mt-10" delay={0.1}>
             <Link href="/showcase">
               <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
                 See all projects →
               </span>
             </Link>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Wave */}
       <WaveDivider flip fill="#D1DCCF" />
 
-      {/* Join Community */}
+      {/* ── Join Community ── */}
       <section id="about" className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Image left */}
-            <div className="rounded-2xl overflow-hidden shadow-lg">
+            {/* Image — slides in from left */}
+            <motion.div
+              className="rounded-2xl overflow-hidden shadow-lg"
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            >
               <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" className="w-full">
                 <rect width="600" height="400" fill="#D1DCCF" />
                 <rect x="60" y="60" width="480" height="280" rx="16" fill="white" />
-                {/* People illustrations */}
                 {[
                   { cx: 150, cy: 200, label: "🌍", name: "Builder" },
                   { cx: 300, cy: 200, label: "💻", name: "Maker" },
@@ -200,10 +332,15 @@ export default function Landing() {
                   Join 100+ teen builders
                 </text>
               </svg>
-            </div>
+            </motion.div>
 
-            {/* Text right */}
-            <div>
+            {/* Text — slides in from right */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            >
               <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-6 leading-tight">
                 Join a community of young builders
               </h2>
@@ -214,11 +351,15 @@ export default function Landing() {
                 Whether you're a first-time builder or already shipping projects, there's a place for you here. Learn from guides, get inspired by other builders, and turn your ideas into reality.
               </p>
               <Link href="/guides">
-                <span className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block">
+                <motion.span
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block"
+                >
                   Get Started
-                </span>
+                </motion.span>
               </Link>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -226,20 +367,31 @@ export default function Landing() {
       {/* Wave */}
       <WaveDivider fill="white" />
 
-      {/* FAQ */}
+      {/* ── FAQ ── */}
       <section id="faq" className="bg-[#D1DCCF] py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] text-center mb-4">
-            FAQ
-          </h2>
-          <p className="font-sans text-[#424242] text-center text-lg mb-12">
-            Got questions? We've got answers.
-          </p>
-          <div className="flex flex-col gap-3">
+          <ScrollReveal className="text-center mb-12">
+            <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">FAQ</h2>
+            <p className="font-sans text-[#424242] text-lg">Got questions? We've got answers.</p>
+          </ScrollReveal>
+
+          <motion.div
+            className="flex flex-col gap-3"
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-40px" }}
+          >
             {faqItems.map((item, i) => (
-              <FaqItem key={i} q={item.q} a={item.a} />
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <FaqItem q={item.q} a={item.a} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>
