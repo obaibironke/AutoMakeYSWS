@@ -408,33 +408,57 @@ export default function Landing() {
   };
 
   return (
-    /* Exactly fills viewport below the sticky navbar */
-    <div style={{ height: "calc(100vh - 64px)", overflow: "hidden", position: "relative" }}>
-      <AnimatePresence mode="popLayout" custom={dir}>
-        <motion.div
-          key={current}
-          custom={dir}
-          variants={containerVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          style={{ position: "absolute", inset: 0 }}
-        >
-          {current === 0 && <HeroSection dir={dir} {...blobProps} />}
-          {current === 1 && <HowItWorksSection dir={dir} />}
-          {current === 2 && <ProjectsSection dir={dir} />}
-          {current === 3 && <FaqSectionContent dir={dir} />}
-        </motion.div>
-      </AnimatePresence>
+    <div>
+      {/* Scrolljacking sections */}
+      <div style={{ height: "calc(100vh - 64px)", overflow: "hidden", position: "relative" }}>
+        <AnimatePresence mode="popLayout" custom={dir}>
+          <motion.div
+            key={current}
+            custom={dir}
+            variants={containerVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            style={{ position: "absolute", inset: 0 }}
+          >
+            {current === 0 && <HeroSection dir={dir} {...blobProps} />}
+            {current === 1 && <HowItWorksSection dir={dir} />}
+            {current === 2 && <ProjectsSection dir={dir} />}
+            {current === 3 && <FaqSectionContent dir={dir} />}
+          </motion.div>
+        </AnimatePresence>
 
-      {/* Minimal section indicator — thin progress line at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#3B2F3E]/8 z-50">
-        <motion.div
-          className="h-full bg-[#3B2F3E]/30"
-          animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        />
+        {/* Minimal section indicator — thin progress line at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#3B2F3E]/8 z-50">
+          <motion.div
+            className="h-full bg-[#3B2F3E]/30"
+            animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </div>
       </div>
+
+      {/* n8n Video Section */}
+      <section className="w-full bg-white py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-3">
+              n8n Workflow Execution
+            </h2>
+            <p className="font-sans text-lg text-[#424242]">
+              Learn how to execute workflows with n8n automation
+            </p>
+          </div>
+          <video
+            controls
+            className="w-full rounded-xl shadow-lg bg-black"
+            style={{ aspectRatio: "16 / 9" }}
+          >
+            <source src="/N8N workflow execution.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
     </div>
   );
 }

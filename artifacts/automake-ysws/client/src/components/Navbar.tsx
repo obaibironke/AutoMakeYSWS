@@ -9,7 +9,6 @@ export default function Navbar() {
     { label: "Showcase", href: "/showcase" },
     { label: "Guides", href: "/guides" },
     { label: "Shop", href: "/shop" },
-    { label: "n8n", href: "/n8n" },
   ];
 
   return (
