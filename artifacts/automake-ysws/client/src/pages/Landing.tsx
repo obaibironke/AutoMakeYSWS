@@ -180,46 +180,48 @@ function HowItWorksSection({ dir }: { dir: number }) {
   return (
     <div className="w-full h-full bg-white flex flex-col items-center justify-center overflow-hidden">
       <motion.div
-        className="w-full max-w-6xl mx-auto px-6"
+        className="w-full flex flex-col"
         custom={dir}
         variants={contentVariants}
         initial="enter"
         animate="center"
         exit="exit"
       >
-        <div className="text-center mb-12">
-          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-4">
-            Here's How It Works
-          </h2>
-          <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
-            Four simple steps from idea to reward. Anyone can do it.
-          </p>
+        <div className="max-w-6xl mx-auto px-6 w-full">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-4">
+              Here's How It Works
+            </h2>
+            <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+              Four simple steps from idea to reward. Anyone can do it.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {steps.map((step, i) => (
+              <motion.div key={i}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-7 text-center"
+              >
+                <div className="text-4xl mb-3">{step.icon}</div>
+                <div className="font-sans text-xs font-bold text-[#3B2F3E]/40 uppercase tracking-widest mb-2">
+                  Step {i + 1}
+                </div>
+                <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link href="/guides">
+              <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
+                Follow the Guides →
+              </span>
+            </Link>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {steps.map((step, i) => (
-            <motion.div key={i}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-7 text-center"
-            >
-              <div className="text-4xl mb-3">{step.icon}</div>
-              <div className="font-sans text-xs font-bold text-[#3B2F3E]/40 uppercase tracking-widest mb-2">
-                Step {i + 1}
-              </div>
-              <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="text-center mt-8">
-          <Link href="/guides">
-            <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
-              Follow the Guides →
-            </span>
-          </Link>
-        </div>
-
-        <div className="mt-10">
+        <div className="w-full mt-10">
           <MarqueeStrip />
         </div>
       </motion.div>
