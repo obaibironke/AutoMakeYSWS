@@ -12,70 +12,59 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-[#D1DCCF] shadow-sm">
+    <nav className="sticky top-0 z-50 shadow-sm" style={{ background: "#0F1923" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link href="/">
-            <span className="font-serif text-2xl font-bold text-[#3B2F3E] tracking-tight cursor-pointer">
+            <span className="font-sans text-2xl font-extrabold tracking-tight cursor-pointer" style={{ color: "#00E5A0" }}>
               Automake
             </span>
           </Link>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span
-                  className={`font-sans text-sm font-medium transition-colors cursor-pointer ${
-                    location === link.href
-                      ? "text-[#3B2F3E] border-b-2 border-[#3B2F3E] pb-0.5"
-                      : "text-[#424242] hover:text-[#3B2F3E]"
-                  }`}
+                  className="font-sans text-sm font-medium transition-colors cursor-pointer"
+                  style={{
+                    color: location === link.href ? "#00E5A0" : "#F5F0E8",
+                    borderBottom: location === link.href ? "2px solid #00E5A0" : "none",
+                    paddingBottom: location === link.href ? "2px" : undefined,
+                  }}
                 >
                   {link.label}
                 </span>
               </Link>
             ))}
             <Link href="/guides">
-              <span className="font-sans text-sm font-semibold bg-[#3B2F3E] text-white px-5 py-2 rounded-lg hover:bg-[#2d2330] transition-colors cursor-pointer">
+              <span
+                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all"
+                style={{ background: "#00E5A0", color: "#0F1923", boxShadow: "2px 2px 0px #F5F0E8" }}
+              >
                 Get Started
               </span>
             </Link>
           </div>
 
-          {/* Mobile hamburger */}
           <button
             className="md:hidden flex flex-col gap-1.5 p-2"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
-            <span
-              className={`block w-6 h-0.5 bg-[#3B2F3E] transition-transform duration-300 ${
-                menuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-[#3B2F3E] transition-opacity duration-300 ${
-                menuOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-[#3B2F3E] transition-transform duration-300 ${
-                menuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            />
+            <span className={`block w-6 h-0.5 transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} style={{ background: "#F5F0E8" }} />
+            <span className={`block w-6 h-0.5 transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`} style={{ background: "#F5F0E8" }} />
+            <span className={`block w-6 h-0.5 transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} style={{ background: "#F5F0E8" }} />
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-[#D1DCCF] px-4 py-4 flex flex-col gap-4">
+        <div className="md:hidden px-4 py-4 flex flex-col gap-4" style={{ background: "#0F1923", borderTop: "1px solid rgba(245,240,232,0.1)" }}>
           {links.map((link) => (
             <Link key={link.href} href={link.href}>
               <span
-                className="font-sans text-base font-medium text-[#424242] hover:text-[#3B2F3E] cursor-pointer"
+                className="font-sans text-base font-medium cursor-pointer"
+                style={{ color: "#F5F0E8" }}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
@@ -84,7 +73,8 @@ export default function Navbar() {
           ))}
           <Link href="/guides">
             <span
-              className="font-sans text-sm font-semibold bg-[#3B2F3E] text-white px-5 py-2 rounded-lg hover:bg-[#2d2330] transition-colors cursor-pointer inline-block text-center"
+              className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block text-center"
+              style={{ background: "#00E5A0", color: "#0F1923" }}
               onClick={() => setMenuOpen(false)}
             >
               Get Started

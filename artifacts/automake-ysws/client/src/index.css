@@ -51,9 +51,14 @@
 
 :root {
   /* Automake brand colors */
-  --eucalyptus: #D1DCCF;
-  --midnight-plum: #3B2F3E;
-  --pencil-lead: #424242;
+  --near-black: #0F1923;
+  --electric-mint: #00E5A0;
+  --warm-cream: #F5F0E8;
+  --bot-orange: #FF5733;
+  /* Legacy aliases → new palette */
+  --eucalyptus: #F5F0E8;
+  --midnight-plum: #0F1923;
+  --pencil-lead: #0F1923;
 
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
@@ -61,41 +66,41 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  /* HSL values for the theme system */
-  --background: 95 15% 90%; /* eucalyptus tinted */
-  --foreground: 280 15% 21%; /* midnight plum */
-  --border: 95 15% 80%;
+  /* HSL values for the theme system (mapped to new palette) */
+  --background: 40 33% 94%; /* warm cream */
+  --foreground: 210 47% 10%; /* near black */
+  --border: 210 30% 80%;
   --card: 0 0% 100%;
-  --card-foreground: 280 15% 21%;
-  --card-border: 95 15% 80%;
+  --card-foreground: 210 47% 10%;
+  --card-border: 210 30% 80%;
   --sidebar: 0 0% 100%;
-  --sidebar-foreground: 280 15% 21%;
-  --sidebar-border: 95 15% 80%;
-  --sidebar-primary: 280 15% 21%;
+  --sidebar-foreground: 210 47% 10%;
+  --sidebar-border: 210 30% 80%;
+  --sidebar-primary: 210 47% 10%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 95 15% 85%;
-  --sidebar-accent-foreground: 280 15% 21%;
-  --sidebar-ring: 280 15% 21%;
+  --sidebar-accent: 40 33% 88%;
+  --sidebar-accent-foreground: 210 47% 10%;
+  --sidebar-ring: 163 100% 45%;
   --popover: 0 0% 100%;
-  --popover-foreground: 280 15% 21%;
-  --popover-border: 95 15% 80%;
-  --primary: 280 15% 21%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 95 15% 85%;
-  --secondary-foreground: 280 15% 21%;
-  --muted: 95 15% 88%;
-  --muted-foreground: 0 0% 26%;
-  --accent: 95 15% 82%;
-  --accent-foreground: 280 15% 21%;
-  --destructive: 0 84% 60%;
+  --popover-foreground: 210 47% 10%;
+  --popover-border: 210 30% 80%;
+  --primary: 163 100% 45%; /* electric mint */
+  --primary-foreground: 210 47% 10%;
+  --secondary: 40 33% 90%;
+  --secondary-foreground: 210 47% 10%;
+  --muted: 40 33% 88%;
+  --muted-foreground: 210 20% 40%;
+  --accent: 163 100% 45%;
+  --accent-foreground: 210 47% 10%;
+  --destructive: 14 100% 57%; /* bot orange */
   --destructive-foreground: 0 0% 100%;
-  --input: 95 15% 75%;
-  --ring: 280 15% 21%;
-  --chart-1: 280 15% 21%;
-  --chart-2: 95 15% 55%;
-  --chart-3: 0 0% 26%;
-  --chart-4: 280 30% 40%;
-  --chart-5: 95 25% 70%;
+  --input: 40 33% 82%;
+  --ring: 163 100% 45%;
+  --chart-1: 163 100% 45%;
+  --chart-2: 14 100% 57%;
+  --chart-3: 210 47% 10%;
+  --chart-4: 163 60% 60%;
+  --chart-5: 14 80% 70%;
 
   --app-font-sans: 'DM Sans', sans-serif;
   --app-font-serif: 'Space Grotesk', sans-serif;
@@ -128,7 +133,8 @@
   }
 
   body {
-    @apply font-sans antialiased bg-white text-foreground;
+    @apply font-sans antialiased text-foreground;
+    background-color: var(--warm-cream);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -136,8 +142,8 @@
   }
 
   mark {
-    background: var(--eucalyptus);
-    color: var(--midnight-plum);
+    background: var(--electric-mint);
+    color: var(--near-black);
     padding: 0 6px;
     border-radius: 4px;
     transform: rotate(-1deg);

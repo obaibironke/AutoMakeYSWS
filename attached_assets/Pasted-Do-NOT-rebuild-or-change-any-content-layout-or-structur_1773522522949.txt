@@ -1,0 +1,153 @@
+Do NOT rebuild or change any content, layout, or structure. Only replace the color scheme throughout the entire project. Here is exactly what to change:
+
+---
+
+## 1. CSS VARIABLES
+
+In `client/src/index.css`, replace the existing color variables with these:
+```css
+:root {
+  --near-black: #0F1923;
+  --electric-mint: #00E5A0;
+  --warm-cream: #F5F0E8;
+  --bot-orange: #FF5733;
+}
+```
+
+Remove all references to --eucalyptus, --midnight-plum, and --pencil-lead everywhere in the codebase and replace them with the new variables using this mapping:
+
+- --eucalyptus → --warm-cream (backgrounds, alternating sections)
+- --midnight-plum → --near-black (headings, navbar, footer, card borders)
+- --pencil-lead → --near-black (body text, borders, details)
+
+---
+
+## 2. GLOBAL STYLES
+
+In index.css:
+- body background: var(--warm-cream)
+- body text color: var(--near-black)
+- All headings: var(--near-black)
+
+---
+
+## 3. BUTTONS
+
+Replace all button styles:
+- Primary CTA buttons: background var(--electric-mint), color var(--near-black), font-weight 700
+- Secondary CTA buttons: background var(--bot-orange), color white, font-weight 700
+- Keep the chunky box-shadow and press effect if it already exists: box-shadow: 3px 3px 0px var(--near-black)
+- On hover: shift 2px down, remove shadow
+
+---
+
+## 4. NAVBAR
+
+- Background: var(--near-black)
+- Logo text: var(--electric-mint)
+- Nav links: var(--warm-cream)
+- Nav link hover: var(--electric-mint)
+
+---
+
+## 5. HERO SECTION
+
+- Background: var(--near-black)
+- Heading text: var(--warm-cream)
+- Tagline text: var(--warm-cream) at 80% opacity
+- Blob colors: use semi-transparent var(--electric-mint) and var(--bot-orange) for the drifting blobs
+- CTA buttons: use primary (mint) and secondary (orange) styles from above
+- Scroll hint arrow: var(--electric-mint)
+
+---
+
+## 6. ALTERNATING SECTIONS
+
+- Odd sections (How It Works, Featured Projects, FAQ): background var(--warm-cream), text var(--near-black)
+- Even sections (Marquee, Community, Integrations): background var(--near-black), text var(--warm-cream)
+- Section headings: var(--near-black) on light sections, var(--electric-mint) on dark sections
+
+---
+
+## 7. CARDS (project cards, guide cards, shop cards)
+
+- Background: white
+- Border: 2px solid var(--near-black)
+- Box shadow: 3px 3px 0px var(--near-black)
+- Hover: translate(-2px, -2px), box-shadow becomes 5px 5px 0px var(--near-black)
+- Category badge: background var(--electric-mint), color var(--near-black), font-weight 700
+- Difficulty badges: 
+  - Beginner: background var(--electric-mint), color var(--near-black)
+  - Intermediate: background var(--bot-orange), color white
+  - Advanced: background var(--near-black), color var(--warm-cream)
+- "Locked" button on shop cards: background #ccc, color #888, cursor not-allowed
+
+---
+
+## 8. MARQUEE STRIP
+
+- Background: var(--near-black)
+- Participant name cards: background var(--electric-mint), color var(--near-black), font-weight 700
+- Project title cards: background var(--bot-orange), color white, font-weight 700
+
+---
+
+## 9. INTEGRATIONS SECTION
+
+- Background: var(--near-black)
+- Heading: var(--electric-mint)
+- Subheading: var(--warm-cream) at 70% opacity
+- Logo cards: background rgba(255,255,255,0.06), border 1px solid rgba(255,255,255,0.15)
+- Logo images: filter brightness(0) invert(1) (keep white)
+
+---
+
+## 10. DOT NAVIGATION
+
+- Active dot: var(--electric-mint)
+- Inactive dots: var(--warm-cream) at 40% opacity, border var(--warm-cream)
+
+---
+
+## 11. FAQ SECTION
+
+- Background: var(--warm-cream)
+- Question text: var(--near-black), font-weight 700
+- Answer text: var(--near-black)
+- Accordion border: 2px solid var(--near-black)
+- Open accordion highlight: left border 4px solid var(--electric-mint)
+
+---
+
+## 12. FOOTER
+
+- Background: var(--near-black)
+- All text: var(--warm-cream)
+- Link hover: var(--electric-mint)
+- Bottom tagline: var(--warm-cream) at 50% opacity
+
+---
+
+## 13. MARK HIGHLIGHTS
+
+If any <mark> elements exist for heading highlights:
+```css
+mark {
+  background: var(--electric-mint);
+  color: var(--near-black);
+  padding: 0 6px;
+  border-radius: 4px;
+}
+```
+
+---
+
+## 14. STICKER BADGES
+
+If hero sticker badges exist, update colors:
+- "FREE TOOLS" badge: background var(--electric-mint), color var(--near-black)
+- "OPEN TO ALL TEENS" badge: background var(--bot-orange), color white
+
+---
+
+Do not change any text content, layout, spacing, animations, or component structure. Only colors.

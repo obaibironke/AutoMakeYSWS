@@ -7,23 +7,33 @@ interface GuideCardProps {
 
 export default function GuideCard({ guide }: GuideCardProps) {
   return (
-    <div className="bg-white border border-[#D1DCCF] rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col">
+    <div
+      className="bg-white rounded-xl p-6 flex flex-col transition-all duration-200"
+      style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}
+      onMouseEnter={e => ((e.currentTarget as HTMLElement).style.boxShadow = "5px 5px 0px #0F1923")}
+      onMouseLeave={e => ((e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #0F1923")}
+    >
       <div className="flex items-start gap-3 mb-3">
-        <h3 className="font-serif text-lg font-bold text-[#3B2F3E] leading-tight flex-1">
+        <h3 className="font-sans text-lg font-bold leading-tight flex-1" style={{ color: "#0F1923" }}>
           {guide.title}
         </h3>
       </div>
 
-      <p className="font-sans text-sm text-[#424242] leading-relaxed flex-1 mb-4">
+      <p className="font-sans text-sm leading-relaxed flex-1 mb-4" style={{ color: "#0F1923" }}>
         {guide.description}
       </p>
 
-      <p className="font-sans text-xs text-[#424242] mb-4">
+      <p className="font-sans text-xs mb-4" style={{ color: "#0F1923" }}>
         {guide.steps.length} steps · {guide.modifications.length} remix ideas
       </p>
 
       <Link href={`/guides/${guide.id}`}>
-        <span className="mt-auto w-full inline-flex items-center justify-center font-sans text-sm font-semibold bg-[#3B2F3E] text-white px-5 py-2.5 rounded-lg hover:bg-[#2d2330] transition-colors cursor-pointer">
+        <span
+          className="mt-auto w-full inline-flex items-center justify-center font-sans text-sm font-bold px-5 py-2.5 rounded-lg cursor-pointer transition-all duration-150"
+          style={{ background: "#00E5A0", color: "#0F1923", boxShadow: "3px 3px 0px #0F1923" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.transform = "translate(2px,2px)"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #0F1923"; (e.currentTarget as HTMLElement).style.transform = ""; }}
+        >
           View Guide →
         </span>
       </Link>

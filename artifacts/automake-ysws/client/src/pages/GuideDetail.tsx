@@ -9,10 +9,10 @@ export default function GuideDetail() {
 
   if (!guide) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-4">
-        <h1 className="font-serif text-3xl text-[#3B2F3E]">Guide not found</h1>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "#F5F0E8" }}>
+        <h1 className="font-sans text-3xl font-extrabold" style={{ color: "#0F1923" }}>Guide not found</h1>
         <Link href="/guides">
-          <span className="font-sans text-[#3B2F3E] underline cursor-pointer">← Back to Guides</span>
+          <span className="font-sans cursor-pointer underline" style={{ color: "#0F1923" }}>← Back to Guides</span>
         </Link>
       </div>
     );
@@ -21,19 +21,19 @@ export default function GuideDetail() {
   const exampleProjects = projects.slice(0, 2);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       {/* Hero */}
-      <section className="bg-[#D1DCCF] py-14">
+      <section className="py-14" style={{ background: "#F5F0E8" }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href="/guides">
-            <span className="font-sans text-sm text-[#3B2F3E] hover:underline cursor-pointer mb-6 inline-block">
+            <span className="font-sans text-sm hover:underline cursor-pointer mb-6 inline-block" style={{ color: "#0F1923" }}>
               ← Back to Guides
             </span>
           </Link>
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-sans text-sm text-[#424242]">{guide.steps.length} steps</span>
+            <span className="font-sans text-sm" style={{ color: "#0F1923" }}>{guide.steps.length} steps</span>
           </div>
-          <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] leading-tight">
+          <h1 className="font-sans text-4xl sm:text-5xl font-extrabold leading-tight" style={{ color: "#0F1923" }}>
             {guide.title}
           </h1>
         </div>
@@ -41,39 +41,39 @@ export default function GuideDetail() {
 
       <section className="py-14">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {/* Intro */}
           <div>
-            <p className="font-sans text-lg text-[#424242] leading-relaxed">{guide.description}</p>
+            <p className="font-sans text-lg leading-relaxed" style={{ color: "#0F1923" }}>{guide.description}</p>
           </div>
 
           {/* Steps */}
           <div>
-            <h2 className="font-serif text-3xl font-bold text-[#3B2F3E] mb-8">Step-by-Step Instructions</h2>
+            <h2 className="font-sans text-3xl font-extrabold mb-8" style={{ color: "#0F1923" }}>Step-by-Step Instructions</h2>
             <div className="space-y-4">
               {guide.steps.map((step, i) => (
                 <div
                   key={i}
-                  className="flex gap-4 items-start bg-[#D1DCCF]/20 border border-[#D1DCCF] rounded-xl p-5"
+                  className="flex gap-4 items-start rounded-xl p-5"
+                  style={{ background: "white", border: "2px solid #0F1923" }}
                 >
-                  <div className="shrink-0 w-8 h-8 rounded-full bg-[#3B2F3E] text-white flex items-center justify-center font-sans font-bold text-sm">
+                  <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-sans font-bold text-sm" style={{ background: "#00E5A0", color: "#0F1923" }}>
                     {i + 1}
                   </div>
-                  <p className="font-sans text-[#424242] text-base leading-relaxed pt-0.5">{step}</p>
+                  <p className="font-sans text-base leading-relaxed pt-0.5" style={{ color: "#0F1923" }}>{step}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Make it your own */}
-          <div className="bg-[#3B2F3E] rounded-2xl p-8 text-white">
-            <h2 className="font-serif text-2xl font-bold text-white mb-6">
+          <div className="rounded-2xl p-8" style={{ background: "#0F1923" }}>
+            <h2 className="font-sans text-2xl font-extrabold mb-6" style={{ color: "#00E5A0" }}>
               Ways to Make It Your Own
             </h2>
             <ul className="space-y-3">
               {guide.modifications.map((mod, i) => (
                 <li key={i} className="flex gap-3 items-start">
-                  <span className="text-[#D1DCCF] font-bold text-lg mt-0.5">✦</span>
-                  <p className="font-sans text-[#D1DCCF] text-base leading-relaxed">{mod}</p>
+                  <span className="font-bold text-lg mt-0.5" style={{ color: "#00E5A0" }}>✦</span>
+                  <p className="font-sans text-base leading-relaxed" style={{ color: "#F5F0E8" }}>{mod}</p>
                 </li>
               ))}
             </ul>
@@ -81,7 +81,7 @@ export default function GuideDetail() {
 
           {/* Example projects */}
           <div>
-            <h2 className="font-serif text-3xl font-bold text-[#3B2F3E] mb-8">
+            <h2 className="font-sans text-3xl font-extrabold mb-8" style={{ color: "#0F1923" }}>
               Example Projects Built from Guides
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

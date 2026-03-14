@@ -1,52 +1,44 @@
 import { Link, useParams } from "wouter";
 import { projects } from "../data/projects";
 
-const categoryColors: Record<string, string> = {
-  Automation: "bg-purple-100 text-purple-800",
-  AI: "bg-blue-100 text-blue-800",
-  IoT: "bg-green-100 text-green-800",
-  API: "bg-orange-100 text-orange-800",
-  Other: "bg-gray-100 text-gray-800",
-};
-
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const project = projects.find((p) => p.id === id);
 
   if (!project) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-4">
-        <h1 className="font-serif text-3xl text-[#3B2F3E]">Project not found</h1>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "#F5F0E8" }}>
+        <h1 className="font-sans text-3xl font-extrabold" style={{ color: "#0F1923" }}>Project not found</h1>
         <Link href="/showcase">
-          <span className="font-sans text-[#3B2F3E] underline cursor-pointer">← Back to Showcase</span>
+          <span className="font-sans cursor-pointer underline" style={{ color: "#0F1923" }}>← Back to Showcase</span>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       {/* Hero */}
-      <section className="bg-[#D1DCCF] py-14">
+      <section className="py-14" style={{ background: "#F5F0E8" }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link href="/showcase">
-            <span className="font-sans text-sm text-[#3B2F3E] hover:underline cursor-pointer mb-6 inline-block">
+            <span className="font-sans text-sm hover:underline cursor-pointer mb-6 inline-block" style={{ color: "#0F1923" }}>
               ← Back to Showcase
             </span>
           </Link>
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className={`font-sans text-xs font-semibold px-3 py-1 rounded-full ${categoryColors[project.category]}`}>
+            <span className="font-sans text-xs font-bold px-3 py-1 rounded-full" style={{ background: "#00E5A0", color: "#0F1923" }}>
               {project.category}
             </span>
-            <div className="flex items-center gap-1 text-[#424242]">
+            <div className="flex items-center gap-1" style={{ color: "#0F1923" }}>
               <span>🕐</span>
               <span className="font-sans text-sm font-medium">{project.hours} hours logged</span>
             </div>
           </div>
-          <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-3">
+          <h1 className="font-sans text-4xl sm:text-5xl font-extrabold mb-3" style={{ color: "#0F1923" }}>
             {project.title}
           </h1>
-          <p className="font-sans text-base text-[#424242]">
+          <p className="font-sans text-base" style={{ color: "#0F1923" }}>
             by <strong>{project.creator}</strong> · {project.age} · {project.location}
           </p>
         </div>
@@ -56,34 +48,31 @@ export default function ProjectDetail() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Main content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Screenshot placeholder */}
             <div>
-              <h2 className="font-serif text-2xl font-bold text-[#3B2F3E] mb-4">Screenshot</h2>
-              <div className="w-full h-56 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center">
+              <h2 className="font-sans text-2xl font-extrabold mb-4" style={{ color: "#0F1923" }}>Screenshot</h2>
+              <div className="w-full h-56 rounded-xl flex items-center justify-center" style={{ background: "white", border: "2px solid #0F1923" }}>
                 <div className="text-center">
                   <div className="text-4xl mb-2">🖼️</div>
-                  <p className="font-sans text-sm text-gray-400">Project screenshot placeholder</p>
+                  <p className="font-sans text-sm" style={{ color: "#0F1923" }}>Project screenshot placeholder</p>
                 </div>
               </div>
             </div>
 
-            {/* Video placeholder */}
             <div>
-              <h2 className="font-serif text-2xl font-bold text-[#3B2F3E] mb-4">Demo Video</h2>
-              <div className="w-full h-48 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center">
+              <h2 className="font-sans text-2xl font-extrabold mb-4" style={{ color: "#0F1923" }}>Demo Video</h2>
+              <div className="w-full h-48 rounded-xl flex items-center justify-center" style={{ background: "white", border: "2px solid #0F1923" }}>
                 <div className="text-center">
                   <div className="text-4xl mb-2">▶️</div>
-                  <p className="font-sans text-sm text-gray-400">Video URL not provided</p>
+                  <p className="font-sans text-sm" style={{ color: "#0F1923" }}>Video URL not provided</p>
                 </div>
               </div>
             </div>
 
-            {/* Documentation */}
             <div>
-              <h2 className="font-serif text-2xl font-bold text-[#3B2F3E] mb-4">Documentation</h2>
+              <h2 className="font-sans text-2xl font-extrabold mb-4" style={{ color: "#0F1923" }}>Documentation</h2>
               <div className="prose max-w-none">
                 {project.documentation.split("\n\n").map((para, i) => (
-                  <p key={i} className="font-sans text-[#424242] text-base leading-relaxed mb-4">
+                  <p key={i} className="font-sans text-base leading-relaxed mb-4" style={{ color: "#0F1923" }}>
                     {para}
                   </p>
                 ))}
@@ -93,34 +82,31 @@ export default function ProjectDetail() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* About */}
-            <div className="bg-[#D1DCCF]/40 border border-[#D1DCCF] rounded-xl p-5">
-              <h3 className="font-serif font-bold text-[#3B2F3E] text-lg mb-3">About this project</h3>
-              <p className="font-sans text-sm text-[#424242] leading-relaxed">{project.description}</p>
+            <div className="rounded-xl p-5" style={{ background: "white", border: "2px solid #0F1923" }}>
+              <h3 className="font-sans font-bold text-lg mb-3" style={{ color: "#0F1923" }}>About this project</h3>
+              <p className="font-sans text-sm leading-relaxed" style={{ color: "#0F1923" }}>{project.description}</p>
             </div>
 
-            {/* Concepts */}
-            <div className="bg-[#D1DCCF]/40 border border-[#D1DCCF] rounded-xl p-5">
-              <h3 className="font-serif font-bold text-[#3B2F3E] text-lg mb-3">Concepts learned</h3>
+            <div className="rounded-xl p-5" style={{ background: "white", border: "2px solid #0F1923" }}>
+              <h3 className="font-sans font-bold text-lg mb-3" style={{ color: "#0F1923" }}>Concepts learned</h3>
               <div className="flex flex-wrap gap-2">
                 {project.concepts.map((c) => (
-                  <span key={c} className="font-sans text-xs font-medium bg-white border border-[#D1DCCF] text-[#424242] px-3 py-1 rounded-full">
+                  <span key={c} className="font-sans text-xs font-medium bg-white px-3 py-1 rounded-full" style={{ border: "1px solid #0F1923", color: "#0F1923" }}>
                     {c}
                   </span>
                 ))}
               </div>
             </div>
 
-            {/* Creator */}
-            <div className="bg-[#3B2F3E] rounded-xl p-5 text-white">
-              <h3 className="font-sans font-semibold text-white/70 text-xs uppercase tracking-widest mb-3">Creator</h3>
+            <div className="rounded-xl p-5 text-white" style={{ background: "#0F1923" }}>
+              <h3 className="font-sans font-semibold text-xs uppercase tracking-widest mb-3" style={{ color: "rgba(245,240,232,0.6)" }}>Creator</h3>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#D1DCCF] flex items-center justify-center text-[#3B2F3E] font-bold font-sans">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold font-sans" style={{ background: "#00E5A0", color: "#0F1923" }}>
                   {project.creator[0]}
                 </div>
                 <div>
-                  <p className="font-sans font-bold text-white">{project.creator}</p>
-                  <p className="font-sans text-sm text-white/60">{project.age} · {project.location}</p>
+                  <p className="font-sans font-bold" style={{ color: "#F5F0E8" }}>{project.creator}</p>
+                  <p className="font-sans text-sm" style={{ color: "rgba(245,240,232,0.6)" }}>{project.age} · {project.location}</p>
                 </div>
               </div>
             </div>
