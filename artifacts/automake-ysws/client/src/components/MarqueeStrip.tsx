@@ -17,9 +17,9 @@ export default function MarqueeStrip() {
   const doubled = [...participants, ...participants];
 
   return (
-    <div className="bg-[#3B2F3E] py-8 overflow-hidden">
+    <div className="overflow-hidden py-2">
       <div
-        className="flex gap-4 marquee-track"
+        className="flex gap-3"
         style={{
           width: "max-content",
           animation: "marquee 30s linear infinite",
@@ -28,12 +28,12 @@ export default function MarqueeStrip() {
         {doubled.map((p, i) => (
           <div
             key={i}
-            className="bg-white/10 border border-white/20 rounded-xl px-6 py-4 shrink-0 flex items-center gap-3"
+            className="bg-[#D1DCCF]/40 border border-[#3B2F3E]/10 rounded-full px-5 py-2.5 shrink-0 flex items-center gap-2.5"
           >
-            <div className="w-8 h-8 rounded-full bg-[#D1DCCF] flex items-center justify-center text-[#3B2F3E] font-bold font-sans text-sm">
+            <div className="w-6 h-6 rounded-full bg-[#3B2F3E]/15 flex items-center justify-center text-[#3B2F3E] font-bold font-sans text-xs">
               {p.name[0]}
             </div>
-            <span className="font-sans text-white font-medium text-sm whitespace-nowrap">
+            <span className="font-sans text-[#3B2F3E]/70 font-medium text-sm whitespace-nowrap">
               {p.name} · {p.age} · {p.location}
             </span>
           </div>
