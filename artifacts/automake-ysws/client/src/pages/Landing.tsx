@@ -403,9 +403,11 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
           {/* Frosted backdrop behind text only */}
           <div
             style={{
-              background: "rgba(59,47,62,0.72)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
+              background: "rgba(59,47,62,0.18)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              border: "1px solid rgba(255,255,255,0.18)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
               borderRadius: "20px",
               padding: "2.5rem 3rem",
               maxWidth: "640px",
