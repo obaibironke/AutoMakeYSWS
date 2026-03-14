@@ -299,6 +299,136 @@ function FaqSectionContent({ dir }: { dir: number }) {
   );
 }
 
+/* ─── Integrations Section ───────────────────────────────── */
+
+const integrationLogos = [
+  { slug: "slack",        name: "Slack",          top: "6%",  left: "10%", size: 56, rot: -4  },
+  { slug: "notion",       name: "Notion",         top: "5%",  left: "40%", size: 64, rot:  3  },
+  { slug: "github",       name: "GitHub",         top: "7%",  left: "70%", size: 56, rot: -6  },
+  { slug: "openai",       name: "OpenAI",         top: "19%", left: "3%",  size: 72, rot:  5  },
+  { slug: "discord",      name: "Discord",        top: "17%", left: "27%", size: 56, rot: -3  },
+  { slug: "airtable",     name: "Airtable",       top: "21%", left: "57%", size: 64, rot:  7  },
+  { slug: "cloudflare",   name: "Cloudflare",     top: "18%", left: "82%", size: 56, rot: -5  },
+  { slug: "google",       name: "Gemini",         top: "33%", left: "16%", size: 64, rot:  4  },
+  { slug: "whatsapp",     name: "WhatsApp",       top: "31%", left: "44%", size: 56, rot: -7  },
+  { slug: "meta",         name: "Meta",           top: "35%", left: "68%", size: 72, rot:  6  },
+  { slug: "anthropic",    name: "Claude",         top: "47%", left: "7%",  size: 56, rot: -3  },
+  { slug: "gmail",        name: "Gmail",          top: "45%", left: "31%", size: 64, rot:  5  },
+  { slug: "mailchimp",    name: "Mailchimp",      top: "49%", left: "54%", size: 56, rot: -6  },
+  { slug: "amazonaws",    name: "AWS",            top: "45%", left: "79%", size: 64, rot:  4  },
+  { slug: "facebook",     name: "Facebook",       top: "59%", left: "13%", size: 56, rot:  7  },
+  { slug: "googledrive",  name: "Google Drive",   top: "61%", left: "39%", size: 64, rot: -4  },
+  { slug: "twilio",       name: "Twilio",         top: "57%", left: "64%", size: 56, rot:  5  },
+  { slug: "instagram",    name: "Instagram",      top: "71%", left: "4%",  size: 72, rot: -5  },
+  { slug: "googlesheets", name: "Google Sheets",  top: "69%", left: "27%", size: 56, rot:  3  },
+  { slug: "clickup",      name: "ClickUp",        top: "73%", left: "51%", size: 64, rot: -7  },
+  { slug: "oracle",       name: "Oracle",         top: "69%", left: "78%", size: 56, rot:  6  },
+  { slug: "calendly",     name: "Calendly",       top: "83%", left: "17%", size: 56, rot: -3  },
+  { slug: "googleads",    name: "Google Ads",     top: "85%", left: "44%", size: 64, rot:  5  },
+  { slug: "brevo",        name: "Brevo",          top: "81%", left: "71%", size: 56, rot: -6  },
+];
+
+function IntegrationsSection({ dir }: { dir: number }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 350);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div className="w-full h-full relative overflow-hidden" style={{ background: "#3B2F3E" }}>
+      {/* Scattered logo field */}
+      <div
+        style={{
+          position: "absolute",
+          inset: "-10% 0",
+          willChange: "transform",
+          transform: "translateZ(0)",
+        }}
+      >
+        {integrationLogos.map((item, i) => (
+          <div
+            key={item.slug}
+            title={item.name}
+            style={{
+              position: "absolute",
+              top: item.top,
+              left: item.left,
+              opacity: visible ? 1 : 0,
+              transform: visible
+                ? `translateY(0px) rotate(${item.rot}deg)`
+                : `translateY(-28px) rotate(${item.rot}deg)`,
+              transition: `opacity 0.5s ease ${i * 40}ms, transform 0.5s ease ${i * 40}ms`,
+            }}
+          >
+            <div
+              style={{
+                width: item.size,
+                height: item.size,
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: "14px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={`https://cdn.simpleicons.org/${item.slug}`}
+                alt={item.name}
+                draggable={false}
+                style={{
+                  width: item.size * 0.48,
+                  height: item.size * 0.48,
+                  filter: "brightness(0) invert(1)",
+                  userSelect: "none",
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Centered text — sits above logos */}
+      <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+        <motion.div
+          custom={dir}
+          variants={contentVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+        >
+          {/* Frosted backdrop behind text only */}
+          <div
+            style={{
+              background: "rgba(59,47,62,0.72)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              borderRadius: "20px",
+              padding: "2.5rem 3rem",
+              maxWidth: "640px",
+              margin: "0 auto",
+            }}
+          >
+            <h2
+              className="font-serif text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight"
+            >
+              We'll fund the tools you need
+            </h2>
+            <p
+              className="font-sans text-base sm:text-lg leading-relaxed"
+              style={{ color: "rgba(255,255,255,0.7)" }}
+            >
+              Get sponsored for any integration your automation requires — no cost to you.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Main: scrolljacking orchestrator ───────────────────── */
 
 const TOTAL = 6;
