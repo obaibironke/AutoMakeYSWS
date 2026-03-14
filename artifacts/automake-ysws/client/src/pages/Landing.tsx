@@ -1,41 +1,17 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import {
   motion,
-  useScroll,
-  useTransform,
-  useSpring,
   AnimatePresence,
+  useMotionValue,
+  useSpring,
+  useTransform,
 } from "framer-motion";
-import { useInView } from "../hooks/useInView";
-import MarqueeStrip from "../components/MarqueeStrip";
 import ProjectCard from "../components/ProjectCard";
+import MarqueeStrip from "../components/MarqueeStrip";
 import { projects } from "../data/projects";
 
-/* ─── Data ──────────────────────────────────────────────────── */
-
-const faqItems = [
-  {
-    q: "Who can participate?",
-    a: "Any teen aged 13–18 anywhere in the world. Automake YSWS is open to all nationalities and skill levels.",
-  },
-  {
-    q: "How do I earn currency?",
-    a: "Submit an automation project, log your build hours, and get approved by an organizer. Each approved project earns you currency based on its complexity and time invested.",
-  },
-  {
-    q: "What can I buy in the shop?",
-    a: "Automation tools, tech gadgets, fun items, learning resources, and high-tier milestone rewards like laptops and travel stipends.",
-  },
-  {
-    q: "Do I need prior experience?",
-    a: "Not at all! Starter guides are available to help you build your first project from scratch, even if you've never coded before.",
-  },
-  {
-    q: "How many projects can I submit?",
-    a: "As many as you like! Each approved project earns you currency. The more you build, the more you earn.",
-  },
-];
+/* ─── Data ────────────────────────────────────────────────── */
 
 const steps = [
   { icon: "🔧", label: "Build an automation project" },
@@ -44,28 +20,29 @@ const steps = [
   { icon: "🪙", label: "Earn currency & shop rewards" },
 ];
 
-const TITLE = "Automake YSWS".split(" ");
+const faqItems = [
+  { q: "Who can participate?", a: "Any teen aged 13–18 anywhere in the world. Automake YSWS is open to all nationalities and skill levels." },
+  { q: "How do I earn currency?", a: "Submit an automation project, log your build hours, and get approved. Each approved project earns currency based on complexity and time invested." },
+  { q: "What can I buy in the shop?", a: "Automation tools, tech gadgets, fun items, learning resources, and milestone rewards like laptops and travel stipends." },
+  { q: "Do I need prior experience?", a: "Not at all! Starter guides help you build your first project from scratch, even if you've never coded before." },
+  { q: "How many projects can I submit?", a: "As many as you like! Each approved project earns you currency. The more you build, the more you earn." },
+];
 
-/* ─── Sub-components ─────────────────────────────────────────── */
+/* ─── Accordion ───────────────────────────────────────────── */
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-[#3B2F3E]/20 rounded-xl overflow-hidden">
       <button
-        className="w-full text-left flex items-center justify-between px-6 py-5 bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-colors"
+        className="w-full text-left flex items-center justify-between px-6 py-4 bg-white/60 hover:bg-white/80 transition-colors"
         onClick={() => setOpen(!open)}
       >
-        <span className="font-sans font-semibold text-[#3B2F3E] text-base pr-4">{q}</span>
+        <span className="font-sans font-semibold text-[#3B2F3E] text-sm pr-4">{q}</span>
         <span
-          className="text-[#3B2F3E] text-xl font-bold shrink-0 inline-block"
-          style={{
-            transform: open ? "rotate(45deg)" : "rotate(0deg)",
-            transition: "transform 0.22s ease",
-          }}
-        >
-          +
-        </span>
+          className="text-[#3B2F3E] text-lg font-bold shrink-0 inline-block"
+          style={{ transform: open ? "rotate(45deg)" : "none", transition: "transform .2s ease" }}
+        >+</span>
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -74,11 +51,11 @@ function FaqItem({ q, a }: { q: string; a: string }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-6 py-5 bg-white border-t border-[#D1DCCF]">
-              <p className="font-sans text-[#424242] text-base leading-relaxed">{a}</p>
+            <div className="px-6 py-4 bg-white border-t border-[#D1DCCF]">
+              <p className="font-sans text-[#424242] text-sm leading-relaxed">{a}</p>
             </div>
           </motion.div>
         )}
@@ -87,270 +64,375 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* Reusable animated section wrapper */
-function RevealSection({
-  children,
-  className = "",
+/* ─── Section content variants (parallax offset vs container) */
+
+const contentVariants = {
+  enter: (d: number) => ({ y: d > 0 ? 90 : -90, opacity: 0 }),
+  center: {
+    y: 0,
+    opacity: 1,
+    transition: { delay: 0.18, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: (d: number) => ({
+    y: d > 0 ? -30 : 30,
+    opacity: 0,
+    transition: { duration: 0.25 },
+  }),
+};
+
+/* ─── Sections ────────────────────────────────────────────── */
+
+function HeroSection({
+  dir,
+  blobX,
+  blobY,
 }: {
-  children: React.ReactNode;
-  className?: string;
+  dir: number;
+  blobX: { b1: any; b2: any; b3: any; b4: any };
+  blobY: { b1: any; b2: any; b3: any; b4: any };
 }) {
-  const { ref, inView } = useInView(0.12);
   return (
-    <motion.section
-      ref={ref as React.RefObject<HTMLElement>}
-      className={`min-h-screen ${className}`}
-      initial={{ opacity: 0, y: 72, scale: 0.97 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.section>
+    <div className="relative w-full h-full bg-[#D1DCCF] flex items-center justify-center text-center overflow-hidden">
+      {/* Parallax blobs */}
+      <motion.div className="blob blob-1"
+        style={{ width: 500, height: 500, background: "#3B2F3E", top: "5%", left: "0%", x: blobX.b1, y: blobY.b1 }} />
+      <motion.div className="blob blob-2"
+        style={{ width: 380, height: 380, background: "#2a2230", top: "20%", right: "2%", x: blobX.b2, y: blobY.b2 }} />
+      <motion.div className="blob blob-3"
+        style={{ width: 300, height: 300, background: "#4a6650", bottom: "10%", left: "25%", x: blobX.b3, y: blobY.b3 }} />
+      <motion.div className="blob blob-4"
+        style={{ width: 220, height: 220, background: "#3B2F3E", bottom: "15%", right: "15%", x: blobX.b4, y: blobY.b4 }} />
+
+      {/* Content — offset from container for parallax feel */}
+      <motion.div
+        className="relative z-10 max-w-5xl mx-auto px-6"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <motion.div
+          className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6"
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+        >
+          <span className="font-sans text-xs font-semibold text-[#3B2F3E] uppercase tracking-widest">
+            Hack Club presents
+          </span>
+        </motion.div>
+
+        <h1 className="font-serif text-6xl sm:text-7xl lg:text-8xl font-bold text-[#3B2F3E] leading-tight mb-6 flex flex-wrap justify-center gap-x-[0.3em]">
+          {"Automake YSWS".split(" ").map((word, i) => (
+            <motion.span key={i} className="inline-block"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 + i * 0.1, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h1>
+
+        <motion.p
+          className="font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed"
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.65, duration: 0.5 }}
+        >
+          Build automation projects. Earn currency. Unlock rewards.
+        </motion.p>
+
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.5 }}
+        >
+          <Link href="/showcase">
+            <motion.span whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
+              className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block">
+              Explore Projects
+            </motion.span>
+          </Link>
+          <Link href="/guides">
+            <motion.span whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
+              className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block">
+              Browse Guides
+            </motion.span>
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      {/* Scroll hint */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
+        <span className="font-sans text-[10px] font-semibold text-[#3B2F3E]/40 uppercase tracking-[0.2em]">scroll</span>
+        <motion.svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="#3B2F3E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </motion.svg>
+      </div>
+    </div>
   );
 }
 
-/* Stagger children into view */
-const stagger = { show: { transition: { staggerChildren: 0.1 } } };
-const staggerFast = { show: { transition: { staggerChildren: 0.07 } } };
-const itemVariant = {
-  hidden: { opacity: 0, y: 36 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
-};
-const popVariant = {
-  hidden: { opacity: 0, scale: 0.94 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-};
+function HowItWorksSection({ dir }: { dir: number }) {
+  return (
+    <div className="w-full h-full bg-white flex flex-col items-center justify-center overflow-hidden">
+      <motion.div
+        className="w-full max-w-6xl mx-auto px-6"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-4">
+            Here's How It Works
+          </h2>
+          <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+            Four simple steps from idea to reward. Anyone can do it.
+          </p>
+        </div>
 
-/* ─── Main component ─────────────────────────────────────────── */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {steps.map((step, i) => (
+            <motion.div key={i}
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-7 text-center"
+            >
+              <div className="text-4xl mb-3">{step.icon}</div>
+              <div className="font-sans text-xs font-bold text-[#3B2F3E]/40 uppercase tracking-widest mb-2">
+                Step {i + 1}
+              </div>
+              <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center mt-8">
+          <Link href="/guides">
+            <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
+              Follow the Guides →
+            </span>
+          </Link>
+        </div>
+
+        <div className="mt-10">
+          <MarqueeStrip />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function ProjectsSection({ dir }: { dir: number }) {
+  const featuredProjects = projects.slice(0, 3);
+  return (
+    <div className="w-full h-full bg-[#D1DCCF] flex flex-col items-center justify-center overflow-hidden">
+      <motion.div
+        className="w-full max-w-6xl mx-auto px-6"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <div className="text-center mb-10">
+          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-4">
+            Projects shipped so far
+          </h2>
+          <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+            Real automation projects built by real teens, just like you.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {featuredProjects.map((p, i) => (
+            <motion.div key={p.id}
+              initial={{ opacity: 0, scale: 0.93 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ProjectCard project={p} />
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center mt-8">
+          <Link href="/showcase">
+            <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
+              See all projects →
+            </span>
+          </Link>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function FaqSectionContent({ dir }: { dir: number }) {
+  return (
+    <div className="w-full h-full bg-[#D1DCCF] flex flex-col items-center justify-center overflow-auto">
+      <motion.div
+        className="w-full max-w-2xl mx-auto px-6 py-10"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-3">FAQ</h2>
+          <p className="font-sans text-[#424242]">Got questions? We've got answers.</p>
+        </div>
+        <div className="flex flex-col gap-2.5">
+          {faqItems.map((item, i) => (
+            <FaqItem key={i} q={item.q} a={item.a} />
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─── Main: scrolljacking orchestrator ───────────────────── */
+
+const TOTAL = 4;
+const TRANSITION_MS = 900;
 
 export default function Landing() {
-  const featuredProjects = projects.slice(0, 3);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = useState(0);
+  const [dir, setDir] = useState(1);
+  const transitioning = useRef(false);
+  const touchStartY = useRef(0);
 
-  /* Parallax for hero blobs */
-  const { scrollY } = useScroll();
-  const rawB1 = useTransform(scrollY, [0, 700], [0, -180]);
-  const rawB2 = useTransform(scrollY, [0, 700], [0, -110]);
-  const rawB3 = useTransform(scrollY, [0, 700], [0, -70]);
-  const blobY1 = useSpring(rawB1, { stiffness: 60, damping: 20 });
-  const blobY2 = useSpring(rawB2, { stiffness: 60, damping: 20 });
-  const blobY3 = useSpring(rawB3, { stiffness: 60, damping: 20 });
+  /* Mouse parallax motion values */
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { stiffness: 38, damping: 18 });
+  const smoothY = useSpring(mouseY, { stiffness: 38, damping: 18 });
 
-  /* Scroll hint fades after first scroll */
-  const hintOpacity = useTransform(scrollY, [0, 120], [1, 0]);
+  /* Each blob at a different rate + direction */
+  const b1x = useTransform(smoothX, (v) => v * 0.75);
+  const b1y = useTransform(smoothY, (v) => v * 0.55);
+  const b2x = useTransform(smoothX, (v) => v * -0.45);
+  const b2y = useTransform(smoothY, (v) => v * 0.65);
+  const b3x = useTransform(smoothX, (v) => v * 0.3);
+  const b3y = useTransform(smoothY, (v) => v * -0.4);
+  const b4x = useTransform(smoothX, (v) => v * -0.6);
+  const b4y = useTransform(smoothY, (v) => v * -0.35);
 
-  /* Stagger container only plays when section is in view */
-  const { ref: howRef, inView: howInView } = useInView(0.15);
-  const { ref: projRef, inView: projInView } = useInView(0.12);
+  const go = useCallback(
+    (next: number) => {
+      if (transitioning.current || next < 0 || next >= TOTAL) return;
+      setDir(next > current ? 1 : -1);
+      setCurrent(next);
+      transitioning.current = true;
+      setTimeout(() => { transitioning.current = false; }, TRANSITION_MS);
+    },
+    [current]
+  );
+
+  /* Wheel */
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 8) return;
+      go(e.deltaY > 0 ? current + 1 : current - 1);
+    };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [current, go]);
+
+  /* Touch swipe */
+  useEffect(() => {
+    const onStart = (e: TouchEvent) => { touchStartY.current = e.touches[0].clientY; };
+    const onEnd = (e: TouchEvent) => {
+      const diff = touchStartY.current - e.changedTouches[0].clientY;
+      if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
+    };
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchend", onEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchend", onEnd);
+    };
+  }, [current, go]);
+
+  /* Arrow / Page keys */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "PageDown") go(current + 1);
+      if (e.key === "ArrowUp" || e.key === "PageUp") go(current - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [current, go]);
+
+  /* Mouse move for blob parallax */
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth - 0.5) * 90);
+      mouseY.set((e.clientY / window.innerHeight - 0.5) * 70);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  /* Container transition variants — full-screen slide in, slight scale-back on exit */
+  const containerVariants = {
+    enter: (d: number) => ({
+      y: d > 0 ? "100%" : "-100%",
+      scale: 1,
+    }),
+    center: {
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.88, ease: [0.22, 1, 0.36, 1] },
+    },
+    exit: (d: number) => ({
+      y: d > 0 ? "-18%" : "18%",
+      scale: 0.9,
+      opacity: 0,
+      transition: { duration: 0.6, ease: [0.4, 0, 1, 1] },
+    }),
+  };
+
+  const blobProps = {
+    blobX: { b1: b1x, b2: b2x, b3: b3x, b4: b4x },
+    blobY: { b1: b1y, b2: b2y, b3: b3y, b4: b4y },
+  };
 
   return (
-    <div>
-      {/* ══════════════════════════════════
-          SECTION 1 — Hero
-      ══════════════════════════════════ */}
-      <section
-        ref={heroRef}
-        className="relative bg-[#D1DCCF] flex flex-col items-center justify-center text-center overflow-hidden"
-        style={{ minHeight: "100vh" }}
-      >
-        {/* Parallax blobs */}
+    /* Exactly fills viewport below the sticky navbar */
+    <div style={{ height: "calc(100vh - 64px)", overflow: "hidden", position: "relative" }}>
+      <AnimatePresence mode="popLayout" custom={dir}>
         <motion.div
-          className="blob blob-1"
-          style={{ width: 480, height: 480, background: "#3B2F3E", top: "8%", left: "2%", y: blobY1 }}
-        />
-        <motion.div
-          className="blob blob-2"
-          style={{ width: 360, height: 360, background: "#2a2230", top: "25%", right: "4%", y: blobY2 }}
-        />
-        <motion.div
-          className="blob blob-3"
-          style={{ width: 300, height: 300, background: "#4a6650", bottom: "12%", left: "28%", y: blobY3 }}
-        />
-        <motion.div
-          className="blob blob-4"
-          style={{ width: 220, height: 220, background: "#3B2F3E", bottom: "18%", right: "18%" }}
-        />
-
-        {/* Hero content */}
-        <motion.div
-          className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20"
-          style={{ zIndex: 1 }}
-          initial="hidden"
-          animate="show"
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
+          key={current}
+          custom={dir}
+          variants={containerVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          style={{ position: "absolute", inset: 0 }}
         >
-          <motion.div
-            variants={itemVariant}
-            className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6"
-          >
-            <span className="font-sans text-xs font-semibold text-[#3B2F3E] uppercase tracking-widest">
-              Hack Club presents
-            </span>
-          </motion.div>
-
-          <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-[#3B2F3E] leading-tight mb-6 flex flex-wrap justify-center gap-x-[0.3em]">
-            {TITLE.map((word, i) => (
-              <motion.span key={i} variants={itemVariant} className="inline-block">
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          <motion.p
-            variants={itemVariant}
-            className="font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed"
-          >
-            Build automation projects. Earn currency. Unlock rewards.
-          </motion.p>
-
-          <motion.div
-            variants={itemVariant}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <Link href="/showcase">
-              <motion.span
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block"
-              >
-                Explore Projects
-              </motion.span>
-            </Link>
-            <Link href="/guides">
-              <motion.span
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block"
-              >
-                Browse Guides
-              </motion.span>
-            </Link>
-          </motion.div>
+          {current === 0 && <HeroSection dir={dir} {...blobProps} />}
+          {current === 1 && <HowItWorksSection dir={dir} />}
+          {current === 2 && <ProjectsSection dir={dir} />}
+          {current === 3 && <FaqSectionContent dir={dir} />}
         </motion.div>
+      </AnimatePresence>
 
-        {/* Scroll hint */}
+      {/* Minimal section indicator — thin progress line at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#3B2F3E]/8 z-50">
         <motion.div
-          style={{ opacity: hintOpacity, position: "absolute", bottom: "2.5rem", left: "50%", x: "-50%", zIndex: 10 }}
-          className="flex flex-col items-center gap-1"
-        >
-          <span className="font-sans text-xs font-medium text-[#3B2F3E]/50 uppercase tracking-widest">scroll</span>
-          <motion.svg
-            width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="#3B2F3E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </motion.svg>
-        </motion.div>
-      </section>
-
-      {/* ══════════════════════════════════
-          SECTION 2 — How It Works
-      ══════════════════════════════════ */}
-      <RevealSection className="bg-white">
-        <div className="flex flex-col justify-center min-h-screen max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div ref={howRef} className="w-full">
-            <motion.div
-              initial="hidden"
-              animate={howInView ? "show" : "hidden"}
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-            >
-              <motion.div variants={itemVariant} className="text-center mb-14">
-                <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
-                  Here's How It Works
-                </h2>
-                <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
-                  Four simple steps from idea to reward. Anyone can do it.
-                </p>
-              </motion.div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {steps.map((step, i) => (
-                  <motion.div
-                    key={i}
-                    variants={itemVariant}
-                    whileHover={{ y: -6 }}
-                    className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-8 text-center hover:bg-[#D1DCCF]/50 transition-colors"
-                  >
-                    <div className="text-4xl mb-4">{step.icon}</div>
-                    <div className="font-sans text-xs font-bold text-[#3B2F3E]/50 uppercase tracking-widest mb-2">
-                      Step {i + 1}
-                    </div>
-                    <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div variants={itemVariant} className="text-center mt-10">
-                <Link href="/guides">
-                  <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
-                    Follow the Guides →
-                  </span>
-                </Link>
-              </motion.div>
-            </motion.div>
-          </div>
-
-          <div className="mt-14">
-            <MarqueeStrip />
-          </div>
-        </div>
-      </RevealSection>
-
-      {/* ══════════════════════════════════
-          SECTION 3 — Projects + FAQ
-      ══════════════════════════════════ */}
-      <RevealSection className="bg-[#D1DCCF]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          {/* Projects */}
-          <div ref={projRef}>
-            <motion.div
-              initial="hidden"
-              animate={projInView ? "show" : "hidden"}
-              variants={staggerFast}
-            >
-              <motion.div variants={itemVariant} className="text-center mb-14">
-                <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
-                  Projects shipped so far
-                </h2>
-                <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
-                  Real automation projects built by real teens, just like you.
-                </p>
-              </motion.div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {featuredProjects.map((p) => (
-                  <motion.div key={p.id} variants={popVariant}>
-                    <ProjectCard project={p} />
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div variants={itemVariant} className="text-center mt-10">
-                <Link href="/showcase">
-                  <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
-                    See all projects →
-                  </span>
-                </Link>
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* FAQ */}
-          <div className="mt-20 max-w-3xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="font-serif text-3xl font-bold text-[#3B2F3E] mb-3">FAQ</h2>
-              <p className="font-sans text-[#424242]">Got questions? We've got answers.</p>
-            </div>
-            <div className="flex flex-col gap-3">
-              {faqItems.map((item, i) => (
-                <FaqItem key={i} q={item.q} a={item.a} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </RevealSection>
+          className="h-full bg-[#3B2F3E]/30"
+          animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
     </div>
   );
 }
