@@ -1,6 +1,5 @@
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import Landing from "./pages/Landing";
 import Showcase from "./pages/Showcase";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -24,7 +23,6 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </main>
-      <Footer />
     </>
   );
 }
