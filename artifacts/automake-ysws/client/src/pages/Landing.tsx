@@ -139,7 +139,7 @@ function HeroSection({
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
-          Build automation projects. Earn currency. Unlock rewards.
+          Build automations that solve real world problems for real world people.
         </motion.p>
 
         <motion.div
