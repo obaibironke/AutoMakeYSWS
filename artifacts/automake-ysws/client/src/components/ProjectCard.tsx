@@ -7,9 +7,18 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <div className="bg-white border border-[#D1DCCF] rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col">
+    <div
+      className="bg-white rounded-xl p-6 flex flex-col transition-all duration-200 hover:-translate-y-1"
+      style={{
+        borderTop: "4px solid #3B2F3E",
+        border: "1px solid #D1DCCF",
+        borderTopWidth: "4px",
+        borderTopColor: "#3B2F3E",
+        boxShadow: "3px 3px 0px #3B2F3E",
+      }}
+    >
       <div className="mb-3">
-        <h3 className="font-serif text-lg font-bold text-[#3B2F3E] leading-tight">
+        <h3 className="font-sans text-lg font-bold text-[#3B2F3E] leading-tight">
           {project.title}
         </h3>
       </div>
@@ -19,7 +28,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       </p>
 
       <Link href={`/projects/${project.id}`}>
-        <span className="mt-4 w-full inline-flex items-center justify-center font-sans text-sm font-semibold bg-[#3B2F3E] text-white px-5 py-2.5 rounded-lg hover:bg-[#2d2330] transition-colors cursor-pointer">
+        <span
+          className="mt-4 w-full inline-flex items-center justify-center font-sans text-sm font-bold bg-[#3B2F3E] text-white px-5 py-2.5 rounded-lg cursor-pointer transition-all duration-150 hover:translate-y-[2px]"
+          style={{ boxShadow: "3px 3px 0px #424242" }}
+          onMouseEnter={e => (e.currentTarget.style.boxShadow = "none")}
+          onMouseLeave={e => (e.currentTarget.style.boxShadow = "3px 3px 0px #424242")}
+        >
           View Project →
         </span>
       </Link>

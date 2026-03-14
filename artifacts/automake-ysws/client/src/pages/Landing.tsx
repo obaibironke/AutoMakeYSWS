@@ -21,11 +21,11 @@ const steps = [
 ];
 
 const faqItems = [
-  { q: "Who can participate?", a: "Any teen aged 13–18 anywhere in the world. Automake YSWS is open to all nationalities and skill levels." },
-  { q: "How do I earn currency?", a: "Submit an automation project, log your build hours, and get approved. Each approved project earns currency based on complexity and time invested." },
-  { q: "What can I buy in the shop?", a: "Automation tools, tech gadgets, fun items, learning resources, and milestone rewards like laptops and travel stipends." },
-  { q: "Do I need prior experience?", a: "Not at all! Starter guides help you build your first project from scratch, even if you've never coded before." },
-  { q: "How many projects can I submit?", a: "As many as you like! Each approved project earns you currency. The more you build, the more you earn." },
+  { q: "Who can join?", a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at." },
+  { q: "How do I get coins?", a: "Build an automation, log your hours, submit it, and get approved. Simple. The cooler and more complex your project, the more coins you earn." },
+  { q: "What can I actually buy?", a: "Automation tools, tech gadgets, fun stuff, learning resources — and big milestone rewards like laptops and travel stipends." },
+  { q: "Do I need to know how to code?", a: "Nope! Our guides walk you through everything from zero. If you can follow steps, you can build your first automation." },
+  { q: "How many projects can I submit?", a: "As many as you want. Each approved project earns more coins. Build more, earn more. No limit." },
 ];
 
 /* ─── Accordion ───────────────────────────────────────────── */
@@ -112,8 +112,31 @@ function HeroSection({
         animate="center"
         exit="exit"
       >
+        {/* Sticker badges */}
         <motion.div
-          className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6"
+          initial={{ opacity: 0, rotate: 8, scale: 0.8 }} animate={{ opacity: 1, rotate: 12, scale: 1 }}
+          transition={{ delay: 0.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: "absolute", top: "12%", right: "7%", background: "#2ECC71", color: "white", borderRadius: "50%", width: 88, height: 88, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "0.65rem", lineHeight: 1.3, letterSpacing: "0.05em", boxShadow: "3px 3px 0px rgba(0,0,0,0.2)", zIndex: 20, flexDirection: "column" }}
+        >
+          FREE<br />TOOLS
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, rotate: -4, scale: 0.8 }} animate={{ opacity: 1, rotate: -8, scale: 1 }}
+          transition={{ delay: 1.0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: "absolute", bottom: "22%", left: "4%", background: "#3B2F3E", color: "white", borderRadius: "50px", padding: "10px 16px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(0,0,0,0.2)", zIndex: 20 }}
+        >
+          OPEN TO<br />ALL TEENS
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, rotate: 2, scale: 0.8 }} animate={{ opacity: 1, rotate: 5, scale: 1 }}
+          transition={{ delay: 1.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: "absolute", top: "18%", left: "3%", background: "#D1DCCF", color: "#3B2F3E", borderRadius: "12px", padding: "8px 14px", fontWeight: 800, fontSize: "0.6rem", lineHeight: 1.4, textAlign: "center", letterSpacing: "0.06em", boxShadow: "3px 3px 0px rgba(59,47,62,0.3)", zIndex: 20 }}
+        >
+          🪙 EARN<br />COINS
+        </motion.div>
+
+        <motion.div
+          className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-5"
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.5 }}
         >
@@ -122,24 +145,39 @@ function HeroSection({
           </span>
         </motion.div>
 
-        <h1 className="font-serif text-6xl sm:text-7xl lg:text-8xl font-bold text-[#3B2F3E] leading-tight mb-6 flex flex-wrap justify-center gap-x-[0.3em]">
-          {"Automake YSWS".split(" ").map((word, i) => (
-            <motion.span key={i} className="inline-block"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 + i * 0.1, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        <h1 className="font-sans font-extrabold text-[#3B2F3E] leading-none mb-5 flex flex-col items-center">
+          <motion.span
+            className="inline-block text-8xl sm:text-9xl"
+            style={{ transform: "rotate(-2deg)", display: "inline-block" }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Automake
+          </motion.span>
+          <motion.span
+            className="inline-block relative text-7xl sm:text-8xl mt-1 pb-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            YSWS
+            <svg viewBox="0 0 220 14" xmlns="http://www.w3.org/2000/svg"
+              style={{ position: "absolute", bottom: 0, left: 0, width: "100%", height: 14 }}
+              preserveAspectRatio="none"
             >
-              {word}
-            </motion.span>
-          ))}
+              <path d="M4 7 C24 1, 44 13, 64 7 S104 1, 124 7 S164 13, 184 7 S204 2, 218 7"
+                fill="none" stroke="#3B2F3E" strokeWidth="3.5" strokeLinecap="round" />
+            </svg>
+          </motion.span>
         </h1>
 
         <motion.p
-          className="font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="font-sans text-lg sm:text-xl text-[#424242] max-w-xl mx-auto mb-9 leading-relaxed"
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
-          Build automations that solve real world problems for real world people.
+          Ship automations. Stack coins. Get free stuff. 🪙
         </motion.p>
 
         <motion.div
@@ -148,14 +186,24 @@ function HeroSection({
           transition={{ delay: 0.75, duration: 0.5 }}
         >
           <Link href="/showcase">
-            <motion.span whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
-              className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block">
+            <motion.span
+              whileHover={{ rotate: -1, y: 2 }} whileTap={{ scale: 0.97 }}
+              className="font-sans font-bold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base cursor-pointer inline-block transition-all"
+              style={{ boxShadow: "3px 3px 0px #424242" }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.boxShadow = "none")}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #424242")}
+            >
               Explore Projects
             </motion.span>
           </Link>
           <Link href="/guides">
-            <motion.span whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
-              className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block">
+            <motion.span
+              whileHover={{ rotate: 1, y: 2 }} whileTap={{ scale: 0.97 }}
+              className="font-sans font-bold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base cursor-pointer inline-block transition-all"
+              style={{ boxShadow: "3px 3px 0px #3B2F3E" }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.boxShadow = "none")}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #3B2F3E")}
+            >
               Browse Guides
             </motion.span>
           </Link>
@@ -189,8 +237,8 @@ function HowItWorksSection({ dir }: { dir: number }) {
       >
         <div className="max-w-6xl mx-auto px-6 w-full">
           <div className="text-center mb-12">
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-4">
-              Here's How It Works
+            <h2 className="font-sans text-4xl sm:text-5xl font-extrabold text-[#3B2F3E] mb-4">
+              Here's <mark>How</mark> It Works
             </h2>
             <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
               Four simple steps from idea to reward. Anyone can do it.
@@ -200,14 +248,18 @@ function HowItWorksSection({ dir }: { dir: number }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((step, i) => (
               <motion.div key={i}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-7 text-center"
+                whileHover={{ y: -6, rotate: 0, transition: { duration: 0.2 } }}
+                className="relative bg-[#D1DCCF]/30 rounded-xl p-7 text-center overflow-hidden"
+                style={{ boxShadow: "3px 3px 0px #3B2F3E", border: "1px solid #D1DCCF" }}
               >
-                <div className="text-4xl mb-3">{step.icon}</div>
-                <div className="font-sans text-xs font-bold text-[#3B2F3E]/40 uppercase tracking-widest mb-2">
-                  Step {i + 1}
+                {/* Watermark number */}
+                <div style={{ position: "absolute", top: -8, left: 6, fontSize: "5rem", fontWeight: 900, color: "#D1DCCF", lineHeight: 1, userSelect: "none", pointerEvents: "none", zIndex: 0 }}>
+                  {String(i + 1).padStart(2, "0")}
                 </div>
-                <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
+                <div className="relative z-10">
+                  <div className="text-5xl mb-3">{step.icon}</div>
+                  <p className="font-sans font-bold text-[#3B2F3E] text-base">{step.label}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -242,8 +294,8 @@ function ProjectsSection({ dir }: { dir: number }) {
         exit="exit"
       >
         <div className="text-center mb-10">
-          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-4">
-            Projects shipped so far
+          <h2 className="font-sans text-4xl sm:text-5xl font-extrabold text-[#3B2F3E] mb-4">
+            Projects <mark>shipped</mark> so far
           </h2>
           <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
             Real automation projects built by real teens, just like you.
@@ -256,6 +308,8 @@ function ProjectsSection({ dir }: { dir: number }) {
               initial={{ opacity: 0, scale: 0.93 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transform: `rotate(${i % 2 === 0 ? "1deg" : "-1deg"})` }}
+              whileHover={{ rotate: 0, y: -4, transition: { duration: 0.2 } }}
             >
               <ProjectCard project={p} />
             </motion.div>
@@ -286,7 +340,7 @@ function FaqSectionContent({ dir }: { dir: number }) {
         exit="exit"
       >
         <div className="text-center mb-8">
-          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B2F3E] mb-3">FAQ</h2>
+          <h2 className="font-sans text-4xl sm:text-5xl font-extrabold text-[#3B2F3E] mb-3"><mark>FAQ</mark></h2>
           <p className="font-sans text-[#424242]">Got questions? We've got answers.</p>
         </div>
         <div className="flex flex-col gap-2.5">
@@ -608,6 +662,10 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* Footer sign-off */}
+      <div style={{ textAlign: "center", padding: "6px 0", fontSize: "11px", color: "rgba(59,47,62,0.35)", fontFamily: "DM Sans, sans-serif", letterSpacing: "0.02em" }}>
+        Made with 🤖 by teen builders. No adults were harmed.
+      </div>
     </div>
   );
 }

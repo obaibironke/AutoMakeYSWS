@@ -1,0 +1,56 @@
+Do NOT rebuild the site. Make these specific targeted changes to make the site feel more fun, playful, and teen-built while keeping the Automake YSWS identity and color palette:
+
+1. FONTS — replace DM Serif Display with a chunkier, more expressive font. Use Google Fonts:
+   - Headings: "Syne" (weight 800) or "Space Grotesk" (weight 700) — bold, geometric, energetic
+   - Keep DM Sans for body text
+
+2. HERO HEADING COPY — change the main hero title treatment:
+   - Make "Automake" massive (text-8xl or larger) and slightly tilted: transform: rotate(-2deg)
+   - Add a hand-drawn style underline under "YSWS" using an SVG squiggle element inline
+   - Change tagline from "Build automation projects. Earn currency. Unlock rewards." to something more casual like: "Ship automations. Stack coins. Get free stuff. 🪙"
+
+3. STICKER BADGES — add 2–3 absolutely positioned rotated badge/stamp elements to the hero section:
+   - A green circle badge (background: #2ECC71, color: white) with text "FREE TOOLS" rotated 12deg
+   - A Midnight Plum badge with text "OPEN TO ALL TEENS" rotated -8deg
+   - Style them with border-radius: 50% or a rough pill shape, bold font, slight box-shadow
+
+4. BUTTONS — make CTA buttons more playful:
+   - Add a slight rotate(-1deg) on hover using CSS transition
+   - Add a chunky 2px offset box-shadow: 3px 3px 0px #424242 (like a sticker/stamp shadow)
+   - On hover, shift the button 2px down and remove the shadow (press effect)
+
+5. CARDS — give project cards and shop item cards a sticker feel:
+   - Add a slight random rotation to each card: alternate between rotate(1deg) and rotate(-1deg) using nth-child CSS
+   - Replace the soft shadow with a flat 3px 3px 0px #3B2F3E border-shadow
+   - Add a small colored top border (4px solid var(--midnight-plum)) to each card
+
+6. HOW IT WORKS SECTION — make the step numbers big and bold:
+   - Each step should have a huge number (01, 02, 03, 04) in the background in a very light Eucalyptus tone, like a watermark behind the step text
+   - Make the step icons bigger (text-4xl emoji size)
+
+7. MARQUEE STRIP — add emoji and make text more casual:
+   - Change participant card format to include a fun emoji per entry e.g. "⚡ Amara · 16 · Nigeria"
+   - Mix in short punchy project name cards like "🤖 WhatsApp Bot", "📊 Auto-Report", "🔗 Zapier Clone"
+
+8. SECTION HEADINGS — add a highlight/marker effect to key words:
+   - Wrap one word in each section heading in a <mark> tag styled as:
+```css
+   mark {
+     background: var(--eucalyptus);
+     color: var(--midnight-plum);
+     padding: 0 6px;
+     border-radius: 4px;
+     transform: rotate(-1deg);
+     display: inline-block;
+   }
+```
+
+9. FAQ SECTION — make questions sound more like a real teen wrote them:
+   - "Who can join?" instead of "Who can participate?"
+   - "How do I get coins?" instead of "How do I earn currency?"
+   - "What can I actually buy?" instead of "What can I buy in the shop?"
+   - "Do I need to know how to code?" instead of "Do I need prior experience?"
+   - Keep the answers casual and short
+
+10. FOOTER — add a fun sign-off line at the very bottom in small text:
+    - "Made with 🤖 by teen builders. No adults were harmed."
