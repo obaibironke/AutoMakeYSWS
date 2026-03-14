@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { motion, AnimatePresence } from "framer-motion";
 import MarqueeStrip from "../components/MarqueeStrip";
 import ProjectCard from "../components/ProjectCard";
+import DotNav from "../components/DotNav";
 import { projects } from "../data/projects";
 
 const faqItems = [
@@ -39,62 +39,7 @@ const steps = [
   { icon: "🪙", label: "Earn currency & shop rewards" },
 ];
 
-// Reusable animation variants
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0 },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1 },
-};
-
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-};
-
-const staggerFast = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.07 } },
-};
-
-function ScrollReveal({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={fadeUp}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function WaveDivider({ flip = false, fill = "#D1DCCF" }: { flip?: boolean; fill?: string }) {
-  return (
-    <div className={`w-full overflow-hidden leading-none ${flip ? "rotate-180" : ""}`}>
-      <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-12">
-        <path
-          d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z"
-          fill={fill}
-        />
-      </svg>
-    </div>
-  );
-}
+const TITLE_WORDS = "Automake YSWS".split(" ");
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -105,227 +50,282 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
       >
         <span className="font-sans font-semibold text-[#3B2F3E] text-base pr-4">{q}</span>
-        <motion.span
+        <span
           className="text-[#3B2F3E] text-xl font-bold shrink-0"
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ duration: 0.2 }}
+          style={{
+            display: "inline-block",
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+            transition: "transform 0.2s ease",
+          }}
         >
           +
-        </motion.span>
+        </span>
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="answer"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="px-6 py-5 bg-white border-t border-[#D1DCCF]">
-              <p className="font-sans text-[#424242] text-base leading-relaxed">{a}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        className="overflow-hidden"
+        style={{
+          maxHeight: open ? "200px" : "0",
+          opacity: open ? 1 : 0,
+          transition: "max-height 0.3s ease, opacity 0.3s ease",
+        }}
+      >
+        <div className="px-6 py-5 bg-white border-t border-[#D1DCCF]">
+          <p className="font-sans text-[#424242] text-base leading-relaxed">{a}</p>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function Landing() {
   const featuredProjects = projects.slice(0, 3);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [activeSection, setActiveSection] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [seenSections, setSeenSections] = useState<Set<number>>(new Set([0]));
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = () => {
+      const idx = Math.round(el.scrollTop / el.clientHeight);
+      setActiveSection(idx);
+      setScrolled(el.scrollTop > el.clientHeight * 0.3);
+      setSeenSections((prev) => {
+        if (prev.has(idx)) return prev;
+        const next = new Set(prev);
+        next.add(idx);
+        return next;
+      });
+    };
+    el.addEventListener("scroll", handler, { passive: true });
+    return () => el.removeEventListener("scroll", handler);
+  }, []);
+
+  const vis = (sectionIdx: number) => seenSections.has(sectionIdx);
+
+  const sectionStyle: React.CSSProperties = {
+    height: "100vh",
+    overflow: "hidden",
+    scrollSnapAlign: "start",
+    position: "relative",
+  };
 
   return (
-    <div className="min-h-screen">
-      {/* ── Hero ── */}
-      <section className="bg-[#D1DCCF] pt-20 pb-16 text-center">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            animate="show"
+    <>
+      <div
+        ref={containerRef}
+        style={{
+          height: "100vh",
+          overflowY: "scroll",
+          scrollSnapType: "y mandatory",
+        }}
+      >
+        {/* ── Section 0: Hero ── */}
+        <section id="section-hero" style={sectionStyle} className="bg-[#D1DCCF]">
+          {/* Blobs */}
+          <div
+            className="blob blob-1"
+            style={{ width: 420, height: 420, background: "#3B2F3E", top: "10%", left: "5%" }}
+          />
+          <div
+            className="blob blob-2"
+            style={{ width: 340, height: 340, background: "#2a2230", top: "30%", right: "8%" }}
+          />
+          <div
+            className="blob blob-3"
+            style={{ width: 280, height: 280, background: "#4a6650", bottom: "15%", left: "30%" }}
+          />
+          <div
+            className="blob blob-4"
+            style={{ width: 200, height: 200, background: "#3B2F3E", bottom: "20%", right: "20%" }}
+          />
+
+          {/* Content */}
+          <div
+            className="relative flex flex-col items-center justify-center h-full pt-20 text-center px-4 sm:px-6 lg:px-8"
+            style={{ zIndex: 1 }}
           >
-            {/* Badge */}
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6"
+            <div
+              className={`fade-up ${vis(0) ? "visible" : ""} inline-block bg-[#3B2F3E]/10 border border-[#3B2F3E]/20 rounded-full px-4 py-1.5 mb-6`}
+              style={{ transitionDelay: "0ms" }}
             >
               <span className="font-sans text-xs font-semibold text-[#3B2F3E] uppercase tracking-widest">
                 Hack Club presents
               </span>
-            </motion.div>
+            </div>
 
-            {/* Title */}
-            <motion.h1
-              variants={fadeUp}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-[#3B2F3E] leading-tight mb-6"
-            >
-              Automake YSWS
-            </motion.h1>
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-[#3B2F3E] leading-tight mb-6">
+              {TITLE_WORDS.map((word, i) => (
+                <span
+                  key={i}
+                  className={`fade-up ${vis(0) ? "visible" : ""} inline-block mr-[0.3em]`}
+                  style={{ transitionDelay: `${100 + i * 100}ms` }}
+                >
+                  {word}
+                </span>
+              ))}
+            </h1>
 
-            {/* Tagline */}
-            <motion.p
-              variants={fadeUp}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed"
+            <p
+              className={`fade-up ${vis(0) ? "visible" : ""} font-sans text-xl sm:text-2xl text-[#424242] max-w-2xl mx-auto mb-10 leading-relaxed`}
+              style={{ transitionDelay: "300ms" }}
             >
               Build automation projects. Earn currency. Unlock rewards.
-            </motion.p>
+            </p>
 
-            {/* CTA buttons */}
-            <motion.div
-              variants={fadeUp}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+            <div
+              className={`fade-up ${vis(0) ? "visible" : ""} flex flex-col sm:flex-row gap-4 justify-center`}
+              style={{ transitionDelay: "400ms" }}
             >
               <Link href="/showcase">
-                <motion.span
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block"
-                >
+                <span className="font-sans font-semibold bg-[#3B2F3E] text-white px-8 py-4 rounded-lg text-base hover:bg-[#2d2330] transition-colors cursor-pointer inline-block">
                   Explore Projects
-                </motion.span>
+                </span>
               </Link>
               <Link href="/guides">
-                <motion.span
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block"
-                >
+                <span className="font-sans font-semibold border-2 border-[#3B2F3E] text-[#3B2F3E] px-8 py-4 rounded-lg text-base hover:bg-[#3B2F3E] hover:text-white transition-colors cursor-pointer inline-block">
                   Browse Guides
-                </motion.span>
+                </span>
               </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+            </div>
+          </div>
 
-      {/* Wave divider */}
-      <WaveDivider fill="#D1DCCF" />
-
-      {/* ── How It Works ── */}
-      <section className="bg-white py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-14">
-            <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
-              Here's How It Works
-            </h2>
-            <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
-              Four simple steps from idea to reward. Anyone can do it.
-            </p>
-          </ScrollReveal>
-
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
+          {/* Scroll hint */}
+          <div
+            className="scroll-hint"
+            style={{
+              position: "absolute",
+              bottom: "2rem",
+              left: "50%",
+              zIndex: 10,
+              opacity: scrolled ? 0 : 1,
+              transition: "opacity 0.4s ease",
+              pointerEvents: "none",
+            }}
           >
-            {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-8 text-center hover:bg-[#D1DCCF]/50 transition-colors cursor-default"
-              >
-                <div className="text-4xl mb-4">{step.icon}</div>
-                <div className="font-sans text-xs font-bold text-[#3B2F3E]/50 uppercase tracking-widest mb-2">
-                  Step {i + 1}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B2F3E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
+          </div>
+        </section>
+
+        {/* ── Section 1: How It Works ── */}
+        <section id="section-how" style={sectionStyle} className="bg-white">
+          <div className="flex flex-col justify-center h-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div
+              className={`slide-left ${vis(1) ? "visible" : ""} text-center mb-10`}
+              style={{ transitionDelay: "0ms" }}
+            >
+              <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
+                Here's How It Works
+              </h2>
+              <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+                Four simple steps from idea to reward. Anyone can do it.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {steps.map((step, i) => (
+                <div
+                  key={i}
+                  className={`slide-left ${vis(1) ? "visible" : ""} bg-[#D1DCCF]/30 border border-[#D1DCCF] rounded-xl p-8 text-center hover:bg-[#D1DCCF]/50 transition-colors cursor-default`}
+                  style={{ transitionDelay: `${i * 150}ms` }}
+                >
+                  <div className="text-4xl mb-4">{step.icon}</div>
+                  <div className="font-sans text-xs font-bold text-[#3B2F3E]/50 uppercase tracking-widest mb-2">
+                    Step {i + 1}
+                  </div>
+                  <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
                 </div>
-                <p className="font-sans font-semibold text-[#3B2F3E] text-base">{step.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+              ))}
+            </div>
 
-          <ScrollReveal className="text-center mt-10" delay={0.1}>
-            <Link href="/guides">
-              <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
-                Follow the Guides →
-              </span>
-            </Link>
-          </ScrollReveal>
-        </div>
-      </section>
+            <div
+              className={`fade-up ${vis(1) ? "visible" : ""} text-center mt-8`}
+              style={{ transitionDelay: "650ms" }}
+            >
+              <Link href="/guides">
+                <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
+                  Follow the Guides →
+                </span>
+              </Link>
+            </div>
 
-      {/* ── Marquee strip ── */}
-      <MarqueeStrip />
+            <div className="mt-8">
+              <MarqueeStrip />
+            </div>
+          </div>
+        </section>
 
-      {/* Wave */}
-      <WaveDivider fill="white" />
+        {/* ── Section 2: Featured Projects ── */}
+        <section id="section-projects" style={sectionStyle} className="bg-[#D1DCCF]">
+          <div className="flex flex-col justify-center h-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div
+              className={`fade-up ${vis(2) ? "visible" : ""} text-center mb-10`}
+              style={{ transitionDelay: "0ms" }}
+            >
+              <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
+                Projects shipped so far
+              </h2>
+              <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
+                Real automation projects built by real teens, just like you.
+              </p>
+            </div>
 
-      {/* ── Featured Projects ── */}
-      <section className="bg-[#D1DCCF] py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-14">
-            <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">
-              Projects shipped so far
-            </h2>
-            <p className="font-sans text-[#424242] text-lg max-w-2xl mx-auto">
-              Real automation projects built by real teens, just like you.
-            </p>
-          </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredProjects.map((p, i) => (
+                <div
+                  key={p.id}
+                  className={`pop-in ${vis(2) ? "visible" : ""}`}
+                  style={{ transitionDelay: `${i * 100}ms` }}
+                >
+                  <ProjectCard project={p} />
+                </div>
+              ))}
+            </div>
 
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            variants={staggerFast}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-          >
-            {featuredProjects.map((p) => (
-              <motion.div
-                key={p.id}
-                variants={fadeUp}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <ProjectCard project={p} />
-              </motion.div>
-            ))}
-          </motion.div>
+            <div
+              className={`fade-up ${vis(2) ? "visible" : ""} text-center mt-8`}
+              style={{ transitionDelay: "350ms" }}
+            >
+              <Link href="/showcase">
+                <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
+                  See all projects →
+                </span>
+              </Link>
+            </div>
+          </div>
+        </section>
 
-          <ScrollReveal className="text-center mt-10" delay={0.1}>
-            <Link href="/showcase">
-              <span className="font-sans font-semibold text-[#3B2F3E] text-base hover:underline cursor-pointer">
-                See all projects →
-              </span>
-            </Link>
-          </ScrollReveal>
-        </div>
-      </section>
+        {/* ── Section 3: FAQ ── */}
+        <section id="section-faq" style={{ ...sectionStyle, overflowY: "auto" }} className="bg-[#D1DCCF]">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div
+              className={`fade-up ${vis(3) ? "visible" : ""} text-center mb-12`}
+              style={{ transitionDelay: "0ms" }}
+            >
+              <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">FAQ</h2>
+              <p className="font-sans text-[#424242] text-lg">Got questions? We've got answers.</p>
+            </div>
 
-      {/* ── FAQ ── */}
-      <section id="faq" className="bg-[#D1DCCF] py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal className="text-center mb-12">
-            <h2 className="font-serif text-4xl font-bold text-[#3B2F3E] mb-4">FAQ</h2>
-            <p className="font-sans text-[#424242] text-lg">Got questions? We've got answers.</p>
-          </ScrollReveal>
+            <div className="flex flex-col gap-3">
+              {faqItems.map((item, i) => (
+                <div
+                  key={i}
+                  className={`fade-up ${vis(3) ? "visible" : ""}`}
+                  style={{ transitionDelay: `${i * 80}ms` }}
+                >
+                  <FaqItem q={item.q} a={item.a} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
 
-          <motion.div
-            className="flex flex-col gap-3"
-            variants={stagger}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-40px" }}
-          >
-            {faqItems.map((item, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <FaqItem q={item.q} a={item.a} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-    </div>
+      <DotNav containerRef={containerRef} />
+    </>
   );
 }
