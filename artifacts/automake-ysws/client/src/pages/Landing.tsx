@@ -103,30 +103,6 @@ export default function Landing() {
             </Link>
           </div>
 
-          {/* Hero illustration */}
-          <div className="relative mx-auto max-w-3xl">
-            <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" className="w-full drop-shadow-xl rounded-t-2xl">
-              <rect width="800" height="320" rx="16" fill="#3B2F3E" />
-              {/* Decorative circuit lines */}
-              <line x1="100" y1="80" x2="300" y2="80" stroke="#D1DCCF" strokeWidth="2" strokeDasharray="8 4" />
-              <line x1="300" y1="80" x2="300" y2="160" stroke="#D1DCCF" strokeWidth="2" strokeDasharray="8 4" />
-              <line x1="300" y1="160" x2="500" y2="160" stroke="#D1DCCF" strokeWidth="2" strokeDasharray="8 4" />
-              <line x1="500" y1="160" x2="500" y2="240" stroke="#D1DCCF" strokeWidth="2" strokeDasharray="8 4" />
-              <line x1="500" y1="240" x2="700" y2="240" stroke="#D1DCCF" strokeWidth="2" strokeDasharray="8 4" />
-              {/* Nodes */}
-              {[
-                [100, 80], [300, 80], [300, 160], [500, 160], [500, 240], [700, 240]
-              ].map(([cx, cy], i) => (
-                <circle key={i} cx={cx} cy={cy} r="10" fill="#D1DCCF" />
-              ))}
-              {/* Center text */}
-              <text x="400" y="148" textAnchor="middle" fill="white" fontSize="20" fontFamily="serif" fontWeight="bold">Automate Everything</text>
-              <text x="400" y="175" textAnchor="middle" fill="#D1DCCF" fontSize="13" fontFamily="sans-serif">🔧 Build → 📋 Submit → ✅ Approve → 🪙 Earn</text>
-              {/* Icons */}
-              <text x="100" y="55" textAnchor="middle" fontSize="22">⚙️</text>
-              <text x="700" y="215" textAnchor="middle" fontSize="22">🚀</text>
-            </svg>
-          </div>
         </div>
       </section>
 
