@@ -6,6 +6,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Guides from "./pages/Guides";
 import GuideDetail from "./pages/GuideDetail";
 import Shop from "./pages/Shop";
+import N8nVideo from "./pages/N8nVideo";
 import NotFound from "./pages/NotFound";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
           <Route path="/guides" component={Guides} />
           <Route path="/guides/:id" component={GuideDetail} />
           <Route path="/shop" component={Shop} />
+          <Route path="/n8n" component={N8nVideo} />
           <Route component={NotFound} />
         </Switch>
       </main>
