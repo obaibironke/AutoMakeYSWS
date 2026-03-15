@@ -432,32 +432,120 @@ function HeroSection({
 function AboutSection({ dir }: { dir: number }) {
   return (
     <div
-      className="w-full h-full flex items-center justify-center overflow-hidden"
-      style={{ background: "#0F1923" }}
+      className="w-full h-full flex items-center justify-center overflow-hidden relative"
+      style={{ background: "#F5F0E8" }}
     >
+      {/* decorative large background text */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-4%",
+          right: "-1%",
+          fontSize: "22vw",
+          fontWeight: 900,
+          color: "rgba(15,25,35,0.04)",
+          lineHeight: 1,
+          userSelect: "none",
+          pointerEvents: "none",
+          fontFamily: "sans-serif",
+          letterSpacing: "-0.04em",
+        }}
+      >
+        AUTO
+      </div>
+
       <motion.div
-        className="w-full max-w-3xl mx-auto px-6 text-center"
+        className="w-full max-w-5xl mx-auto px-8 sm:px-12"
         custom={dir}
         variants={contentVariants}
         initial="enter"
         animate="center"
         exit="exit"
       >
+        {/* Section label */}
+        <div className="mb-6">
+          <span
+            className="font-sans text-xs font-bold uppercase tracking-[0.25em]"
+            style={{ color: "#FF5733" }}
+          >
+            About the program
+          </span>
+        </div>
+
+        {/* Heading */}
+        <h2
+          className="font-sans font-extrabold mb-8 leading-tight"
+          style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
+        >
+          <span
+            style={{
+              display: "inline",
+              background: "#00E5A0",
+              borderRadius: "6px",
+              padding: "0 10px 2px",
+              marginRight: "12px",
+            }}
+          >
+            Why
+          </span>
+          Automake?
+        </h2>
+
+        {/* Body text — large and filling */}
         <p
-          className="font-sans text-xl sm:text-2xl leading-relaxed"
-          style={{ color: "rgba(245,240,232,0.85)" }}
+          className="font-sans leading-relaxed"
+          style={{
+            color: "#0F1923",
+            fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)",
+            maxWidth: "780px",
+          }}
         >
           Automations can be used for amazing things. They power useful tools
           like Slack bots or fun email responders.{" "}
-          <span style={{ color: "#00E5A0", fontWeight: 700 }}>Automake</span>{" "}
-          exists to provide a place{" "}
-          <span style={{ color: "#00E5A0", fontWeight: 700 }}>
+          <span style={{ fontWeight: 800 }}>Automake</span> exists to provide a
+          place{" "}
+          <span
+            style={{
+              fontWeight: 800,
+              background: "#00E5A0",
+              borderRadius: "4px",
+              padding: "0 5px",
+            }}
+          >
             (and reward)
           </span>{" "}
-          for learning how to build real automations so that you can take any
+          for learning how to build real automations — so that you can take any
           inefficient or repetitive manual task and turn it into a task that
           takes care of itself.
         </p>
+
+        {/* Decorative divider */}
+        <div className="mt-10 flex items-center gap-4">
+          <div
+            style={{
+              width: 48,
+              height: 4,
+              background: "#FF5733",
+              borderRadius: 2,
+            }}
+          />
+          <div
+            style={{
+              width: 24,
+              height: 4,
+              background: "#00E5A0",
+              borderRadius: 2,
+            }}
+          />
+          <div
+            style={{
+              width: 12,
+              height: 4,
+              background: "rgba(15,25,35,0.15)",
+              borderRadius: 2,
+            }}
+          />
+        </div>
       </motion.div>
     </div>
   );
