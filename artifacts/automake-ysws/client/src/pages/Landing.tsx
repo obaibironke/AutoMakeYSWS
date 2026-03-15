@@ -880,44 +880,198 @@ function FaqSectionContent({ dir }: { dir: number }) {
   );
 }
 
-/* ─── N8n Video ──────────────────────────────────────────── */
+/* ─── Footer Section ─────────────────────────────────────── */
 
-function N8nVideoSection({ dir }: { dir: number }) {
+function FooterSection({ dir }: { dir: number }) {
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center overflow-hidden"
+      className="w-full h-full flex flex-col items-center justify-center overflow-auto"
       style={{ background: "#0F1923" }}
     >
       <motion.div
-        className="w-full max-w-4xl mx-auto px-6 flex flex-col items-center justify-center h-full"
+        className="w-full max-w-6xl mx-auto px-8 md:px-12 py-12"
         custom={dir}
         variants={contentVariants}
         initial="enter"
         animate="center"
         exit="exit"
       >
-        <div className="text-center mb-10">
-          <h2
-            className="font-sans text-4xl sm:text-5xl font-extrabold mb-3"
+        <p
+          className="mb-4 font-sans text-lg md:text-xl font-bold"
+          style={{ color: "#F5F0E8" }}
+        >
+          A project by{" "}
+          <a
+            href="https://hackclub.com?utm_source=automake"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline transition-colors"
             style={{ color: "#00E5A0" }}
           >
-            n8n Workflow Execution
-          </h2>
-          <p
-            className="font-sans text-lg"
-            style={{ color: "rgba(245,240,232,0.8)" }}
+            Hack Club
+          </a>{" "}
+          built by the{" "}
+          <a
+            href="https://hackclub.com/team"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline transition-colors"
+            style={{ color: "#00E5A0" }}
           >
-            Learn how to execute workflows with n8n automation
-          </p>
-        </div>
-        <video
-          controls
-          className="w-full rounded-xl shadow-lg bg-black"
-          style={{ aspectRatio: "16 / 9" }}
+            Automake Team
+          </a>
+        </p>
+
+        <p
+          className="font-sans text-sm md:text-base mb-10 max-w-3xl leading-relaxed"
+          style={{ color: "rgba(245,240,232,0.7)" }}
         >
-          <source src="/N8N workflow execution.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+          Hack Club is a 501(c)(3) nonprofit and network of 60k+ technical high
+          schoolers. We believe you learn best by building so we're creating
+          community and providing grants so you can make awesome projects. In
+          the past few years, we've{" "}
+          <a
+            href="https://summer.hackclub.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#00E5A0] transition-colors"
+            style={{ color: "rgba(245,240,232,0.7)" }}
+          >
+            partnered with GitHub to run Summer of Making
+          </a>
+          ,{" "}
+          <a
+            href="https://github.com/hackclub/the-hacker-zephyr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#00E5A0] transition-colors"
+            style={{ color: "rgba(245,240,232,0.7)" }}
+          >
+            hosted the world's longest hackathon on land
+          </a>
+          , and{" "}
+          <a
+            href="https://www.youtube.com/watch?v=QvCoISXfcE8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#00E5A0] transition-colors"
+            style={{ color: "rgba(245,240,232,0.7)" }}
+          >
+            ran Canada's largest high school hackathon
+          </a>
+          .<br />
+          <br />
+          At Hack Club, students aren't just learning, they're shipping.
+        </p>
+
+        <div className="flex flex-wrap gap-x-16 gap-y-8">
+          {/* Hack Club column */}
+          <div className="flex flex-col">
+            <p
+              className="mb-3 font-sans text-base md:text-lg font-extrabold"
+              style={{ color: "#F5F0E8" }}
+            >
+              Hack Club
+            </p>
+            <div
+              className="font-sans text-sm md:text-base space-y-2"
+              style={{ color: "rgba(245,240,232,0.7)" }}
+            >
+              {[
+                {
+                  label: "Philosophy",
+                  href: "https://hackclub.com/philosophy/",
+                },
+                {
+                  label: "Our Team & Board",
+                  href: "https://hackclub.com/team/",
+                },
+                { label: "Branding", href: "https://hackclub.com/brand/" },
+                { label: "Donate", href: "https://hackclub.com/philanthropy/" },
+              ].map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block hover:text-[#00E5A0] transition-colors"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Automake column */}
+          <div className="flex flex-col">
+            <p
+              className="mb-3 font-sans text-base md:text-lg font-extrabold"
+              style={{ color: "#F5F0E8" }}
+            >
+              Automake
+            </p>
+            <div
+              className="font-sans text-sm md:text-base space-y-2"
+              style={{ color: "rgba(245,240,232,0.7)" }}
+            >
+              {[
+                { label: "Showcase", href: "/showcase" },
+                { label: "Guides", href: "/guides" },
+                { label: "Shop", href: "/shop" },
+              ].map((l) => (
+                <Link key={l.label} href={l.href}>
+                  <span className="block hover:text-[#00E5A0] transition-colors cursor-pointer">
+                    {l.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Resources column */}
+          <div className="flex flex-col">
+            <p
+              className="mb-3 font-sans text-base md:text-lg font-extrabold"
+              style={{ color: "#F5F0E8" }}
+            >
+              Resources
+            </p>
+            <div
+              className="font-sans text-sm md:text-base space-y-2"
+              style={{ color: "rgba(245,240,232,0.7)" }}
+            >
+              {[
+                {
+                  label: "Community Events",
+                  href: "https://events.hackclub.com/",
+                },
+                { label: "Jams", href: "https://jams.hackclub.com/" },
+                { label: "Workshops", href: "https://workshops.hackclub.com/" },
+                {
+                  label: "Code of Conduct",
+                  href: "https://hackclub.com/conduct/",
+                },
+              ].map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block hover:text-[#00E5A0] transition-colors"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p
+          className="font-sans text-xs mt-12"
+          style={{ color: "rgba(245,240,232,0.35)" }}
+        >
+          Made with 🤖 by teen builders. No adults were harmed.
+        </p>
       </motion.div>
     </div>
   );
@@ -1080,7 +1234,7 @@ export default function Landing() {
             )}
             {current === 3 && <ProjectsSection dir={dir} />}
             {current === 4 && <FaqSectionContent dir={dir} />}
-            {current === 5 && <N8nVideoSection dir={dir} />}
+            {current === 5 && <FooterSection dir={dir} />}
           </motion.div>
         </AnimatePresence>
 

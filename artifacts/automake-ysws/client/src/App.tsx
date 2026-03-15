@@ -10,7 +10,19 @@ import NotFound from "./pages/NotFound";
 
 function Router() {
   return (
-    <>
+    <div>
+      <a
+        href="https://hackclub.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ position: "fixed", top: "100px", left: "0px", zIndex: 9999 }}
+      >
+        <img
+          src="https://assets.hackclub.com/flag-orpheus-left.svg"
+          alt="Hack Club"
+          style={{ width: "200px" }}
+        />
+      </a>
       <Navbar />
       <main>
         <Switch>
@@ -23,7 +35,7 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </main>
-    </>
+    </div>
   );
 }
 
