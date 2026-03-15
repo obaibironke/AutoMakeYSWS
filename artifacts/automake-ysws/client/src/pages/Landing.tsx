@@ -491,7 +491,7 @@ function AboutSection({ dir }: { dir: number }) {
           Automake?
         </h2>
 
-        {/* Body text — large and filling */}
+        {/* Body text */}
         <p
           className="font-sans leading-relaxed"
           style={{
@@ -502,16 +502,9 @@ function AboutSection({ dir }: { dir: number }) {
         >
           Automations can be used for amazing things. They power useful tools
           like Slack bots or fun email responders.{" "}
-          <span style={{ fontWeight: 800 }}>Automake</span> exists to provide a
-          place{" "}
-          <span
-            style={{
-              fontWeight: 800,
-              background: "#00E5A0",
-              borderRadius: "4px",
-              padding: "0 5px",
-            }}
-          >
+          <span style={{ fontWeight: 800, color: "#00E5A0" }}>Automake</span>{" "}
+          exists to provide a place{" "}
+          <span style={{ fontWeight: 800, color: "#00E5A0" }}>
             (and reward)
           </span>{" "}
           for learning how to build real automations — so that you can take any
