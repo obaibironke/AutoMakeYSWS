@@ -64,31 +64,31 @@ export const shopItems: ShopItem[] = [
     category: "Tech & Gadgets",
     description: "A $100 grant to go towards any laptop or tablet of your choosing.",
     cost: 1000
-  },
+  }
   // Fun & Quirky
   {
-    id: "8",
+    id: "9",
     name: "Sticker Pack",
     category: "Fun & Quirky",
     description: "A pack of high-quality Automake YSWS and tech stickers for your laptop.",
     cost: 40
   },
   {
-    id: "9",
+    id: "10",
     name: "Signed Photo from someone at HQ",
     category: "Fun & Quirky",
     description: "A signed photo from someone at HQ.",
     cost: 60
   },
   {
-    id: "10",
+    id: "11",
     name: "Hot Chocolate Kit",
     category: "Fun & Quirky",
     description: "A cozy hot chocolate kit for those late-night building sessions.",
     cost: 50
   },
   {
-    id: "11",
+    id: "12",
     name: "Mystery Object from HQ",
     category: "Fun & Quirky",
     description: "A surprise item chosen by the Automake team. Could be anything that is lying around at HQ.",
@@ -96,9 +96,9 @@ export const shopItems: ShopItem[] = [
   },
   // Milestone Rewards
   {
-    id: "12",
+    id: "13",
     name: "VR Headset",
     category: "Milestone Rewards",
     description: "A Meta Quest or similar VR headset to explore spatial computing and virtual worlds.",
     cost: 4000
-  },
+  }
