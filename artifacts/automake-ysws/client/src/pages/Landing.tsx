@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import {
   motion,
@@ -121,7 +121,7 @@ const contentVariants = {
   }),
 };
 
-/* ─── Sections ────────────────────────────────────────────── */
+/* ─── Hero ───────────────────────────────────────────────── */
 
 function HeroSection({
   dir,
@@ -137,7 +137,6 @@ function HeroSection({
       className="relative w-full h-full flex items-center justify-center text-center overflow-hidden"
       style={{ background: "#0F1923" }}
     >
-      {/* Parallax blobs */}
       <motion.div
         className="blob blob-1"
         style={{
@@ -187,7 +186,6 @@ function HeroSection({
         }}
       />
 
-      {/* Content */}
       <motion.div
         className="relative z-10 max-w-5xl mx-auto px-6"
         custom={dir}
@@ -196,7 +194,6 @@ function HeroSection({
         animate="center"
         exit="exit"
       >
-        {/* Sticker badges */}
         <motion.div
           initial={{ opacity: 0, rotate: 8, scale: 0.8 }}
           animate={{ opacity: 1, rotate: 12, scale: 1 }}
@@ -227,6 +224,7 @@ function HeroSection({
           <br />
           TOOLS
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0, rotate: -4, scale: 0.8 }}
           animate={{ opacity: 1, rotate: -8, scale: 1 }}
@@ -252,6 +250,7 @@ function HeroSection({
           <br />
           ALL TEENS
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0, rotate: 2, scale: 0.8 }}
           animate={{ opacity: 1, rotate: -5, scale: 1 }}
@@ -402,7 +401,6 @@ function HeroSection({
         </motion.div>
       </motion.div>
 
-      {/* Scroll hint */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
         <span
           className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em]"
@@ -428,6 +426,8 @@ function HeroSection({
     </div>
   );
 }
+
+/* ─── How It Works ───────────────────────────────────────── */
 
 function HowItWorksSection({ dir }: { dir: number }) {
   return (
@@ -458,7 +458,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
               Four simple steps from idea to reward. Anyone can do it.
             </p>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((step, i) => (
               <motion.div
@@ -497,7 +496,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
               </motion.div>
             ))}
           </div>
-
           <div className="text-center mt-8">
             <Link href="/guides">
               <span
@@ -509,7 +507,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
             </Link>
           </div>
         </div>
-
         <div className="w-full mt-10">
           <MarqueeStrip />
         </div>
@@ -517,6 +514,272 @@ function HowItWorksSection({ dir }: { dir: number }) {
     </div>
   );
 }
+
+/* ─── Integrations ───────────────────────────────────────── */
+
+const integrationLogos: Array<{
+  slug: string;
+  name: string;
+  top: string;
+  left: string;
+  size: number;
+  rot: number;
+  src?: string;
+}> = [
+  // Row 1
+  {
+    slug: "slack",
+    name: "Slack",
+    top: "7%",
+    left: "6%",
+    size: 80,
+    rot: -4,
+    src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png",
+  },
+  { slug: "notion", name: "Notion", top: "6%", left: "29%", size: 80, rot: 3 },
+  { slug: "github", name: "GitHub", top: "8%", left: "53%", size: 80, rot: -6 },
+  {
+    slug: "huggingface",
+    name: "Hugging Face",
+    top: "5%",
+    left: "77%",
+    size: 80,
+    rot: 5,
+  },
+  // Row 2
+  {
+    slug: "discord",
+    name: "Discord",
+    top: "20%",
+    left: "16%",
+    size: 80,
+    rot: -3,
+  },
+  {
+    slug: "airtable",
+    name: "Airtable",
+    top: "19%",
+    left: "42%",
+    size: 80,
+    rot: 7,
+  },
+  {
+    slug: "cloudflare",
+    name: "Cloudflare",
+    top: "21%",
+    left: "66%",
+    size: 80,
+    rot: -5,
+  },
+  { slug: "stripe", name: "Stripe", top: "18%", left: "89%", size: 80, rot: 4 },
+  // Row 3
+  { slug: "google", name: "Gemini", top: "33%", left: "6%", size: 80, rot: 4 },
+  {
+    slug: "whatsapp",
+    name: "WhatsApp",
+    top: "32%",
+    left: "29%",
+    size: 80,
+    rot: -7,
+  },
+  { slug: "meta", name: "Meta", top: "34%", left: "53%", size: 80, rot: 6 },
+  {
+    slug: "anthropic",
+    name: "Claude",
+    top: "31%",
+    left: "77%",
+    size: 80,
+    rot: -3,
+  },
+  // Row 4
+  { slug: "gmail", name: "Gmail", top: "46%", left: "16%", size: 80, rot: 5 },
+  {
+    slug: "mailchimp",
+    name: "Mailchimp",
+    top: "47%",
+    left: "42%",
+    size: 80,
+    rot: -6,
+  },
+  {
+    slug: "supabase",
+    name: "Supabase",
+    top: "45%",
+    left: "66%",
+    size: 80,
+    rot: 4,
+  },
+  {
+    slug: "clickup",
+    name: "ClickUp",
+    top: "48%",
+    left: "89%",
+    size: 80,
+    rot: -5,
+  },
+  // Row 5
+  {
+    slug: "facebook",
+    name: "Facebook",
+    top: "59%",
+    left: "6%",
+    size: 80,
+    rot: 7,
+  },
+  {
+    slug: "googledrive",
+    name: "Google Drive",
+    top: "58%",
+    left: "29%",
+    size: 80,
+    rot: -4,
+  },
+  { slug: "vonage", name: "Vonage", top: "60%", left: "53%", size: 80, rot: 5 },
+  {
+    slug: "instagram",
+    name: "Instagram",
+    top: "57%",
+    left: "77%",
+    size: 80,
+    rot: -5,
+  },
+  // Row 6
+  {
+    slug: "googlesheets",
+    name: "Google Sheets",
+    top: "72%",
+    left: "16%",
+    size: 80,
+    rot: 3,
+  },
+  {
+    slug: "calendly",
+    name: "Calendly",
+    top: "71%",
+    left: "42%",
+    size: 80,
+    rot: -7,
+  },
+  {
+    slug: "googleads",
+    name: "Google Ads",
+    top: "73%",
+    left: "66%",
+    size: 80,
+    rot: 6,
+  },
+  { slug: "brevo", name: "Brevo", top: "70%", left: "89%", size: 80, rot: -3 },
+];
+
+function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 350);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div
+      className="w-full h-full relative overflow-hidden"
+      style={{ background: "#0F1923" }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: "3% 0",
+          willChange: "transform",
+          transform: `translateY(${logoY}px) translateZ(0)`,
+          transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      >
+        {integrationLogos.map((item, i) => (
+          <div
+            key={item.slug}
+            title={item.name}
+            style={{
+              position: "absolute",
+              top: item.top,
+              left: item.left,
+              opacity: visible ? 1 : 0,
+              transform: visible
+                ? `translateY(0px) rotate(${item.rot}deg)`
+                : `translateY(-28px) rotate(${item.rot}deg)`,
+              transition: `opacity 0.5s ease ${i * 40}ms, transform 0.5s ease ${i * 40}ms`,
+            }}
+          >
+            <div
+              style={{
+                width: item.size,
+                height: item.size,
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: "14px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={item.src ?? `https://cdn.simpleicons.org/${item.slug}`}
+                alt={item.name}
+                draggable={false}
+                style={{
+                  width: item.size * 0.48,
+                  height: item.size * 0.48,
+                  filter: item.src ? "none" : "brightness(0) invert(1)",
+                  userSelect: "none",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+        <motion.div
+          custom={dir}
+          variants={contentVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+        >
+          <div
+            style={{
+              background: "rgba(15,25,35,0.6)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.18)",
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
+              borderRadius: "20px",
+              padding: "2.5rem 3rem",
+              maxWidth: "640px",
+              margin: "0 auto",
+            }}
+          >
+            <h2
+              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
+              style={{ color: "#00E5A0" }}
+            >
+              We'll fund the tools you need
+            </h2>
+            <p
+              className="font-sans text-base sm:text-lg leading-relaxed"
+              style={{ color: "rgba(245,240,232,0.8)" }}
+            >
+              Get sponsored for any integration your automation requires — no
+              cost to you.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Projects ───────────────────────────────────────────── */
 
 function ProjectsSection({ dir }: { dir: number }) {
   const featuredProjects = projects.slice(0, 3);
@@ -547,7 +810,6 @@ function ProjectsSection({ dir }: { dir: number }) {
             Real automation projects built by real teens, just like you.
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {featuredProjects.map((p, i) => (
             <motion.div
@@ -566,7 +828,6 @@ function ProjectsSection({ dir }: { dir: number }) {
             </motion.div>
           ))}
         </div>
-
         <div className="text-center mt-8">
           <Link href="/showcase">
             <span
@@ -581,6 +842,8 @@ function ProjectsSection({ dir }: { dir: number }) {
     </div>
   );
 }
+
+/* ─── FAQ ────────────────────────────────────────────────── */
 
 function FaqSectionContent({ dir }: { dir: number }) {
   return (
@@ -617,227 +880,7 @@ function FaqSectionContent({ dir }: { dir: number }) {
   );
 }
 
-/* ─── Integrations Section ───────────────────────────────── */
-
-const integrationLogos = [
-  // Row 1 — 4 icons, tops ~3-5%, cols at 3 / 28 / 54 / 80
-  {
-    slug: "slack",
-    name: "Slack",
-    top: "4%",
-    left: "3%",
-    size: 72,
-    rot: -4,
-    src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png",
-  },
-  { slug: "notion",      name: "Notion",      top: "3%",  left: "28%", size: 82, rot:  3 },
-  { slug: "github",      name: "GitHub",      top: "5%",  left: "54%", size: 72, rot: -6 },
-  { slug: "huggingface", name: "Hugging Face",top: "2%",  left: "80%", size: 82, rot:  5 },
-  // Row 2 — 3 icons, tops ~15-18%, cols at 15 / 43 / 70 (staggered +12)
-  { slug: "discord",     name: "Discord",     top: "16%", left: "15%", size: 82, rot: -3 },
-  { slug: "airtable",    name: "Airtable",    top: "15%", left: "43%", size: 72, rot:  7 },
-  { slug: "cloudflare",  name: "Cloudflare",  top: "18%", left: "71%", size: 92, rot: -5 },
-  // Row 3 — 4 icons, tops ~28-31%, cols at 3 / 28 / 54 / 80
-  { slug: "google",      name: "Gemini",      top: "29%", left: "3%",  size: 92, rot:  4 },
-  { slug: "whatsapp",    name: "WhatsApp",    top: "28%", left: "29%", size: 72, rot: -7 },
-  { slug: "meta",        name: "Meta",        top: "31%", left: "55%", size: 82, rot:  6 },
-  { slug: "anthropic",   name: "Claude",      top: "27%", left: "81%", size: 72, rot: -3 },
-  // Row 4 — 3 icons, tops ~41-44%, cols at 15 / 43 / 70
-  { slug: "gmail",       name: "Gmail",       top: "42%", left: "15%", size: 72, rot:  5 },
-  { slug: "mailchimp",   name: "Mailchimp",   top: "44%", left: "43%", size: 92, rot: -6 },
-  { slug: "supabase",    name: "Supabase",    top: "41%", left: "71%", size: 82, rot:  4 },
-  // Row 5 — 4 icons, tops ~54-57%, cols at 3 / 28 / 54 / 80
-  { slug: "facebook",    name: "Facebook",    top: "55%", left: "3%",  size: 82, rot:  7 },
-  { slug: "googledrive", name: "Google Drive",top: "54%", left: "29%", size: 72, rot: -4 },
-  { slug: "vonage",      name: "Vonage",      top: "57%", left: "55%", size: 82, rot:  5 },
-  { slug: "instagram",   name: "Instagram",   top: "55%", left: "81%", size: 72, rot: -5 },
-  // Row 6 — 3 icons, tops ~67-70%, cols at 15 / 43 / 70
-  { slug: "googlesheets",name: "Google Sheets",top:"68%", left: "14%", size: 82, rot:  3 },
-  { slug: "clickup",     name: "ClickUp",     top: "67%", left: "43%", size: 72, rot: -7 },
-  { slug: "stripe",      name: "Stripe",      top: "70%", left: "71%", size: 92, rot:  6 },
-  // Row 7 — 3 icons, tops ~81-84%, cols at 3 / 41 / 79
-  { slug: "calendly",    name: "Calendly",    top: "82%", left: "3%",  size: 72, rot: -3 },
-  { slug: "googleads",   name: "Google Ads",  top: "80%", left: "41%", size: 82, rot:  5 },
-  { slug: "brevo",       name: "Brevo",       top: "83%", left: "79%", size: 72, rot: -6 },
-];
-
-function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
-  const [visible, setVisible] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [cw, setCw] = useState(0);
-  const [ch, setCh] = useState(0);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const update = () => { setCw(el.offsetWidth); setCh(el.offsetHeight); };
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 350);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Compute pixel positions dynamically so icons fill edge-to-edge on any screen
-  const layout = useMemo(() => {
-    if (!cw || !ch) return [];
-
-    const PAD = cw * 0.02;
-    const usableW = cw - 2 * PAD;
-
-    // Fit 4 icons per row with a gap of 0.35× icon size
-    // 4*size + 3*gap = usableW  →  size*(4 + 3*0.35) = usableW  →  size = usableW/5.05
-    const size = Math.round(usableW / 5.05);
-    const gap = (usableW - 4 * size) / 3;
-    const halfCell = (size + gap) / 2; // stagger offset for 3-col rows
-
-    // inset:"-10% 0" means the logo field starts 10% above container.
-    // In logo field pixels: container top = 0.1*ch, container bottom = 1.1*ch
-    const topStart = ch * 0.1 + ch * 0.02;
-    const topEnd   = ch * 1.1 - size - ch * 0.02;
-    const usableH  = topEnd - topStart;
-
-    // 7 rows: alternating 4 and 3 icons = 4+3+4+3+4+3+3 = 24
-    const rowPattern = [4, 3, 4, 3, 4, 3, 3];
-    const rots = [-4, 3, -6, 5, -3, 7, -5, 4, -7, 6, -3, 5, -4, 7, -6, 3, -5, 6, -3, 4, -7, 5, -4, 3];
-
-    const result: Array<{ top: number; left: number; size: number; rot: number }> = [];
-    let idx = 0;
-
-    rowPattern.forEach((cols, rowIdx) => {
-      const rowFrac = rowIdx / (rowPattern.length - 1);
-      const rowTop = topStart + rowFrac * usableH;
-      const jitterY = ((rowIdx * 7) % 5 - 2) * ch * 0.004;
-
-      const colLefts = cols === 4
-        ? [0, 1, 2, 3].map(c => PAD + c * (size + gap))
-        : [0, 1, 2].map(c => PAD + halfCell + c * (size + gap));
-
-      colLefts.forEach((leftPx, colIdx) => {
-        const jitterX = ((rowIdx * 3 + colIdx * 7) % 5 - 2) * cw * 0.003;
-        result.push({
-          top: rowTop + jitterY,
-          left: leftPx + jitterX,
-          size,
-          rot: rots[idx % rots.length],
-        });
-        idx++;
-      });
-    });
-
-    return result;
-  }, [cw, ch]);
-
-  return (
-    <div
-      ref={containerRef}
-      className="w-full h-full relative overflow-hidden"
-      style={{ background: "#0F1923" }}
-    >
-      {/* Scattered logo field */}
-      <div
-        style={{
-          position: "absolute",
-          inset: "-10% 0",
-          willChange: "transform",
-          transform: `translateY(${logoY}px) translateZ(0)`,
-          transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      >
-        {layout.map((pos, i) => {
-          const item = integrationLogos[i];
-          if (!item) return null;
-          return (
-            <div
-              key={item.slug}
-              title={item.name}
-              style={{
-                position: "absolute",
-                top: pos.top,
-                left: pos.left,
-                opacity: visible ? 1 : 0,
-                transform: visible
-                  ? `translateY(0px) rotate(${pos.rot}deg)`
-                  : `translateY(-28px) rotate(${pos.rot}deg)`,
-                transition: `opacity 0.5s ease ${i * 40}ms, transform 0.5s ease ${i * 40}ms`,
-              }}
-            >
-              <div
-                style={{
-                  width: pos.size,
-                  height: pos.size,
-                  background: "rgba(255,255,255,0.07)",
-                  border: "1px solid rgba(255,255,255,0.14)",
-                  borderRadius: "14px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                  src={item.src ?? `https://cdn.simpleicons.org/${item.slug}`}
-                  alt={item.name}
-                  draggable={false}
-                  style={{
-                    width: pos.size * 0.48,
-                    height: pos.size * 0.48,
-                    filter: item.src ? "none" : "brightness(0) invert(1)",
-                    userSelect: "none",
-                    objectFit: "contain",
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Centered text */}
-      <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-        <motion.div
-          custom={dir}
-          variants={contentVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-        >
-          <div
-            style={{
-              background: "rgba(15,25,35,0.55)",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
-              border: "1px solid rgba(255,255,255,0.18)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
-              borderRadius: "20px",
-              padding: "2.5rem 3rem",
-              maxWidth: "640px",
-              margin: "0 auto",
-            }}
-          >
-            <h2
-              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
-              style={{ color: "#00E5A0" }}
-            >
-              We'll fund the tools you need
-            </h2>
-            <p
-              className="font-sans text-base sm:text-lg leading-relaxed"
-              style={{ color: "rgba(245,240,232,0.8)" }}
-            >
-              Get sponsored for any integration your automation requires — no cost to you.
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── N8n Video Section ──────────────────────────────────── */
+/* ─── N8n Video ──────────────────────────────────────────── */
 
 function N8nVideoSection({ dir }: { dir: number }) {
   return (
@@ -880,7 +923,7 @@ function N8nVideoSection({ dir }: { dir: number }) {
   );
 }
 
-/* ─── Main: scrolljacking orchestrator ───────────────────── */
+/* ─── Main ───────────────────────────────────────────────── */
 
 const TOTAL = 6;
 const TRANSITION_MS = 900;
@@ -934,15 +977,12 @@ export default function Landing() {
       e.preventDefault();
       if (Math.abs(e.deltaY) < 8) return;
       if (transitioning.current) return;
-
       const scrollDir = e.deltaY > 0 ? 1 : -1;
-
       if (current === INTEG_SECTION) {
         intScrollCount.current += 1;
         setIntegLogoY((prev) =>
           Math.max(-70, Math.min(70, prev + scrollDir * -35)),
         );
-
         if (intScrollCount.current >= INTEG_HOLD) {
           intScrollCount.current = 0;
           go(current + scrollDir);
@@ -995,10 +1035,7 @@ export default function Landing() {
   }, []);
 
   const containerVariants = {
-    enter: (d: number) => ({
-      y: d > 0 ? "100%" : "-100%",
-      scale: 1,
-    }),
+    enter: (d: number) => ({ y: d > 0 ? "100%" : "-100%", scale: 1 }),
     center: {
       y: 0,
       scale: 1,
@@ -1047,7 +1084,6 @@ export default function Landing() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Progress bar */}
         <div
           className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
           style={{ background: "rgba(0,229,160,0.15)" }}
