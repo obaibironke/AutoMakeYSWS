@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import {
   motion,
@@ -663,14 +663,78 @@ const integrationLogos = [
 
 function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
   const [visible, setVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cw, setCw] = useState(0);
+  const [ch, setCh] = useState(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => { setCw(el.offsetWidth); setCh(el.offsetHeight); };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 350);
     return () => clearTimeout(t);
   }, []);
 
+  // Compute pixel positions dynamically so icons fill edge-to-edge on any screen
+  const layout = useMemo(() => {
+    if (!cw || !ch) return [];
+
+    const PAD = cw * 0.02;
+    const usableW = cw - 2 * PAD;
+
+    // Fit 4 icons per row with a gap of 0.35× icon size
+    // 4*size + 3*gap = usableW  →  size*(4 + 3*0.35) = usableW  →  size = usableW/5.05
+    const size = Math.round(usableW / 5.05);
+    const gap = (usableW - 4 * size) / 3;
+    const halfCell = (size + gap) / 2; // stagger offset for 3-col rows
+
+    // inset:"-10% 0" means the logo field starts 10% above container.
+    // In logo field pixels: container top = 0.1*ch, container bottom = 1.1*ch
+    const topStart = ch * 0.1 + ch * 0.02;
+    const topEnd   = ch * 1.1 - size - ch * 0.02;
+    const usableH  = topEnd - topStart;
+
+    // 7 rows: alternating 4 and 3 icons = 4+3+4+3+4+3+3 = 24
+    const rowPattern = [4, 3, 4, 3, 4, 3, 3];
+    const rots = [-4, 3, -6, 5, -3, 7, -5, 4, -7, 6, -3, 5, -4, 7, -6, 3, -5, 6, -3, 4, -7, 5, -4, 3];
+
+    const result: Array<{ top: number; left: number; size: number; rot: number }> = [];
+    let idx = 0;
+
+    rowPattern.forEach((cols, rowIdx) => {
+      const rowFrac = rowIdx / (rowPattern.length - 1);
+      const rowTop = topStart + rowFrac * usableH;
+      const jitterY = ((rowIdx * 7) % 5 - 2) * ch * 0.004;
+
+      const colLefts = cols === 4
+        ? [0, 1, 2, 3].map(c => PAD + c * (size + gap))
+        : [0, 1, 2].map(c => PAD + halfCell + c * (size + gap));
+
+      colLefts.forEach((leftPx, colIdx) => {
+        const jitterX = ((rowIdx * 3 + colIdx * 7) % 5 - 2) * cw * 0.003;
+        result.push({
+          top: rowTop + jitterY,
+          left: leftPx + jitterX,
+          size,
+          rot: rots[idx % rots.length],
+        });
+        idx++;
+      });
+    });
+
+    return result;
+  }, [cw, ch]);
+
   return (
     <div
+      ref={containerRef}
       className="w-full h-full relative overflow-hidden"
       style={{ background: "#0F1923" }}
     >
@@ -684,48 +748,52 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
           transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
-        {integrationLogos.map((item, i) => (
-          <div
-            key={item.slug}
-            title={item.name}
-            style={{
-              position: "absolute",
-              top: item.top,
-              left: item.left,
-              opacity: visible ? 1 : 0,
-              transform: visible
-                ? `translateY(0px) rotate(${item.rot}deg)`
-                : `translateY(-28px) rotate(${item.rot}deg)`,
-              transition: `opacity 0.5s ease ${i * 40}ms, transform 0.5s ease ${i * 40}ms`,
-            }}
-          >
+        {layout.map((pos, i) => {
+          const item = integrationLogos[i];
+          if (!item) return null;
+          return (
             <div
+              key={item.slug}
+              title={item.name}
               style={{
-                width: item.size,
-                height: item.size,
-                background: "rgba(255,255,255,0.07)",
-                border: "1px solid rgba(255,255,255,0.14)",
-                borderRadius: "14px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                position: "absolute",
+                top: pos.top,
+                left: pos.left,
+                opacity: visible ? 1 : 0,
+                transform: visible
+                  ? `translateY(0px) rotate(${pos.rot}deg)`
+                  : `translateY(-28px) rotate(${pos.rot}deg)`,
+                transition: `opacity 0.5s ease ${i * 40}ms, transform 0.5s ease ${i * 40}ms`,
               }}
             >
-              <img
-                src={item.src ?? `https://cdn.simpleicons.org/${item.slug}`}
-                alt={item.name}
-                draggable={false}
+              <div
                 style={{
-                  width: item.size * 0.48,
-                  height: item.size * 0.48,
-                  filter: item.src ? "none" : "brightness(0) invert(1)",
-                  userSelect: "none",
-                  objectFit: "contain",
+                  width: pos.size,
+                  height: pos.size,
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(255,255,255,0.14)",
+                  borderRadius: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-              />
+              >
+                <img
+                  src={item.src ?? `https://cdn.simpleicons.org/${item.slug}`}
+                  alt={item.name}
+                  draggable={false}
+                  style={{
+                    width: pos.size * 0.48,
+                    height: pos.size * 0.48,
+                    filter: item.src ? "none" : "brightness(0) invert(1)",
+                    userSelect: "none",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Centered text */}

@@ -9,13 +9,6 @@ export interface ShopItem {
 export const shopItems: ShopItem[] = [
   // Automation Tools
   {
-    id: "1",
-    name: "Make.com Pro Subscription",
-    category: "Automation Tools",
-    description: "One month of Make.com Pro — 10,000 operations, more modules, and priority support.",
-    cost: 150
-  },
-  {
     id: "2",
     name: "Airtable Credits",
     category: "Automation Tools",
@@ -28,20 +21,6 @@ export const shopItems: ShopItem[] = [
     category: "Automation Tools",
     description: "Prepaid message credits for the WhatsApp Business API — send thousands of automated messages.",
     cost: 200
-  },
-  {
-    id: "4",
-    name: "AI Credits Pack",
-    category: "Automation Tools",
-    description: "A bundle of OpenAI or Anthropic API credits to power your AI projects.",
-    cost: 120
-  },
-  {
-    id: "5",
-    name: "Paid Automation Course",
-    category: "Automation Tools",
-    description: "Access to a premium Make.com or Zapier course covering advanced workflows and real-world use cases.",
-    cost: 180
   },
   // Tech & Gadgets
   {
@@ -71,13 +50,6 @@ export const shopItems: ShopItem[] = [
     category: "Tech & Gadgets",
     description: "A lightweight Chromebook — perfect for building and running web-based automation projects.",
     cost: 2000
-  },
-  {
-    id: "10",
-    name: "iPad",
-    category: "Tech & Gadgets",
-    description: "An iPad for sketching ideas, reading docs, and building on the go.",
-    cost: 2500
   },
   {
     id: "11",
