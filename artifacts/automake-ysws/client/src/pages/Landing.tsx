@@ -527,15 +527,6 @@ const integrationLogos: Array<{
   src?: string;
 }> = [
   // Row 1
-  {
-    slug: "slack",
-    name: "Slack",
-    top: "7%",
-    left: "6%",
-    size: 80,
-    rot: -4,
-    src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png",
-  },
   { slug: "notion", name: "Notion", top: "6%", left: "29%", size: 80, rot: 3 },
   { slug: "github", name: "GitHub", top: "8%", left: "53%", size: 80, rot: -6 },
   {
@@ -651,6 +642,15 @@ const integrationLogos: Array<{
     left: "16%",
     size: 80,
     rot: 3,
+  },
+  {
+    slug: "slack",
+    name: "Slack",
+    top: "71%",
+    left: "29%",
+    size: 80,
+    rot: -4,
+    src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png",
   },
   {
     slug: "calendly",
@@ -910,16 +910,7 @@ function FooterSection({ dir }: { dir: number }) {
           >
             Hack Club
           </a>{" "}
-          built by the{" "}
-          <a
-            href="https://hackclub.com/team"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline transition-colors"
-            style={{ color: "#00E5A0" }}
-          >
-            Automake Team
-          </a>
+          built by @Oba.
         </p>
 
         <p
@@ -1065,13 +1056,6 @@ function FooterSection({ dir }: { dir: number }) {
             </div>
           </div>
         </div>
-
-        <p
-          className="font-sans text-xs mt-12"
-          style={{ color: "rgba(245,240,232,0.35)" }}
-        >
-          Made with 🤖 by teen builders. No adults were harmed.
-        </p>
       </motion.div>
     </div>
   );
