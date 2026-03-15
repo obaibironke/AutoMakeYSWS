@@ -335,32 +335,13 @@ function HeroSection({
         </h1>
 
         <motion.p
-          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-4 leading-relaxed"
+          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-9 leading-relaxed"
           style={{ color: "rgba(245,240,232,0.8)" }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
           Build an automation that solves a real problem, get a SBC to host it.
-        </motion.p>
-
-        <motion.p
-          className="font-sans text-sm sm:text-base max-w-2xl mx-auto mb-9 leading-relaxed"
-          style={{ color: "rgba(245,240,232,0.65)" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.72, duration: 0.5 }}
-        >
-          Automations can be used for amazing things. They power useful tools
-          like Slack bots or fun email responders.{" "}
-          <span style={{ color: "#00E5A0", fontWeight: 700 }}>Automake</span>{" "}
-          exists to provide a place{" "}
-          <span style={{ color: "#00E5A0", fontWeight: 700 }}>
-            (and reward)
-          </span>{" "}
-          for learning how to build real automations so that you can take any
-          inefficient or repetitive manual task and turn it into a task that
-          takes care of itself.
         </motion.p>
 
         <motion.div
@@ -442,6 +423,42 @@ function HeroSection({
           <path d="M12 5v14M5 12l7 7 7-7" />
         </motion.svg>
       </div>
+    </div>
+  );
+}
+
+/* ─── About ──────────────────────────────────────────────── */
+
+function AboutSection({ dir }: { dir: number }) {
+  return (
+    <div
+      className="w-full h-full flex items-center justify-center overflow-hidden"
+      style={{ background: "#0F1923" }}
+    >
+      <motion.div
+        className="w-full max-w-3xl mx-auto px-6 text-center"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <p
+          className="font-sans text-xl sm:text-2xl leading-relaxed"
+          style={{ color: "rgba(245,240,232,0.85)" }}
+        >
+          Automations can be used for amazing things. They power useful tools
+          like Slack bots or fun email responders.{" "}
+          <span style={{ color: "#00E5A0", fontWeight: 700 }}>Automake</span>{" "}
+          exists to provide a place{" "}
+          <span style={{ color: "#00E5A0", fontWeight: 700 }}>
+            (and reward)
+          </span>{" "}
+          for learning how to build real automations so that you can take any
+          inefficient or repetitive manual task and turn it into a task that
+          takes care of itself.
+        </p>
+      </motion.div>
     </div>
   );
 }
@@ -1079,9 +1096,9 @@ function FooterSection({ dir }: { dir: number }) {
 
 /* ─── Main ───────────────────────────────────────────────── */
 
-const TOTAL = 6;
+const TOTAL = 7;
 const TRANSITION_MS = 900;
-const INTEG_SECTION = 2;
+const INTEG_SECTION = 3;
 const INTEG_HOLD = 2;
 
 export default function Landing() {
@@ -1228,13 +1245,14 @@ export default function Landing() {
             style={{ position: "absolute", inset: 0 }}
           >
             {current === 0 && <HeroSection dir={dir} {...blobProps} />}
-            {current === 1 && <HowItWorksSection dir={dir} />}
-            {current === 2 && (
+            {current === 1 && <AboutSection dir={dir} />}
+            {current === 2 && <HowItWorksSection dir={dir} />}
+            {current === 3 && (
               <IntegrationsSection dir={dir} logoY={integLogoY} />
             )}
-            {current === 3 && <ProjectsSection dir={dir} />}
-            {current === 4 && <FaqSectionContent dir={dir} />}
-            {current === 5 && <FooterSection dir={dir} />}
+            {current === 4 && <ProjectsSection dir={dir} />}
+            {current === 5 && <FaqSectionContent dir={dir} />}
+            {current === 6 && <FooterSection dir={dir} />}
           </motion.div>
         </AnimatePresence>
 
