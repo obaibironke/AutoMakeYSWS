@@ -620,38 +620,45 @@ function FaqSectionContent({ dir }: { dir: number }) {
 /* ─── Integrations Section ───────────────────────────────── */
 
 const integrationLogos = [
+  // Row 1 — 4 icons, tops ~3-5%, cols at 3 / 28 / 54 / 80
   {
     slug: "slack",
     name: "Slack",
-    top: "6%",
-    left: "4%",
+    top: "4%",
+    left: "3%",
     size: 72,
     rot: -4,
     src: "https://cdn.hackclub.com/019cee17-6c23-776d-9d1b-48582fc3ca3e/SLA-Slack-From-Salesforce-Logo-WHITE.png",
   },
-  { slug: "notion", name: "Notion", top: "5%", left: "46%", size: 82, rot: 3 },
-  { slug: "github", name: "GitHub", top: "7%", left: "87%", size: 72, rot: -6 },
-  { slug: "huggingface", name: "Hugging Face", top: "19%", left: "1%", size: 92, rot: 5 },
-  { slug: "discord", name: "Discord", top: "17%", left: "27%", size: 72, rot: -3 },
-  { slug: "airtable", name: "Airtable", top: "21%", left: "54%", size: 82, rot: 7 },
-  { slug: "cloudflare", name: "Cloudflare", top: "18%", left: "81%", size: 72, rot: -5 },
-  { slug: "google", name: "Gemini", top: "33%", left: "8%", size: 82, rot: 4 },
-  { slug: "whatsapp", name: "WhatsApp", top: "31%", left: "45%", size: 72, rot: -7 },
-  { slug: "meta", name: "Meta", top: "35%", left: "83%", size: 92, rot: 6 },
-  { slug: "anthropic", name: "Claude", top: "47%", left: "3%", size: 72, rot: -3 },
-  { slug: "gmail", name: "Gmail", top: "45%", left: "29%", size: 82, rot: 5 },
-  { slug: "mailchimp", name: "Mailchimp", top: "49%", left: "56%", size: 72, rot: -6 },
-  { slug: "supabase", name: "Supabase", top: "45%", left: "83%", size: 82, rot: 4 },
-  { slug: "facebook", name: "Facebook", top: "59%", left: "6%", size: 72, rot: 7 },
-  { slug: "googledrive", name: "Google Drive", top: "61%", left: "43%", size: 82, rot: -4 },
-  { slug: "vonage", name: "Vonage", top: "57%", left: "81%", size: 72, rot: 5 },
-  { slug: "instagram", name: "Instagram", top: "71%", left: "1%", size: 92, rot: -5 },
-  { slug: "googlesheets", name: "Google Sheets", top: "69%", left: "26%", size: 72, rot: 3 },
-  { slug: "clickup", name: "ClickUp", top: "73%", left: "53%", size: 82, rot: -7 },
-  { slug: "stripe", name: "Stripe", top: "69%", left: "80%", size: 72, rot: 6 },
-  { slug: "calendly", name: "Calendly", top: "83%", left: "10%", size: 72, rot: -3 },
-  { slug: "googleads", name: "Google Ads", top: "85%", left: "47%", size: 82, rot: 5 },
-  { slug: "brevo", name: "Brevo", top: "81%", left: "84%", size: 72, rot: -6 },
+  { slug: "notion",      name: "Notion",      top: "3%",  left: "28%", size: 82, rot:  3 },
+  { slug: "github",      name: "GitHub",      top: "5%",  left: "54%", size: 72, rot: -6 },
+  { slug: "huggingface", name: "Hugging Face",top: "2%",  left: "80%", size: 82, rot:  5 },
+  // Row 2 — 3 icons, tops ~15-18%, cols at 15 / 43 / 70 (staggered +12)
+  { slug: "discord",     name: "Discord",     top: "16%", left: "15%", size: 82, rot: -3 },
+  { slug: "airtable",    name: "Airtable",    top: "15%", left: "43%", size: 72, rot:  7 },
+  { slug: "cloudflare",  name: "Cloudflare",  top: "18%", left: "71%", size: 92, rot: -5 },
+  // Row 3 — 4 icons, tops ~28-31%, cols at 3 / 28 / 54 / 80
+  { slug: "google",      name: "Gemini",      top: "29%", left: "3%",  size: 92, rot:  4 },
+  { slug: "whatsapp",    name: "WhatsApp",    top: "28%", left: "29%", size: 72, rot: -7 },
+  { slug: "meta",        name: "Meta",        top: "31%", left: "55%", size: 82, rot:  6 },
+  { slug: "anthropic",   name: "Claude",      top: "27%", left: "81%", size: 72, rot: -3 },
+  // Row 4 — 3 icons, tops ~41-44%, cols at 15 / 43 / 70
+  { slug: "gmail",       name: "Gmail",       top: "42%", left: "15%", size: 72, rot:  5 },
+  { slug: "mailchimp",   name: "Mailchimp",   top: "44%", left: "43%", size: 92, rot: -6 },
+  { slug: "supabase",    name: "Supabase",    top: "41%", left: "71%", size: 82, rot:  4 },
+  // Row 5 — 4 icons, tops ~54-57%, cols at 3 / 28 / 54 / 80
+  { slug: "facebook",    name: "Facebook",    top: "55%", left: "3%",  size: 82, rot:  7 },
+  { slug: "googledrive", name: "Google Drive",top: "54%", left: "29%", size: 72, rot: -4 },
+  { slug: "vonage",      name: "Vonage",      top: "57%", left: "55%", size: 82, rot:  5 },
+  { slug: "instagram",   name: "Instagram",   top: "55%", left: "81%", size: 72, rot: -5 },
+  // Row 6 — 3 icons, tops ~67-70%, cols at 15 / 43 / 70
+  { slug: "googlesheets",name: "Google Sheets",top:"68%", left: "14%", size: 82, rot:  3 },
+  { slug: "clickup",     name: "ClickUp",     top: "67%", left: "43%", size: 72, rot: -7 },
+  { slug: "stripe",      name: "Stripe",      top: "70%", left: "71%", size: 92, rot:  6 },
+  // Row 7 — 3 icons, tops ~81-84%, cols at 3 / 41 / 79
+  { slug: "calendly",    name: "Calendly",    top: "82%", left: "3%",  size: 72, rot: -3 },
+  { slug: "googleads",   name: "Google Ads",  top: "80%", left: "41%", size: 82, rot:  5 },
+  { slug: "brevo",       name: "Brevo",       top: "83%", left: "79%", size: 72, rot: -6 },
 ];
 
 function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
