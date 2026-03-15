@@ -342,7 +342,7 @@ function HeroSection({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
-          Ship automations. Stack coins. Get free stuff.
+          Build an automation that solves a real problem, get a Raspberry PI 4 to host it.
         </motion.p>
 
         <motion.div
