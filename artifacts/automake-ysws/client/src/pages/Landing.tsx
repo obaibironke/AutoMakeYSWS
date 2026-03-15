@@ -335,13 +335,32 @@ function HeroSection({
         </h1>
 
         <motion.p
-          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-9 leading-relaxed"
+          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-4 leading-relaxed"
           style={{ color: "rgba(245,240,232,0.8)" }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
           Build an automation that solves a real problem, get a SBC to host it.
+        </motion.p>
+
+        <motion.p
+          className="font-sans text-sm sm:text-base max-w-2xl mx-auto mb-9 leading-relaxed"
+          style={{ color: "rgba(245,240,232,0.65)" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.72, duration: 0.5 }}
+        >
+          Automations can be used for amazing things. They power useful tools
+          like Slack bots or fun email responders.{" "}
+          <span style={{ color: "#00E5A0", fontWeight: 700 }}>Automake</span>{" "}
+          exists to provide a place{" "}
+          <span style={{ color: "#00E5A0", fontWeight: 700 }}>
+            (and reward)
+          </span>{" "}
+          for learning how to build real automations so that you can take any
+          inefficient or repetitive manual task and turn it into a task that
+          takes care of itself.
         </motion.p>
 
         <motion.div
@@ -956,7 +975,6 @@ function FooterSection({ dir }: { dir: number }) {
         </p>
 
         <div className="flex flex-wrap gap-x-16 gap-y-8">
-          {/* Hack Club column */}
           <div className="flex flex-col">
             <p
               className="mb-3 font-sans text-base md:text-lg font-extrabold"
@@ -993,7 +1011,6 @@ function FooterSection({ dir }: { dir: number }) {
             </div>
           </div>
 
-          {/* Automake column */}
           <div className="flex flex-col">
             <p
               className="mb-3 font-sans text-base md:text-lg font-extrabold"
@@ -1019,7 +1036,6 @@ function FooterSection({ dir }: { dir: number }) {
             </div>
           </div>
 
-          {/* Resources column */}
           <div className="flex flex-col">
             <p
               className="mb-3 font-sans text-base md:text-lg font-extrabold"
