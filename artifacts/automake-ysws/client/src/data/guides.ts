@@ -76,7 +76,7 @@ export const guides: Guide[] = [
         ],
       },
       {
-        text: 'Start n8n locally in PowerShell with: `docker run -d --restart unless-stopped -p 5678:5678 -v n8n_data:/home/node/.n8n -e N8N_EDITOR_BASE_URL=https://YOUR-NGROK-DOMAIN -e WEBHOOK_URL=https://YOUR-NGROK-DOMAIN n8nio/n8n`',
+        text: "Start n8n locally in PowerShell with: `docker run -d --restart unless-stopped -p 5678:5678 -v n8n_data:/home/node/.n8n -e N8N_EDITOR_BASE_URL=https://YOUR-NGROK-DOMAIN -e WEBHOOK_URL=https://YOUR-NGROK-DOMAIN n8nio/n8n`",
         images: ["/guide-images/starter-guide/image16.png"],
       },
       {
@@ -93,7 +93,6 @@ export const guides: Guide[] = [
           "/guide-images/starter-guide/image15.png",
           "/guide-images/starter-guide/image50.png",
           "/guide-images/starter-guide/image14.png",
-          "/guide-images/starter-guide/image34.png",
           "/guide-images/starter-guide/image25.png",
           "/guide-images/starter-guide/image7.png",
         ],
@@ -175,7 +174,7 @@ export const guides: Guide[] = [
     ],
     modifications: [
       "Make the bot respond differently based on keywords in the message — use an IF node or a Switch node to route different messages to different responses.",
-      "Connect an AI node (like OpenAI) so the bot generates dynamic responses instead of a fixed reply.",
+      "Connect an AI node (Hack Club provides free AIs for Hack Clubbers) so the bot generates dynamic responses instead of a fixed reply.",
       "Add a Google Sheets node to log every message the bot receives into a spreadsheet.",
       "Build a command system where messages starting with `/` trigger specific actions.",
       "Add a second workflow that posts a scheduled message to a Slack channel every morning using a Schedule Trigger node.",
