@@ -10,121 +10,44 @@ export interface Guide {
 export const guides: Guide[] = [
   {
     id: "1",
-    title: "Build Your First Make.com Automation",
+    title: "Build a Slack Bot with n8n",
     difficulty: "Beginner",
-    description: "Get started with automation by connecting two apps together using Make.com (formerly Integromat). No coding required.",
+    description:
+      "Build your first Slack bot using n8n running locally via Docker and exposed to the internet with ngrok. Your bot will respond to any message sent to it in Slack.",
     steps: [
-      "Create a free account at make.com and log in.",
-      "Click 'Create a new scenario' from the dashboard.",
-      "Add your first module by clicking the big '+' button — search for 'Gmail' and select 'Watch Emails'.",
-      "Authenticate your Gmail account by following the OAuth flow.",
-      "Add a second module — try 'Google Sheets' → 'Add a Row' to log each new email.",
-      "Map the fields: set the spreadsheet, sheet name, and map email data (subject, sender, date) to columns.",
-      "Set the schedule to run every 15 minutes using the clock icon at the bottom.",
-      "Click 'Run once' to test the scenario — check your sheet for a new row.",
-      "Turn on the scenario with the toggle switch and let it run automatically."
+      'Go to `https://api.slack.com/apps` and create a new app. Select "Create from scratch", name it "[Your Name]\'s Automake Starter" (or something similar), and select Hack Club as the workspace.',
+      'Navigate to "OAuth & Permissions" in the left sidebar. Under "App Home", make sure "Allow users to send Slash commands and messages from the messages tab" is checked.',
+      'Scroll down to "Bot Token Scopes" and add the following scopes: `chat:write`, `im:write`, `im:read`, `im:history`.',
+      'Install the app to your workspace by clicking "Install to Workspace" and following the prompts.',
+      'Go to `https://ngrok.com`, create a free account, and select "Your Authtoken" from the left menu.',
+      "In PowerShell, run `winget install ngrok.ngrok` to install ngrok.",
+      'Configure your authtoken by running: `& "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages\\ngrok.ngrok_Microsoft.Winget.Source_8wekyb3d8bbwe\\ngrok.exe" config add-authtoken YOUR_TOKEN_HERE`',
+      "Claim a free static domain on the ngrok Domains page if one hasn't been assigned yet.",
+      "In PowerShell, run `ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678` to expose port 5678 to the internet.",
+      "Download and install Docker Desktop from `https://docker.com/products/docker-desktop`. Log in and update WSL when prompted.",
+      "Start n8n locally in PowerShell with: `docker run -d --restart unless-stopped -p 5678:5678 -v n8n_data:/home/node/.n8n -e N8N_EDITOR_BASE_URL=https://YOUR-NGROK-DOMAIN -e WEBHOOK_URL=https://YOUR-NGROK-DOMAIN n8nio/n8n`",
+      "Make sure Docker is set to start on sign-in so n8n is always available. Then open `http://localhost:5678` and set up your n8n owner account. Grab the free activation key when prompted.",
+      'In n8n, add a new credential. Search for "Slack API" and select it. Go back to Slack API → "OAuth & Permissions" and copy your Bot OAuth Token — this is your access token. Your signing secret is found under "Basic Information".',
+      'Add a Slack Trigger node to a new workflow. Set it to trigger "On a new message posted to channel".',
+      "To find your channel ID: open Slack on web or desktop, start a new message with your bot, then click the bot's name and copy the channel ID (it always starts with `D`). Enter this ID in the trigger node.",
+      "In n8n, go to your trigger node → Webhook URLs → Production URL and copy it.",
+      'Navigate out of the node and click "Publish" to activate the workflow.',
+      'Go back to Slack API → "Event Subscriptions". Paste the n8n production URL into the "Request URL" field. It should say "Verified" after a few seconds.',
+      'Add these bot events under "Subscribe to bot events": `message.im`. Save your changes and reinstall the app.',
+      'Add a Slack "Send a Message" node after the trigger node. Connect them.',
+      "Add an If node between the two nodes. Set the condition: `{{ $json.user }}` is equal to your bot's User ID. Wire the False output to the Send Message node. This prevents the bot from responding to its own messages.",
+      'Go to the Slack app and send a message to your bot. In n8n, go to Executions, find the one that just ran, and press "Copy to Editor".',
+      'In the Send Message node, drag the `channel` field from the left input panel into the "Channel by ID" field.',
+      'Set the "Message Text" to whatever you want your bot to say — it can be as simple as "Hi!" or an explanation of the bot.',
+      'Add "Include Link to Workflow" as a property and keep it toggled off.',
+      "Publish your changes and test by sending a message to your bot in Slack. You should get a response back. You've built your first Slack bot!",
     ],
     modifications: [
-      "Add a filter to only log emails from specific senders or with certain keywords.",
-      "Add a third module to send a Slack or Discord message when a new email arrives.",
-      "Connect to Airtable instead of Google Sheets for a richer database format.",
-      "Add error handling modules to catch failures and notify you.",
-      "Chain multiple conditions to route emails into different sheets based on category."
-    ]
+      "Make the bot respond differently based on keywords in the message — use an IF node or a Switch node to route different messages to different responses.",
+      "Connect an AI node (like OpenAI) so the bot generates dynamic responses instead of a fixed reply.",
+      "Add a Google Sheets node to log every message the bot receives into a spreadsheet.",
+      "Build a command system where messages starting with `/` trigger specific actions.",
+      "Add a second workflow that posts a scheduled message to a Slack channel every morning using a Schedule Trigger node.",
+    ],
   },
-  {
-    id: "2",
-    title: "Automate WhatsApp Messages with the API",
-    difficulty: "Beginner",
-    description: "Use the WhatsApp Business API to send automated messages — great for reminders, alerts, and notifications.",
-    steps: [
-      "Sign up for a Meta Developer account at developers.facebook.com.",
-      "Create a new app and add the 'WhatsApp' product to it.",
-      "In the WhatsApp settings, find your Phone Number ID and generate a temporary Access Token.",
-      "Open a terminal or Replit and install the 'axios' package: npm install axios.",
-      "Write a simple Node.js script that sends a POST request to the WhatsApp API endpoint with your token, phone number, and message body.",
-      "Test by sending a message to your own WhatsApp number.",
-      "To schedule automatic messages, use node-cron to run your function at set intervals.",
-      "Deploy your script to a free host like Replit or Railway to keep it running 24/7."
-    ],
-    modifications: [
-      "Build a daily motivational quote sender using a public quotes API.",
-      "Create a weather report bot that fetches weather data and texts it to you each morning.",
-      "Set up a study reminder that sends messages at scheduled study times.",
-      "Add a keyword-based chatbot that responds to incoming messages.",
-      "Build a group announcement tool for sending bulk messages to multiple contacts."
-    ]
-  },
-  {
-    id: "4",
-    title: "Create an AI Chatbot with OpenAI API",
-    difficulty: "Intermediate",
-    description: "Build a custom chatbot using the OpenAI API that you can train with a custom system prompt.",
-    steps: [
-      "Create an account at platform.openai.com and generate an API key.",
-      "Create a new project folder and run 'npm init -y' followed by 'npm install openai'.",
-      "Write a Node.js script that initializes the OpenAI client with your API key.",
-      "Create a system prompt that defines your chatbot's persona and rules (e.g., a study assistant that only answers homework questions).",
-      "Build a message loop that keeps conversation history in an array and sends it with each new message.",
-      "Add a simple readline interface so you can type messages in the terminal.",
-      "Test your bot by having a multi-turn conversation and see how it maintains context.",
-      "Create a simple HTML frontend with a chat interface that calls your backend script.",
-      "Deploy to Replit or Vercel so anyone can chat with your bot."
-    ],
-    modifications: [
-      "Give the bot a specific personality — a chef, a historian, or a coding mentor.",
-      "Add a knowledge base by including relevant text in the system prompt.",
-      "Build a bot that can search the web by integrating a search API.",
-      "Add voice input/output using the Web Speech API.",
-      "Create a subject-specific tutoring bot that quizzes users on a topic."
-    ]
-  },
-  {
-    id: "5",
-    title: "Build a Full API Integration with Airtable",
-    difficulty: "Intermediate",
-    description: "Use the Airtable API to build a project tracker that reads, writes, and updates records programmatically.",
-    steps: [
-      "Create a free Airtable account and build a new base with a 'Projects' table (fields: Name, Status, Due Date, Notes).",
-      "Go to airtable.com/account to get your personal API key.",
-      "Find your Base ID from the Airtable API documentation page for your base.",
-      "Install the 'airtable' npm package: npm install airtable.",
-      "Write a script to list all records from the Projects table and log them to the console.",
-      "Add a function to create a new record by providing name, status, and due date.",
-      "Add a function to update an existing record's status field.",
-      "Build a simple CLI (command-line interface) that lets you choose which operation to run.",
-      "Add error handling and input validation to your CLI."
-    ],
-    modifications: [
-      "Connect your Airtable base to a Make.com scenario for more automations.",
-      "Build a web frontend that shows your projects in a Kanban-style board.",
-      "Add a function to delete records older than a certain date.",
-      "Create a daily digest that emails you all tasks due this week.",
-      "Build a habit tracker that automatically logs whether you completed daily tasks."
-    ]
-  },
-  {
-    id: "6",
-    title: "Deploy a Serverless API on Vercel",
-    difficulty: "Advanced",
-    description: "Build and deploy a serverless REST API with authentication, rate limiting, and database integration on Vercel.",
-    steps: [
-      "Install the Vercel CLI: npm install -g vercel and log in with 'vercel login'.",
-      "Create a new project folder with a 'api/' directory — Vercel treats each file here as a serverless function.",
-      "Write your first serverless function in api/hello.js that returns JSON: module.exports = (req, res) => res.json({ message: 'Hello!' }).",
-      "Run 'vercel dev' to test locally — visit localhost:3000/api/hello.",
-      "Add environment variables in the Vercel dashboard for your API keys and database URL.",
-      "Connect a PostgreSQL database using Vercel's built-in Postgres or an external provider like Supabase.",
-      "Add API key authentication by checking a header in each function and returning 401 if missing.",
-      "Implement rate limiting using an in-memory store or Vercel KV to cap requests per IP.",
-      "Deploy to production with 'vercel --prod' and test all endpoints."
-    ],
-    modifications: [
-      "Add JWT authentication instead of simple API keys.",
-      "Build a REST CRUD API for a specific resource like todos or blog posts.",
-      "Add OpenAPI documentation using swagger-jsdoc.",
-      "Implement webhook endpoints that other services can call when events happen.",
-      "Add caching headers and Vercel's Edge Cache for faster responses."
-    ]
-  }
 ];
