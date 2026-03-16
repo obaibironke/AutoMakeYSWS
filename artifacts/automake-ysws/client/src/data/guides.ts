@@ -14,7 +14,7 @@ export interface StepItem {
 
 export const guides: Guide[] = [
   {
-    id: "1",
+    id: "starter",
     title: "Build a Slack Bot with n8n",
     difficulty: "Beginner",
     description:
