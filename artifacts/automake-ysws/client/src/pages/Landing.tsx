@@ -9,6 +9,8 @@ import {
 } from "framer-motion";
 import MarqueeStrip from "../components/MarqueeStrip";
 
+const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
+
 /* ─── Data ────────────────────────────────────────────────── */
 
 const steps = [
@@ -236,7 +238,7 @@ function HeroSection({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75, duration: 0.5 }}
         >
-          <Link href="/showcase">
+          <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
             <motion.span
               whileHover={{ rotate: -1, y: 2 }}
               whileTap={{ scale: 0.97 }}
@@ -251,9 +253,9 @@ function HeroSection({
                 (e.currentTarget as HTMLElement).style.transform = "";
               }}
             >
-              Explore Projects
+              RSVP Now
             </motion.span>
-          </Link>
+          </a>
           <Link href="/guides">
             <motion.span
               whileHover={{ rotate: 1, y: 2 }}
@@ -537,6 +539,86 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
   );
 }
 
+/* ─── RSVP Section ───────────────────────────────────────── */
+
+function RsvpSection({ dir }: { dir: number }) {
+  return (
+    <div
+      className="w-full h-full flex items-center justify-center overflow-hidden relative"
+      style={{ background: "#F5F0E8" }}
+    >
+      <div
+        style={{
+          position: "absolute", bottom: "-4%", right: "-1%",
+          fontSize: "22vw", fontWeight: 900,
+          color: "rgba(15,25,35,0.04)", lineHeight: 1,
+          userSelect: "none", pointerEvents: "none",
+          fontFamily: "sans-serif", letterSpacing: "-0.04em",
+        }}
+      >
+        JOIN
+      </div>
+
+      <motion.div
+        className="w-full max-w-5xl mx-auto px-8 sm:px-12 text-center"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <div className="mb-6">
+          <span className="font-sans text-xs font-bold uppercase tracking-[0.25em]" style={{ color: "#FF5733" }}>
+            Limited spots available
+          </span>
+        </div>
+
+        <h2
+          className="font-sans font-extrabold mb-6 leading-tight"
+          style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
+        >
+          Ready to{" "}
+          <span style={{ display: "inline", background: "#00E5A0", borderRadius: "6px", padding: "0 10px 2px" }}>
+            ship?
+          </span>
+        </h2>
+
+        <p
+          className="font-sans leading-relaxed mb-10 mx-auto"
+          style={{ color: "#0F1923", fontSize: "clamp(1rem, 2vw, 1.3rem)", maxWidth: "600px" }}
+        >
+          Sign up now to join Automake, get access to guides, earn currency, and unlock rewards for building real automations.
+        </p>
+
+        <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
+          <motion.span
+            whileHover={{ rotate: -1, y: 2 }}
+            whileTap={{ scale: 0.97 }}
+            className="font-sans font-bold px-12 py-5 rounded-lg text-lg cursor-pointer inline-block transition-all"
+            style={{ background: "#0F1923", color: "#00E5A0", boxShadow: "4px 4px 0px #FF5733" }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow = "none";
+              (e.currentTarget as HTMLElement).style.transform = "translate(3px,3px)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow = "4px 4px 0px #FF5733";
+              (e.currentTarget as HTMLElement).style.transform = "";
+            }}
+          >
+            RSVP →
+          </motion.span>
+        </a>
+
+        <div className="mt-10 flex items-center justify-center gap-4">
+          <div style={{ width: 48, height: 4, background: "#FF5733", borderRadius: 2 }} />
+          <div style={{ width: 24, height: 4, background: "#00E5A0", borderRadius: 2 }} />
+          <div style={{ width: 12, height: 4, background: "rgba(15,25,35,0.15)", borderRadius: 2 }} />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ─── FAQ ────────────────────────────────────────────────── */
 
 function FaqSectionContent({ dir }: { dir: number }) {
@@ -667,7 +749,7 @@ function FooterSection({ dir }: { dir: number }) {
 
 /* ─── Main ───────────────────────────────────────────────── */
 
-const TOTAL = 6;
+const TOTAL = 7;
 const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
 const INTEG_HOLD = 2;
@@ -800,8 +882,9 @@ export default function Landing() {
             {current === 1 && <AboutSection dir={dir} />}
             {current === 2 && <HowItWorksSection dir={dir} />}
             {current === 3 && <IntegrationsSection dir={dir} logoY={integLogoY} />}
-            {current === 4 && <FaqSectionContent dir={dir} />}
-            {current === 5 && <FooterSection dir={dir} />}
+            {current === 4 && <RsvpSection dir={dir} />}
+            {current === 5 && <FaqSectionContent dir={dir} />}
+            {current === 6 && <FooterSection dir={dir} />}
           </motion.div>
         </AnimatePresence>
 
