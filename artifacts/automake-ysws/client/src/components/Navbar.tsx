@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 
+const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
-
   const links = [
     { label: "Showcase", href: "/showcase" },
     { label: "Guides", href: "/guides" },
     { label: "Shop", href: "/shop" },
   ];
-
   return (
     <nav className="sticky top-0 z-50 shadow-sm" style={{ background: "#0F1923" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +20,6 @@ export default function Navbar() {
               Automake
             </span>
           </Link>
-
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -36,16 +35,15 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
-            <Link href="/guides">
+            <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
               <span
-                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all"
+                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
                 style={{ background: "#00E5A0", color: "#0F1923", boxShadow: "2px 2px 0px #F5F0E8" }}
               >
-                Get Started
+                RSVP
               </span>
-            </Link>
+            </a>
           </div>
-
           <button
             className="md:hidden flex flex-col gap-1.5 p-2"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -57,7 +55,6 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-
       {menuOpen && (
         <div className="md:hidden px-4 py-4 flex flex-col gap-4" style={{ background: "#0F1923", borderTop: "1px solid rgba(245,240,232,0.1)" }}>
           {links.map((link) => (
@@ -71,15 +68,14 @@ export default function Navbar() {
               </span>
             </Link>
           ))}
-          <Link href="/guides">
+          <a href={RSVP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>
             <span
               className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block text-center"
               style={{ background: "#00E5A0", color: "#0F1923" }}
-              onClick={() => setMenuOpen(false)}
             >
-              Get Started
+              RSVP
             </span>
-          </Link>
+          </a>
         </div>
       )}
     </nav>

@@ -569,7 +569,7 @@ function RsvpSection({ dir }: { dir: number }) {
       >
         <div className="mb-6">
           <span className="font-sans text-xs font-bold uppercase tracking-[0.25em]" style={{ color: "#FF5733" }}>
-            Limited spots available
+            Join Automake YSWS
           </span>
         </div>
 
@@ -587,7 +587,7 @@ function RsvpSection({ dir }: { dir: number }) {
           className="font-sans leading-relaxed mb-10 mx-auto"
           style={{ color: "#0F1923", fontSize: "clamp(1rem, 2vw, 1.3rem)", maxWidth: "600px" }}
         >
-          Sign up now to join Automake, get access to guides, earn currency, and unlock rewards for building real automations.
+          Build a real automation, submit it, earn currency, and unlock rewards. Guides are free and open to everyone — no signup needed to get started.
         </p>
 
         <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
