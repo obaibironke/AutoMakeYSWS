@@ -6,30 +6,6 @@ function renderStepText(text: string) {
   return parts.map((part, i) => {
     if (part.startsWith("`") && part.endsWith("`")) {
       const code = part.slice(1, -1);
-      const isBlock = code.length > 40;
-      if (isBlock) {
-        return (
-          <code
-            key={i}
-            style={{
-              display: "block",
-              marginTop: "8px",
-              background: "rgba(0,229,160,0.08)",
-              border: "1px solid rgba(0,229,160,0.3)",
-              borderRadius: "8px",
-              padding: "10px 14px",
-              fontFamily: "monospace",
-              fontSize: "0.82em",
-              fontWeight: 600,
-              color: "#00E5A0",
-              wordBreak: "break-all",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {code}
-          </code>
-        );
-      }
       return (
         <code
           key={i}
@@ -42,6 +18,9 @@ function renderStepText(text: string) {
             fontSize: "0.88em",
             fontWeight: 600,
             color: "#00E5A0",
+            wordBreak: "break-all",
+            overflowWrap: "anywhere",
+            display: "inline",
           }}
         >
           {code}
@@ -96,31 +75,26 @@ export default function GuideDetail() {
           <div>
             <h2 className="font-sans text-3xl font-extrabold mb-8" style={{ color: "#0F1923" }}>Step-by-Step Instructions</h2>
             <div className="space-y-4">
-              {guide.steps.map((step, i) => {
-                const isCommandOnly = step.startsWith("`") && step.endsWith("`");
-                return (
+              {guide.steps.map((step, i) => (
+                <div
+                  key={i}
+                  className="flex gap-4 items-start rounded-xl p-5"
+                  style={{ background: "white", border: "2px solid #0F1923" }}
+                >
                   <div
-                    key={i}
-                    className="flex gap-4 items-start rounded-xl p-5"
-                    style={{
-                      background: isCommandOnly ? "#0F1923" : "white",
-                      border: "2px solid #0F1923",
-                    }}
+                    className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-sans font-bold text-sm"
+                    style={{ background: "#00E5A0", color: "#0F1923" }}
                   >
-                    {!isCommandOnly && (
-                      <div
-                        className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-sans font-bold text-sm"
-                        style={{ background: "#00E5A0", color: "#0F1923" }}
-                      >
-                        {i + 1}
-                      </div>
-                    )}
-                    <p className="font-sans text-base leading-relaxed pt-0.5 w-full" style={{ color: isCommandOnly ? "#00E5A0" : "#0F1923" }}>
-                      {renderStepText(step)}
-                    </p>
+                    {i + 1}
                   </div>
-                );
-              })}
+                  <p
+                    className="font-sans text-base leading-relaxed pt-0.5"
+                    style={{ color: "#0F1923", minWidth: 0, wordBreak: "break-word" }}
+                  >
+                    {renderStepText(step)}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
