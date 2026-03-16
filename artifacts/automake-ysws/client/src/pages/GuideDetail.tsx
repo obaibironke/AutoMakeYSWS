@@ -6,6 +6,33 @@ function renderStepText(text: string) {
   return parts.map((part, i) => {
     if (part.startsWith("`") && part.endsWith("`")) {
       const code = part.slice(1, -1);
+      const isLong = code.length > 30;
+
+      if (isLong) {
+        return (
+          <code
+            key={i}
+            style={{
+              background: "rgba(0,229,160,0.08)",
+              border: "1px solid rgba(0,229,160,0.3)",
+              borderRadius: "8px",
+              padding: "8px 12px",
+              fontFamily: "monospace",
+              fontSize: "0.85em",
+              fontWeight: 600,
+              color: "#00E5A0",
+              display: "block",
+              marginTop: "10px",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-all",
+              overflowWrap: "anywhere",
+            }}
+          >
+            {code}
+          </code>
+        );
+      }
+
       return (
         <code
           key={i}
@@ -42,17 +69,11 @@ export default function GuideDetail() {
         className="min-h-screen flex flex-col items-center justify-center gap-4"
         style={{ background: "#F5F0E8" }}
       >
-        <h1
-          className="font-sans text-3xl font-extrabold"
-          style={{ color: "#0F1923" }}
-        >
+        <h1 className="font-sans text-3xl font-extrabold" style={{ color: "#0F1923" }}>
           Guide not found
         </h1>
         <Link href="/guides">
-          <span
-            className="font-sans cursor-pointer underline"
-            style={{ color: "#0F1923" }}
-          >
+          <span className="font-sans cursor-pointer underline" style={{ color: "#0F1923" }}>
             ← Back to Guides
           </span>
         </Link>
@@ -90,20 +111,14 @@ export default function GuideDetail() {
       <section className="py-14">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div>
-            <p
-              className="font-sans text-lg leading-relaxed"
-              style={{ color: "#0F1923" }}
-            >
+            <p className="font-sans text-lg leading-relaxed" style={{ color: "#0F1923" }}>
               {guide.description}
             </p>
           </div>
 
           {/* Steps */}
           <div>
-            <h2
-              className="font-sans text-3xl font-extrabold mb-8"
-              style={{ color: "#0F1923" }}
-            >
+            <h2 className="font-sans text-3xl font-extrabold mb-8" style={{ color: "#0F1923" }}>
               Step-by-Step Instructions
             </h2>
             <div className="space-y-4">
@@ -159,16 +174,8 @@ export default function GuideDetail() {
             <ul className="space-y-3">
               {guide.modifications.map((mod, i) => (
                 <li key={i} className="flex gap-3 items-start">
-                  <span
-                    className="font-bold text-lg mt-0.5"
-                    style={{ color: "#00E5A0" }}
-                  >
-                    ✦
-                  </span>
-                  <p
-                    className="font-sans text-base leading-relaxed"
-                    style={{ color: "#F5F0E8" }}
-                  >
+                  <span className="font-bold text-lg mt-0.5" style={{ color: "#00E5A0" }}>✦</span>
+                  <p className="font-sans text-base leading-relaxed" style={{ color: "#F5F0E8" }}>
                     {renderStepText(mod)}
                   </p>
                 </li>
