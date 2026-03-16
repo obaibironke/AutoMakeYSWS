@@ -18,9 +18,10 @@ function renderStepText(text: string) {
             fontSize: "0.88em",
             fontWeight: 600,
             color: "#00E5A0",
-            wordBreak: "break-all",
-            overflowWrap: "anywhere",
-            display: "inline",
+            display: "inline-block",
+            whiteSpace: "nowrap",
+            wordBreak: "normal",
+            overflowWrap: "normal",
           }}
         >
           {code}
@@ -121,7 +122,7 @@ export default function GuideDetail() {
                   <div className="flex-1 min-w-0">
                     <p
                       className="font-sans text-base leading-relaxed pt-0.5"
-                      style={{ color: "#0F1923", wordBreak: "break-word" }}
+                      style={{ color: "#0F1923" }}
                     >
                       {renderStepText(step.text)}
                     </p>
