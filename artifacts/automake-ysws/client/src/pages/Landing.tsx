@@ -953,8 +953,7 @@ function RsvpSection({ dir }: { dir: number }) {
           }}
         >
           Build a real automation, submit it, earn currency, and unlock rewards.
-          Guides are free and open to everyone — no signup needed to get
-          started.
+          Guides are free and open to everyone, you don't need to sign up start.
         </p>
 
         <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
