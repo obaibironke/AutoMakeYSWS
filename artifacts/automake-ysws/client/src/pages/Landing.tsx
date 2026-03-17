@@ -45,6 +45,10 @@ const faqItems = [
     q: "Do I have to use n8n?",
     a: "No you do not have to use n8n as long as you can export your workflow as a JSON and it works.",
   },
+  {
+    q: "What do I need to submit?",
+    a: "For your project to be approved you need to have logged at least 3 hours of work. The automation needs to be able to run on its own without you starting it and you need to be able to submit your workflow's JSON. I need to be able to test it, whether it be through slack or hitting a webhook. If you just copy and paste from a guide, provide fake/demo only workflows, submit broken automations, submit the same workflow multiple times with no fixes, or create projects for the sole purpose of farming rewards, your project will be rejected and you may get banned from participating in this YSWS.",
+  },
 ];
 
 /* ─── Accordion ───────────────────────────────────────────── */
