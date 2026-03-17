@@ -993,15 +993,12 @@ function RsvpSection({ dir }: { dir: number }) {
 }
 
 /* ─── FAQ ────────────────────────────────────────────────── */
-function FaqSectionContent({
-  dir,
-  onScrollStateChange,
-}: {
+function FaqSectionContent({ 
+  dir, 
+  onScrollStateChange 
+}: { 
   dir: number;
-  onScrollStateChange: (state: {
-    isAtTop: boolean;
-    isAtBottom: boolean;
-  }) => void;
+  onScrollStateChange: (state: { isAtTop: boolean; isAtBottom: boolean }) => void;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -1010,16 +1007,16 @@ function FaqSectionContent({
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
     onScrollStateChange({
       isAtTop: scrollTop < 5,
-      isAtBottom: scrollHeight - scrollTop - clientHeight < 5,
+      isAtBottom: scrollHeight - scrollTop - clientHeight < 5
     });
   }, [onScrollStateChange]);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
-      el.addEventListener("scroll", checkScroll);
+      el.addEventListener('scroll', checkScroll);
       checkScroll();
-      return () => el.removeEventListener("scroll", checkScroll);
+      return () => el.removeEventListener('scroll', checkScroll);
     }
   }, [checkScroll]);
 
@@ -1059,15 +1056,12 @@ function FaqSectionContent({
 }
 
 /* ─── Footer Section ─────────────────────────────────────── */
-function FooterSection({
+function FooterSection({ 
   dir,
-  onScrollStateChange,
-}: {
+  onScrollStateChange 
+}: { 
   dir: number;
-  onScrollStateChange: (state: {
-    isAtTop: boolean;
-    isAtBottom: boolean;
-  }) => void;
+  onScrollStateChange: (state: { isAtTop: boolean; isAtBottom: boolean }) => void;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -1076,16 +1070,16 @@ function FooterSection({
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
     onScrollStateChange({
       isAtTop: scrollTop < 5,
-      isAtBottom: scrollHeight - scrollTop - clientHeight < 5,
+      isAtBottom: scrollHeight - scrollTop - clientHeight < 5
     });
   }, [onScrollStateChange]);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
-      el.addEventListener("scroll", checkScroll);
+      el.addEventListener('scroll', checkScroll);
       checkScroll();
-      return () => el.removeEventListener("scroll", checkScroll);
+      return () => el.removeEventListener('scroll', checkScroll);
     }
   }, [checkScroll]);
 
@@ -1267,6 +1261,9 @@ const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
 const INTEG_HOLD = 2;
 
+// Indices of sections that have internal scrollbars
+const SCROLLABLE_INDICES = [5, 6]; 
+
 export default function Landing() {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
@@ -1274,19 +1271,18 @@ export default function Landing() {
   const intScrollCount = useRef(0);
   const [integLogoY, setIntegLogoY] = useState(0);
 
-  // Track scroll boundaries of the current section
-  const [scrollState, setScrollState] = useState({
-    isAtTop: true,
-    isAtBottom: true,
-  });
+  // Initialize with false for scrollable boundary logic
+  const [scrollState, setScrollState] = useState({ isAtTop: true, isAtBottom: true });
 
   useEffect(() => {
     if (current !== INTEG_SECTION) {
       intScrollCount.current = 0;
       setIntegLogoY(0);
     }
-    // Most sections aren't internally scrollable, so they are "at top/bottom" by default
-    setScrollState({ isAtTop: true, isAtBottom: true });
+    // Only scrollable sections care about these; others are "locked" to true
+    if (!SCROLLABLE_INDICES.includes(current)) {
+      setScrollState({ isAtTop: true, isAtBottom: true });
+    }
   }, [current]);
 
   const mouseX = useMotionValue(0);
@@ -1319,6 +1315,7 @@ export default function Landing() {
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       const scrollDir = e.deltaY > 0 ? 1 : -1;
+      const isScrollableSection = SCROLLABLE_INDICES.includes(current);
 
       // Handle the specialized Integrations section "hold"
       if (current === INTEG_SECTION && !transitioning.current) {
@@ -1337,26 +1334,28 @@ export default function Landing() {
         return;
       }
 
-      // Check if we are interacting with an internally scrollable section
-      const target = e.target as HTMLElement;
-      const scrollable = target.closest(".scrollable-section");
-
-      if (scrollable) {
-        // Only trigger section change if at the scroll boundary
-        if (scrollDir > 0 && scrollState.isAtBottom) {
-          e.preventDefault();
-          go(current + 1);
-        } else if (scrollDir < 0 && scrollState.isAtTop) {
-          e.preventDefault();
-          go(current - 1);
+      // Logic for FAQ and Footer (Sections with internal scroll)
+      if (isScrollableSection) {
+        if (scrollDir > 0 && !scrollState.isAtBottom) {
+          // Inside section scrolling down
+          return; 
         }
-        // Otherwise, do nothing and let the element scroll naturally
+        if (scrollDir < 0 && !scrollState.isAtTop) {
+          // Inside section scrolling up
+          return;
+        }
+
+        // At boundaries, proceed to change section
+        e.preventDefault();
+        if (Math.abs(e.deltaY) < 15) return;
+        go(current + scrollDir);
         return;
       }
 
-      // Standard section switching for non-scrollable parts
+      // Standard section switching (Hero, About, etc.)
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 15) return;
+      if (Math.abs(e.deltaY) < 25) return; // Slightly higher threshold for "snap" feel
+      if (transitioning.current) return;
       go(current + scrollDir);
     };
 
@@ -1429,13 +1428,16 @@ export default function Landing() {
             )}
             {current === 4 && <RsvpSection dir={dir} />}
             {current === 5 && (
-              <FaqSectionContent
-                dir={dir}
-                onScrollStateChange={setScrollState}
+              <FaqSectionContent 
+                dir={dir} 
+                onScrollStateChange={setScrollState} 
               />
             )}
             {current === 6 && (
-              <FooterSection dir={dir} onScrollStateChange={setScrollState} />
+              <FooterSection 
+                dir={dir} 
+                onScrollStateChange={setScrollState} 
+              />
             )}
           </motion.div>
         </AnimatePresence>
