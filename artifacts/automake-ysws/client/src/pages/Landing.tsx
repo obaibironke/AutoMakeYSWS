@@ -1317,10 +1317,24 @@ export default function Landing() {
     const onWheel = (e: WheelEvent) => {
       // Check if the event originated from a scrollable section
       const target = e.target as HTMLElement;
-      const scrollableSection = target.closest('.scrollable-section');
+      const scrollableSection = target.closest('.scrollable-section') as HTMLElement;
 
       if (scrollableSection) {
-        // Allow natural scrolling within scrollable sections
+        const { scrollTop, scrollHeight, clientHeight } = scrollableSection;
+        const scrollDir = e.deltaY > 0 ? 1 : -1;
+
+        // Check if scrolling down and at bottom
+        const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
+        // Check if scrolling up and at top
+        const isAtTop = scrollTop < 10;
+
+        // Allow section transition only if at boundary
+        if ((scrollDir > 0 && isAtBottom && scrolledToBottom) || (scrollDir < 0 && isAtTop)) {
+          e.preventDefault();
+          if (transitioning.current) return;
+          go(current + scrollDir);
+        }
+        // Otherwise allow natural scrolling within the section
         return;
       }
 
@@ -1353,25 +1367,7 @@ export default function Landing() {
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
-  }, [current, go]);
-
-  useEffect(() => {
-    const onStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY;
-    };
-
-    const onEnd = (e: TouchEvent) => {
-      const diff = touchStartY.current - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
-    };
-
-    window.addEventListener("touchstart", onStart, { passive: true });
-    window.addEventListener("touchend", onEnd, { passive: true });
-    return () => {
-      window.removeEventListener("touchstart", onStart);
-      window.removeEventListener("touchend", onEnd);
-    };
-  }, [current, go]);
+  }, ,[current, go, scrolledToBottom]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
