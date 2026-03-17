@@ -1367,7 +1367,7 @@ export default function Landing() {
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
-  }, ,[current, go, scrolledToBottom]);
+  }, [current, go, scrolledToBottom]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
