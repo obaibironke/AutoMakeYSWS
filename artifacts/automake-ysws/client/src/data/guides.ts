@@ -174,7 +174,11 @@ export const guides: Guide[] = [
       },
       {
         text: "Tip: If your computer isn't on then your ngrok will not be running and your webhook will not work. If you restart your computer you will need to run \`ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678\` again in order for your webhooks to work.",
-        type: "tip", // Add this field to mark it as a tip
+        type: "tip",
+      },
+      {
+        text: "Tip: After every change make sure to publish your workflow, this makes sure that your workflow is running with all the changes you made. If you do not do this then your workflow will continue to run with the old version.",
+        type: "tip",
       },
     ],
     modifications: [
