@@ -41,6 +41,10 @@ const faqItems = [
     q: "How many projects can I submit?",
     a: "You can submit as many projects as you would like. The more you ship, the more you earn!",
   },
+  {
+    q: "Do I have to use n8n?",
+    a: "No you do not have to use n8n as long as you can export your workflow as a JSON and it works.",
+  },
 ];
 
 /* ─── Accordion ───────────────────────────────────────────── */
