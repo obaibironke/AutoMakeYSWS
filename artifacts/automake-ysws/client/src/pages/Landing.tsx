@@ -12,15 +12,14 @@ import MarqueeStrip from "../components/MarqueeStrip";
 const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
 
 /* ─── Data ────────────────────────────────────────────────── */
-
-const steps = [
+const steps = ,[
   { label: "Build an automation project" },
   { label: "Log your hours & submit" },
   { label: "Get reviewed & approved" },
   { label: "Earn credits & shop rewards" },
 ];
 
-const faqItems = [
+const faqItems = ,[
   {
     q: "Who can join?",
     a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at.",
@@ -47,14 +46,13 @@ const faqItems = [
   },
   {
     q: "What do I need to submit?",
-    a: "For your project to be approved you need to have logged at least 3 hours of work. The automation needs to be able to run on its own without you starting it and you need to be able to submit your workflow's JSON. I need to be able to test it, whether it be through slack or hitting a webhook. If you just copy and paste from a guide, provide fake/demo only workflows, submit broken automations, submit the same workflow multiple times with no fixes, or create projects for the sole purpose of farming rewards, your project will be rejected and you may get banned from participating in this YSWS.",
+    a: "For your project to be approved you need to have logged at least 3 hours of work. The automation needs to be able to run on its own without you starting it and you need to be able to submit your workflow's JSON. I need to be able to test it, whether it be through slack or hitting a webhook. If you just copy and paste from a guide, provide fake/demo only workflows, submit broken automations, submit the same workflow multiple times with no fixes, or create projects for the sole purpose of farming rewards, your project will be rejected and you may get banned from participating in Automake.",
   },
 ];
 
 /* ─── Accordion ───────────────────────────────────────────── */
-
 function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
+  const ,[open, setOpen] = useState(false);
   return (
     <div
       className="rounded-xl overflow-hidden"
@@ -92,7 +90,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.28, ease: ,[0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
             <div
@@ -114,13 +112,12 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 /* ─── Section content variants ────────────────────────────── */
-
 const contentVariants = {
   enter: (d: number) => ({ y: d > 0 ? 90 : -90, opacity: 0 }),
   center: {
     y: 0,
     opacity: 1,
-    transition: { delay: 0.18, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { delay: 0.18, duration: 0.7, ease: ,[0.22, 1, 0.36, 1] },
   },
   exit: (d: number) => ({
     y: d > 0 ? -30 : 30,
@@ -130,7 +127,6 @@ const contentVariants = {
 };
 
 /* ─── Hero ───────────────────────────────────────────────── */
-
 function HeroSection({
   dir,
   blobX,
@@ -193,7 +189,6 @@ function HeroSection({
           y: blobY.b4,
         }}
       />
-
       <motion.div
         className="relative z-10 max-w-5xl mx-auto px-6"
         custom={dir}
@@ -205,7 +200,7 @@ function HeroSection({
         <motion.div
           initial={{ opacity: 0, rotate: 8, scale: 0.8 }}
           animate={{ opacity: 1, rotate: 12, scale: 1 }}
-          transition={{ delay: 0.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 0.9, duration: 0.5, ease: ,[0.22, 1, 0.36, 1] }}
           style={{
             position: "absolute",
             top: "6%",
@@ -232,11 +227,10 @@ function HeroSection({
           <br />
           TOOLS
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0, rotate: -4, scale: 0.8 }}
           animate={{ opacity: 1, rotate: -8, scale: 1 }}
-          transition={{ delay: 1.0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 1.0, duration: 0.5, ease: ,[0.22, 1, 0.36, 1] }}
           style={{
             position: "absolute",
             bottom: "8%",
@@ -258,11 +252,10 @@ function HeroSection({
           <br />
           ALL TEENS
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0, rotate: 2, scale: 0.8 }}
           animate={{ opacity: 1, rotate: -5, scale: 1 }}
-          transition={{ delay: 1.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 1.05, duration: 0.5, ease: ,[0.22, 1, 0.36, 1] }}
           style={{
             position: "absolute",
             top: "6%",
@@ -284,7 +277,6 @@ function HeroSection({
           <br />
           CREDITS
         </motion.div>
-
         <motion.div
           className="inline-block rounded-full px-4 py-1.5 mb-5"
           style={{
@@ -302,7 +294,6 @@ function HeroSection({
             Hack Club presents
           </span>
         </motion.div>
-
         <h1
           className="font-sans font-extrabold leading-none mb-5 flex flex-col items-center"
           style={{ color: "#F5F0E8" }}
@@ -315,7 +306,7 @@ function HeroSection({
             transition={{
               delay: 0.45,
               duration: 0.55,
-              ease: [0.22, 1, 0.36, 1],
+              ease: ,[0.22, 1, 0.36, 1],
             }}
           >
             Automake
@@ -341,7 +332,6 @@ function HeroSection({
             </svg>
           </motion.span>
         </h1>
-
         <motion.p
           className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-9 leading-relaxed"
           style={{ color: "rgba(245,240,232,0.8)" }}
@@ -351,7 +341,6 @@ function HeroSection({
         >
           Build an automation that solves a real problem, get a SBC to host it.
         </motion.p>
-
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
           initial={{ opacity: 0, y: 20 }}
@@ -408,10 +397,9 @@ function HeroSection({
           </Link>
         </motion.div>
       </motion.div>
-
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
         <span
-          className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em]"
+          className="font-sans text-,[10px] font-semibold uppercase tracking-,[0.2em]"
           style={{ color: "rgba(0,229,160,0.7)" }}
         >
           scroll
@@ -425,7 +413,7 @@ function HeroSection({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          animate={{ y: [0, 6, 0] }}
+          animate={{ y: ,[0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <path d="M12 5v14M5 12l7 7 7-7" />
@@ -436,7 +424,6 @@ function HeroSection({
 }
 
 /* ─── About ──────────────────────────────────────────────── */
-
 function AboutSection({ dir }: { dir: number }) {
   return (
     <div
@@ -460,7 +447,6 @@ function AboutSection({ dir }: { dir: number }) {
       >
         AUTO
       </div>
-
       <motion.div
         className="w-full max-w-5xl mx-auto px-8 sm:px-12"
         custom={dir}
@@ -471,13 +457,12 @@ function AboutSection({ dir }: { dir: number }) {
       >
         <div className="mb-6">
           <span
-            className="font-sans text-xs font-bold uppercase tracking-[0.25em]"
+            className="font-sans text-xs font-bold uppercase tracking-,[0.25em]"
             style={{ color: "#FF5733" }}
           >
             About the program
           </span>
         </div>
-
         <h2
           className="font-sans font-extrabold mb-8 leading-tight"
           style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
@@ -495,7 +480,6 @@ function AboutSection({ dir }: { dir: number }) {
           </span>
           Automake?
         </h2>
-
         <p
           className="font-sans leading-relaxed"
           style={{
@@ -515,7 +499,6 @@ function AboutSection({ dir }: { dir: number }) {
           any inefficient or repetitive manual task and turn it into a task that
           takes care of itself.
         </p>
-
         <div className="mt-10 flex items-center gap-4">
           <div
             style={{
@@ -548,7 +531,6 @@ function AboutSection({ dir }: { dir: number }) {
 }
 
 /* ─── How It Works ───────────────────────────────────────── */
-
 function HowItWorksSection({ dir }: { dir: number }) {
   return (
     <div
@@ -636,7 +618,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
 }
 
 /* ─── Integrations ───────────────────────────────────────── */
-
 const integrationLogos: Array<{
   slug: string;
   name: string;
@@ -645,7 +626,7 @@ const integrationLogos: Array<{
   size: number;
   rot: number;
   src?: string;
-}> = [
+}> = ,[
   { slug: "notion", name: "Notion", top: "6%", left: "29%", size: 80, rot: 3 },
   { slug: "github", name: "GitHub", top: "8%", left: "53%", size: 80, rot: -6 },
   {
@@ -786,12 +767,11 @@ const integrationLogos: Array<{
 ];
 
 function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
-  const [visible, setVisible] = useState(false);
-
+  const ,[visible, setVisible] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 350);
     return () => clearTimeout(t);
-  }, []);
+  }, ,[]);
 
   return (
     <div
@@ -893,7 +873,6 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
 }
 
 /* ─── RSVP Section ───────────────────────────────────────── */
-
 function RsvpSection({ dir }: { dir: number }) {
   return (
     <div
@@ -917,7 +896,6 @@ function RsvpSection({ dir }: { dir: number }) {
       >
         JOIN
       </div>
-
       <motion.div
         className="w-full max-w-5xl mx-auto px-8 sm:px-12 text-center"
         custom={dir}
@@ -928,13 +906,12 @@ function RsvpSection({ dir }: { dir: number }) {
       >
         <div className="mb-6">
           <span
-            className="font-sans text-xs font-bold uppercase tracking-[0.25em]"
+            className="font-sans text-xs font-bold uppercase tracking-,[0.25em]"
             style={{ color: "#FF5733" }}
           >
             Join Automake
           </span>
         </div>
-
         <h2
           className="font-sans font-extrabold mb-6 leading-tight"
           style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
@@ -951,7 +928,6 @@ function RsvpSection({ dir }: { dir: number }) {
             ship?
           </span>
         </h2>
-
         <p
           className="font-sans leading-relaxed mb-10 mx-auto"
           style={{
@@ -963,7 +939,6 @@ function RsvpSection({ dir }: { dir: number }) {
           Build a real automation, submit it, earn credits, and unlock rewards.
           Guides are free and open to everyone, you don't need to sign up start.
         </p>
-
         <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
           <motion.span
             whileHover={{ rotate: -1, y: 2 }}
@@ -988,7 +963,6 @@ function RsvpSection({ dir }: { dir: number }) {
             RSVP →
           </motion.span>
         </a>
-
         <div className="mt-10 flex items-center justify-center gap-4">
           <div
             style={{
@@ -1021,11 +995,38 @@ function RsvpSection({ dir }: { dir: number }) {
 }
 
 /* ─── FAQ ────────────────────────────────────────────────── */
+function FaqSectionContent({ 
+  dir, 
+  onScrollComplete 
+}: { 
+  dir: number;
+  onScrollComplete: (complete: boolean) => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-function FaqSectionContent({ dir }: { dir: number }) {
+  useEffect(() => {
+    const checkScroll = () => {
+      if (!scrollRef.current) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
+      onScrollComplete(isAtBottom);
+    };
+
+    const element = scrollRef.current;
+    if (element) {
+      element.addEventListener('scroll', checkScroll);
+      // Check initial state
+      checkScroll();
+
+      return () => element.removeEventListener('scroll', checkScroll);
+    }
+  }, ,[onScrollComplete]);
+
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center overflow-auto"
+      ref={scrollRef}
+      className="w-full h-full flex flex-col items-center justify-start overflow-auto"
       style={{ background: "#F5F0E8" }}
     >
       <motion.div
@@ -1058,11 +1059,38 @@ function FaqSectionContent({ dir }: { dir: number }) {
 }
 
 /* ─── Footer Section ─────────────────────────────────────── */
+function FooterSection({ 
+  dir,
+  onScrollComplete 
+}: { 
+  dir: number;
+  onScrollComplete: (complete: boolean) => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-function FooterSection({ dir }: { dir: number }) {
+  useEffect(() => {
+    const checkScroll = () => {
+      if (!scrollRef.current) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
+      onScrollComplete(isAtBottom);
+    };
+
+    const element = scrollRef.current;
+    if (element) {
+      element.addEventListener('scroll', checkScroll);
+      // Check initial state
+      checkScroll();
+
+      return () => element.removeEventListener('scroll', checkScroll);
+    }
+  }, ,[onScrollComplete]);
+
   return (
     <div
-      className="w-full h-full flex flex-col items-center justify-center overflow-auto"
+      ref={scrollRef}
+      className="w-full h-full flex flex-col items-center justify-start overflow-auto"
       style={{ background: "#0F1923" }}
     >
       <motion.div
@@ -1089,7 +1117,6 @@ function FooterSection({ dir }: { dir: number }) {
           </a>{" "}
           built by @Oba.
         </p>
-
         <p
           className="font-sans text-sm md:text-base mb-10 max-w-3xl leading-relaxed"
           style={{ color: "rgba(245,240,232,0.7)" }}
@@ -1102,7 +1129,7 @@ function FooterSection({ dir }: { dir: number }) {
             href="https://summer.hackclub.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-[#00E5A0] transition-colors"
+            className="underline hover:text-,[#00E5A0] transition-colors"
             style={{ color: "rgba(245,240,232,0.7)" }}
           >
             partnered with GitHub to run Summer of Making
@@ -1112,7 +1139,7 @@ function FooterSection({ dir }: { dir: number }) {
             href="https://github.com/hackclub/the-hacker-zephyr"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-[#00E5A0] transition-colors"
+            className="underline hover:text-,[#00E5A0] transition-colors"
             style={{ color: "rgba(245,240,232,0.7)" }}
           >
             hosted the world's longest hackathon on land
@@ -1122,7 +1149,7 @@ function FooterSection({ dir }: { dir: number }) {
             href="https://www.youtube.com/watch?v=QvCoISXfcE8"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-[#00E5A0] transition-colors"
+            className="underline hover:text-,[#00E5A0] transition-colors"
             style={{ color: "rgba(245,240,232,0.7)" }}
           >
             ran Canada's largest high school hackathon
@@ -1131,7 +1158,6 @@ function FooterSection({ dir }: { dir: number }) {
           <br />
           At Hack Club, students aren't just learning, they're shipping.
         </p>
-
         <div className="flex flex-wrap gap-x-16 gap-y-8">
           <div className="flex flex-col">
             <p
@@ -1144,7 +1170,7 @@ function FooterSection({ dir }: { dir: number }) {
               className="font-sans text-sm md:text-base space-y-2"
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
-              {[
+              {,[
                 {
                   label: "Philosophy",
                   href: "https://hackclub.com/philosophy/",
@@ -1161,14 +1187,13 @@ function FooterSection({ dir }: { dir: number }) {
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block hover:text-[#00E5A0] transition-colors"
+                  className="block hover:text-,[#00E5A0] transition-colors"
                 >
                   {l.label}
                 </a>
               ))}
             </div>
           </div>
-
           <div className="flex flex-col">
             <p
               className="mb-3 font-sans text-base md:text-lg font-extrabold"
@@ -1180,20 +1205,19 @@ function FooterSection({ dir }: { dir: number }) {
               className="font-sans text-sm md:text-base space-y-2"
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
-              {[
+              {,[
                 { label: "Showcase", href: "/showcase" },
                 { label: "Guides", href: "/guides" },
                 { label: "Shop", href: "/shop" },
               ].map((l) => (
                 <Link key={l.label} href={l.href}>
-                  <span className="block hover:text-[#00E5A0] transition-colors cursor-pointer">
+                  <span className="block hover:text-,[#00E5A0] transition-colors cursor-pointer">
                     {l.label}
                   </span>
                 </Link>
               ))}
             </div>
           </div>
-
           <div className="flex flex-col">
             <p
               className="mb-3 font-sans text-base md:text-lg font-extrabold"
@@ -1205,7 +1229,7 @@ function FooterSection({ dir }: { dir: number }) {
               className="font-sans text-sm md:text-base space-y-2"
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
-              {[
+              {,[
                 {
                   label: "Community Events",
                   href: "https://events.hackclub.com/",
@@ -1222,7 +1246,7 @@ function FooterSection({ dir }: { dir: number }) {
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block hover:text-[#00E5A0] transition-colors"
+                  className="block hover:text-,[#00E5A0] transition-colors"
                 >
                   {l.label}
                 </a>
@@ -1236,26 +1260,31 @@ function FooterSection({ dir }: { dir: number }) {
 }
 
 /* ─── Main ───────────────────────────────────────────────── */
-
 const TOTAL = 7;
 const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
 const INTEG_HOLD = 2;
 
+// Sections that require scrolling to bottom
+const SCROLLABLE_SECTIONS = ,[5, 6]; // FAQ and Footer
+
 export default function Landing() {
-  const [current, setCurrent] = useState(0);
-  const [dir, setDir] = useState(1);
+  const ,[current, setCurrent] = useState(0);
+  const ,[dir, setDir] = useState(1);
   const transitioning = useRef(false);
   const touchStartY = useRef(0);
   const intScrollCount = useRef(0);
-  const [integLogoY, setIntegLogoY] = useState(0);
+  const ,[integLogoY, setIntegLogoY] = useState(0);
+  const ,[scrolledToBottom, setScrolledToBottom] = useState(false);
 
   useEffect(() => {
     if (current !== INTEG_SECTION) {
       intScrollCount.current = 0;
       setIntegLogoY(0);
     }
-  }, [current]);
+    // Reset scroll state when changing sections
+    setScrolledToBottom(false);
+  }, ,[current]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -1274,6 +1303,12 @@ export default function Landing() {
   const go = useCallback(
     (next: number) => {
       if (transitioning.current || next < 0 || next >= TOTAL) return;
+
+      // Check if current section is scrollable and requires bottom scroll
+      if (SCROLLABLE_SECTIONS.includes(current) && next > current && !scrolledToBottom) {
+        return; // Prevent navigation if not scrolled to bottom
+      }
+
       setDir(next > current ? 1 : -1);
       setCurrent(next);
       transitioning.current = true;
@@ -1281,7 +1316,7 @@ export default function Landing() {
         transitioning.current = false;
       }, TRANSITION_MS);
     },
-    [current],
+    ,[current, scrolledToBottom],
   );
 
   useEffect(() => {
@@ -1289,7 +1324,9 @@ export default function Landing() {
       e.preventDefault();
       if (Math.abs(e.deltaY) < 8) return;
       if (transitioning.current) return;
+
       const scrollDir = e.deltaY > 0 ? 1 : -1;
+
       if (current === INTEG_SECTION) {
         intScrollCount.current += 1;
         setIntegLogoY((prev) =>
@@ -1308,56 +1345,60 @@ export default function Landing() {
         go(current + scrollDir);
       }
     };
+
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
-  }, [current, go]);
+  }, ,[current, go]);
 
   useEffect(() => {
     const onStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY;
+      touchStartY.current = e.touches,[0].clientY;
     };
     const onEnd = (e: TouchEvent) => {
-      const diff = touchStartY.current - e.changedTouches[0].clientY;
+      const diff = touchStartY.current - e.changedTouches,[0].clientY;
       if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
     };
+
     window.addEventListener("touchstart", onStart, { passive: true });
     window.addEventListener("touchend", onEnd, { passive: true });
     return () => {
       window.removeEventListener("touchstart", onStart);
       window.removeEventListener("touchend", onEnd);
     };
-  }, [current, go]);
+  }, ,[current, go]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown" || e.key === "PageDown") go(current + 1);
       if (e.key === "ArrowUp" || e.key === "PageUp") go(current - 1);
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [current, go]);
+  }, ,[current, go]);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth - 0.5) * 90);
       mouseY.set((e.clientY / window.innerHeight - 0.5) * 70);
     };
+
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  }, ,[]);
 
   const containerVariants = {
     enter: (d: number) => ({ y: d > 0 ? "100%" : "-100%", scale: 1 }),
     center: {
       y: 0,
       scale: 1,
-      transition: { duration: 0.88, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.88, ease: ,[0.22, 1, 0.36, 1] },
     },
     exit: (d: number) => ({
       y: d > 0 ? "-18%" : "18%",
       scale: 0.9,
       opacity: 0,
-      transition: { duration: 0.6, ease: [0.4, 0, 1, 1] },
+      transition: { duration: 0.6, ease: ,[0.4, 0, 1, 1] },
     }),
   };
 
@@ -1392,20 +1433,30 @@ export default function Landing() {
               <IntegrationsSection dir={dir} logoY={integLogoY} />
             )}
             {current === 4 && <RsvpSection dir={dir} />}
-            {current === 5 && <FaqSectionContent dir={dir} />}
-            {current === 6 && <FooterSection dir={dir} />}
+            {current === 5 && (
+              <FaqSectionContent 
+                dir={dir} 
+                onScrollComplete={setScrolledToBottom}
+              />
+            )}
+            {current === 6 && (
+              <FooterSection 
+                dir={dir}
+                onScrollComplete={setScrolledToBottom}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
 
         <div
-          className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
+          className="absolute bottom-0 left-0 right-0 h-,[3px] z-50"
           style={{ background: "rgba(0,229,160,0.15)" }}
         >
           <motion.div
             className="h-full"
             style={{ background: "#00E5A0" }}
             animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease: ,[0.22, 1, 0.36, 1] }}
           />
         </div>
       </div>
