@@ -10,6 +10,7 @@ export interface Guide {
 export interface StepItem {
   text: string;
   images?: string[];
+  type?: "step" | "tip"; // Add this optional field
 }
 
 export const guides: Guide[] = [
@@ -21,7 +22,7 @@ export const guides: Guide[] = [
       "Build your first Slack bot using n8n running locally via Docker and exposed to the internet with ngrok. Your bot will respond to any message sent to it in Slack.",
     steps: [
       {
-        text: 'Go to `https://api.slack.com/apps` and create a new app. Select "Create from scratch", name it "[Your Name]\'s Automake Starter" (or something similar), and select Hack Club as the workspace.',
+        text: 'Go to \`https://api.slack.com/apps\` and create a new app. Select "Create from scratch", name it "[Your Name]\'s Automake Starter" (or something similar), and select Hack Club as the workspace.',
         images: [
           "/guide-images/starter-guide/image9.png",
           "/guide-images/starter-guide/image44.png",
@@ -36,7 +37,7 @@ export const guides: Guide[] = [
         ],
       },
       {
-        text: 'Scroll down to "Bot Token Scopes" and add the following scopes: `chat:write`, `im:write`, `im:read`, `im:history`.',
+        text: 'Scroll down to "Bot Token Scopes" and add the following scopes: \`chat:write\`, \`im:write\`, \`im:read\`, \`im:history\`.',
         images: [
           "/guide-images/starter-guide/image12.png",
           "/guide-images/starter-guide/image35.png",
@@ -48,14 +49,14 @@ export const guides: Guide[] = [
         images: ["/guide-images/starter-guide/image30.png"],
       },
       {
-        text: 'Go to `https://ngrok.com`, create a free account, and select "Your Authtoken" from the left menu.',
+        text: 'Go to \`https://ngrok.com\`, create a free account, and select "Your Authtoken" from the left menu.',
         images: ["/guide-images/starter-guide/image49.png"],
       },
       {
-        text: "In PowerShell, run `winget install ngrok.ngrok` to install ngrok.",
+        text: "In PowerShell, run \`winget install ngrok.ngrok\` to install ngrok.",
       },
       {
-        text: 'Configure your authtoken by running: `& "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages\\ngrok.ngrok_Microsoft.Winget.Source_8wekyb3d8bbwe\\ngrok.exe" config add-authtoken YOUR_TOKEN_HERE`',
+        text: 'Configure your authtoken by running: \`& "$env:LOCALAPPDATA\\\\Microsoft\\\\WinGet\\\\Packages\\\\ngrok.ngrok\\_Microsoft.Winget.Source\\_8wekyb3d8bbwe\\\\ngrok.exe" config add-authtoken YOUR\\_TOKEN\\_HERE\`',
         images: ["/guide-images/starter-guide/image33.png"],
       },
       {
@@ -63,11 +64,11 @@ export const guides: Guide[] = [
         images: ["/guide-images/starter-guide/image29.png"],
       },
       {
-        text: "In PowerShell, run `ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678` to expose port 5678 to the internet.",
+        text: "In PowerShell, run \`ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678\` to expose port 5678 to the internet.",
         images: ["/guide-images/starter-guide/image43.png"],
       },
       {
-        text: "Download and install Docker Desktop from `https://docker.com/products/docker-desktop`. Log in and update WSL when prompted.",
+        text: "Download and install Docker Desktop from \`https://docker.com/products/docker-desktop\`. Log in and update WSL when prompted.",
         images: [
           "/guide-images/starter-guide/image45.png",
           "/guide-images/starter-guide/image19.png",
@@ -76,11 +77,11 @@ export const guides: Guide[] = [
         ],
       },
       {
-        text: "Start n8n locally in PowerShell with: `docker run -d --restart unless-stopped -p 5678:5678 -v n8n_data:/home/node/.n8n -e N8N_EDITOR_BASE_URL=https://YOUR-NGROK-DOMAIN -e WEBHOOK_URL=https://YOUR-NGROK-DOMAIN n8nio/n8n`",
+        text: "Start n8n locally in PowerShell with: \`docker run -d --restart unless-stopped -p 5678:5678 -v n8n\\_data:/home/node/.n8n -e N8N\\_EDITOR\\_BASE\\_URL=https://YOUR-NGROK-DOMAIN -e WEBHOOK\\_URL=https://YOUR-NGROK-DOMAIN n8nio/n8n\`",
         images: ["/guide-images/starter-guide/image16.png"],
       },
       {
-        text: "Make sure Docker is set to start on sign-in so n8n is always available. Then open `http://localhost:5678` and set up your n8n owner account. Grab the free activation key when prompted.",
+        text: "Make sure Docker is set to start on sign-in so n8n is always available. Then open \`http://localhost:5678\` and set up your n8n owner account. Grab the free activation key when prompted.",
         images: [
           "/guide-images/starter-guide/image40.png",
           "/guide-images/starter-guide/image1.png",
@@ -107,7 +108,7 @@ export const guides: Guide[] = [
         ],
       },
       {
-        text: "To find your channel ID: open Slack on web or desktop, start a new message with your bot, then click the bot's name and copy the channel ID (it always starts with `D`). Enter this ID in the trigger node.",
+        text: "To find your channel ID: open Slack on web or desktop, start a new message with your bot, then click the bot's name and copy the channel ID (it always starts with \`D\`). Enter this ID in the trigger node.",
         images: [
           "/guide-images/starter-guide/image21.png",
           "/guide-images/starter-guide/image37.png",
@@ -127,7 +128,7 @@ export const guides: Guide[] = [
         images: ["/guide-images/starter-guide/image17.png"],
       },
       {
-        text: 'Add these bot events under "Subscribe to bot events": `message.im`. Save your changes and reinstall the app.',
+        text: 'Add these bot events under "Subscribe to bot events": \`message.im\`. Save your changes and reinstall the app.',
         images: ["/guide-images/starter-guide/image41.png"],
       },
       {
@@ -140,7 +141,7 @@ export const guides: Guide[] = [
         ],
       },
       {
-        text: "Add an If node between the two nodes. Set the condition: `{{ $json.user }}` is equal to your bot's User ID. Wire the False output to the Send Message node. This prevents the bot from responding to its own messages.",
+        text: "Add an If node between the two nodes. Set the condition: \`{{ $json.user }}\` is equal to your bot's User ID. Wire the False output to the Send Message node. This prevents the bot from responding to its own messages.",
         images: [
           "/guide-images/starter-guide/image3.png",
           "/guide-images/starter-guide/image23.png",
@@ -154,7 +155,7 @@ export const guides: Guide[] = [
         ],
       },
       {
-        text: 'In the Send Message node, drag the `channel` field from the left input panel into the "Channel by ID" field.',
+        text: 'In the Send Message node, drag the \`channel\` field from the left input panel into the "Channel by ID" field.',
         images: [
           "/guide-images/starter-guide/image18.png",
           "/guide-images/starter-guide/image8.png",
@@ -171,16 +172,16 @@ export const guides: Guide[] = [
       {
         text: "Publish your changes and test by sending a message to your bot in Slack. You should get a response back. You've built your first Slack bot!",
       },
+      {
+        text: "Tip: If your computer isn't on then your ngrok will not be running and your webhook will not work. If you restart your computer you will need to run \`ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678\` again in order for your webhooks to work.",
+        type: "tip", // Add this field to mark it as a tip
+      },
     ],
-  },
-    {
-      text: "Tip: If your computer isn't on then your ngrok will not be running and your webhook will not work. If you restart your computer you will need to run `ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678` again in order for your webhooks to work."
-    }
     modifications: [
       "Make the bot respond differently based on keywords in the message — use an IF node or a Switch node to route different messages to different responses.",
       "Connect an AI node (Hack Club provides free AIs for Hack Clubbers) so the bot generates dynamic responses instead of a fixed reply.",
       "Add a Google Sheets node to log every message the bot receives into a spreadsheet.",
-      "Build a command system where messages starting with `/` trigger specific actions.",
+      "Build a command system where messages starting with \`/\` trigger specific actions.",
       "Add a second workflow that posts a scheduled message to a Slack channel every morning using a Schedule Trigger node.",
     ],
   },
