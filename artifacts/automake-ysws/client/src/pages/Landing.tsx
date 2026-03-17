@@ -12,7 +12,7 @@ import MarqueeStrip from "../components/MarqueeStrip";
 const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
 
 /* ─── Data ────────────────────────────────────────────────── */
-const steps = ,[
+const steps = [
   { label: "Build an automation project" },
   { label: "Log your hours & submit" },
   { label: "Get reviewed & approved" },
