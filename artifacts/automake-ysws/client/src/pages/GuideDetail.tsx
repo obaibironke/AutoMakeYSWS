@@ -146,12 +146,14 @@ export default function GuideDetail() {
                     className="flex gap-4 items-start rounded-xl p-5"
                     style={{ background: "white", border: "2px solid #0F1923" }}
                   >
-                    <div
-                      className="shrink-0 h-8 rounded-full flex items-center justify-center font-sans font-bold text-sm px-3"
-                      style={{ background: "#00E5A0", color: "#0F1923" }}
-                    >
-                      {isTip ? "💡" : stepNumber}
-                    </div>
+                    {!isTip && (
+                      <div
+                        className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-sans font-bold text-sm"
+                        style={{ background: "#00E5A0", color: "#0F1923" }}
+                      >
+                        {stepNumber}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p
                         className="font-sans text-base leading-relaxed pt-0.5"
