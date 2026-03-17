@@ -17,7 +17,7 @@ const steps = [
   { label: "Build an automation project" },
   { label: "Log your hours & submit" },
   { label: "Get reviewed & approved" },
-  { label: "Earn currency & shop rewards" },
+  { label: "Earn credits & shop rewards" },
 ];
 
 const faqItems = [
@@ -26,12 +26,12 @@ const faqItems = [
     a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at.",
   },
   {
-    q: "How do I get coins?",
-    a: "Build an automation, log your hours, submit it, and get approved. Simple. The cooler and more complex your project, the more coins you earn.",
+    q: "How do I get credits?",
+    a: "Build an automation, log your hours, submit it, and get approved. Simple. The cooler and more complex your project, the more credits you earn.",
   },
   {
     q: "What can I actually buy?",
-    a: "Coins can be used to buy automation tools, gadgets, and more. Check out the shop to see what you can get!",
+    a: "Credits can be used to buy automation tools, gadgets, and more. Check out the shop to see what you can get!",
   },
   {
     q: "Do I need to know how to code?",
@@ -274,7 +274,7 @@ function HeroSection({
         >
           EARN
           <br />
-          COINS
+          CREDITS
         </motion.div>
 
         <motion.div
@@ -952,7 +952,7 @@ function RsvpSection({ dir }: { dir: number }) {
             maxWidth: "600px",
           }}
         >
-          Build a real automation, submit it, earn currency, and unlock rewards.
+          Build a real automation, submit it, earn credits, and unlock rewards.
           Guides are free and open to everyone, you don't need to sign up start.
         </p>
 
