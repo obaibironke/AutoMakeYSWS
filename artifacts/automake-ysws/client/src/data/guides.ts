@@ -172,6 +172,9 @@ export const guides: Guide[] = [
         text: "Publish your changes and test by sending a message to your bot in Slack. You should get a response back. You've built your first Slack bot!",
       },
     ],
+    {
+      text: "Tip: If your computer isn't on then your ngrok will not be running and your webhook will not work. If you restart your computer you will need to run `ngrok http --domain=YOUR-STATIC-DOMAIN-HERE 5678` again in order for your webhooks to work."
+    }
     modifications: [
       "Make the bot respond differently based on keywords in the message — use an IF node or a Switch node to route different messages to different responses.",
       "Connect an AI node (Hack Club provides free AIs for Hack Clubbers) so the bot generates dynamic responses instead of a fixed reply.",
