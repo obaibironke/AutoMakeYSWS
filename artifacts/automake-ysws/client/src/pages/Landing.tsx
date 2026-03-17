@@ -19,7 +19,7 @@ const steps = [
   { label: "Earn credits & shop rewards" },
 ];
 
-const faqItems = ,[
+const faqItems = [
   {
     q: "Who can join?",
     a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at.",
