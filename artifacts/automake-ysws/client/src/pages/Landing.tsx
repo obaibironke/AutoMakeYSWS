@@ -993,31 +993,35 @@ function RsvpSection({ dir }: { dir: number }) {
 }
 
 /* ─── FAQ ────────────────────────────────────────────────── */
-function FaqSectionContent({ 
-  dir, 
-  onScrollComplete 
-}: { 
+function FaqSectionContent({
+  dir,
+  onScrollStateChange,
+}: {
   dir: number;
-  onScrollComplete: (complete: boolean) => void;
+  onScrollStateChange: (state: {
+    isAtTop: boolean;
+    isAtBottom: boolean;
+  }) => void;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const checkScroll = () => {
-      if (!scrollRef.current) return;
-      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-      const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
-      onScrollComplete(isAtBottom);
-    };
+  const checkScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    onScrollStateChange({
+      isAtTop: scrollTop < 5,
+      isAtBottom: scrollHeight - scrollTop - clientHeight < 5,
+    });
+  }, [onScrollStateChange]);
 
-    const element = scrollRef.current;
-    if (element) {
-      element.addEventListener('scroll', checkScroll);
-      // Check initial state
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener("scroll", checkScroll);
       checkScroll();
-      return () => element.removeEventListener('scroll', checkScroll);
+      return () => el.removeEventListener("scroll", checkScroll);
     }
-  }, [onScrollComplete]);
+  }, [checkScroll]);
 
   return (
     <div
@@ -1055,31 +1059,35 @@ function FaqSectionContent({
 }
 
 /* ─── Footer Section ─────────────────────────────────────── */
-function FooterSection({ 
+function FooterSection({
   dir,
-  onScrollComplete 
-}: { 
+  onScrollStateChange,
+}: {
   dir: number;
-  onScrollComplete: (complete: boolean) => void;
+  onScrollStateChange: (state: {
+    isAtTop: boolean;
+    isAtBottom: boolean;
+  }) => void;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const checkScroll = () => {
-      if (!scrollRef.current) return;
-      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-      const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
-      onScrollComplete(isAtBottom);
-    };
+  const checkScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    onScrollStateChange({
+      isAtTop: scrollTop < 5,
+      isAtBottom: scrollHeight - scrollTop - clientHeight < 5,
+    });
+  }, [onScrollStateChange]);
 
-    const element = scrollRef.current;
-    if (element) {
-      element.addEventListener('scroll', checkScroll);
-      // Check initial state
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener("scroll", checkScroll);
       checkScroll();
-      return () => element.removeEventListener('scroll', checkScroll);
+      return () => el.removeEventListener("scroll", checkScroll);
     }
-  }, [onScrollComplete]);
+  }, [checkScroll]);
 
   return (
     <div
@@ -1259,25 +1267,26 @@ const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
 const INTEG_HOLD = 2;
 
-// Sections that require scrolling to bottom
-const SCROLLABLE_SECTIONS = [5, 6]; // FAQ and Footer
-
 export default function Landing() {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
   const transitioning = useRef(false);
-  const touchStartY = useRef(0);
   const intScrollCount = useRef(0);
   const [integLogoY, setIntegLogoY] = useState(0);
-  const [scrolledToBottom, setScrolledToBottom] = useState(false);
+
+  // Track scroll boundaries of the current section
+  const [scrollState, setScrollState] = useState({
+    isAtTop: true,
+    isAtBottom: true,
+  });
 
   useEffect(() => {
     if (current !== INTEG_SECTION) {
       intScrollCount.current = 0;
       setIntegLogoY(0);
     }
-    // Reset scroll state when changing sections
-    setScrolledToBottom(false);
+    // Most sections aren't internally scrollable, so they are "at top/bottom" by default
+    setScrollState({ isAtTop: true, isAtBottom: true });
   }, [current]);
 
   const mouseX = useMotionValue(0);
@@ -1297,12 +1306,6 @@ export default function Landing() {
   const go = useCallback(
     (next: number) => {
       if (transitioning.current || next < 0 || next >= TOTAL) return;
-
-      // Check if current section is scrollable and requires bottom scroll
-      if (SCROLLABLE_SECTIONS.includes(current) && next > current && !scrolledToBottom) {
-        return; // Prevent navigation if not scrolled to bottom
-      }
-
       setDir(next > current ? 1 : -1);
       setCurrent(next);
       transitioning.current = true;
@@ -1310,43 +1313,16 @@ export default function Landing() {
         transitioning.current = false;
       }, TRANSITION_MS);
     },
-    [current, scrolledToBottom],
+    [current],
   );
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      // Check if the event originated from a scrollable section
-      const target = e.target as HTMLElement;
-      const scrollableSection = target.closest('.scrollable-section') as HTMLElement;
-
-      if (scrollableSection) {
-        const { scrollTop, scrollHeight, clientHeight } = scrollableSection;
-        const scrollDir = e.deltaY > 0 ? 1 : -1;
-
-        // Check if scrolling down and at bottom
-        const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
-        // Check if scrolling up and at top
-        const isAtTop = scrollTop < 10;
-
-        // Allow section transition only if at boundary
-        if ((scrollDir > 0 && isAtBottom && scrolledToBottom) || (scrollDir < 0 && isAtTop)) {
-          e.preventDefault();
-          if (transitioning.current) return;
-          go(current + scrollDir);
-        }
-        // Otherwise allow natural scrolling within the section
-        return;
-      }
-
-      // Prevent default for non-scrollable sections
-      e.preventDefault();
-
-      if (Math.abs(e.deltaY) < 8) return;
-      if (transitioning.current) return;
-
       const scrollDir = e.deltaY > 0 ? 1 : -1;
 
-      if (current === INTEG_SECTION) {
+      // Handle the specialized Integrations section "hold"
+      if (current === INTEG_SECTION && !transitioning.current) {
+        e.preventDefault();
         intScrollCount.current += 1;
         setIntegLogoY((prev) =>
           Math.max(-70, Math.min(70, prev + scrollDir * -35)),
@@ -1356,25 +1332,43 @@ export default function Landing() {
           go(current + scrollDir);
         } else {
           transitioning.current = true;
-          setTimeout(() => {
-            transitioning.current = false;
-          }, 460);
+          setTimeout(() => (transitioning.current = false), 460);
         }
-      } else {
-        go(current + scrollDir);
+        return;
       }
+
+      // Check if we are interacting with an internally scrollable section
+      const target = e.target as HTMLElement;
+      const scrollable = target.closest(".scrollable-section");
+
+      if (scrollable) {
+        // Only trigger section change if at the scroll boundary
+        if (scrollDir > 0 && scrollState.isAtBottom) {
+          e.preventDefault();
+          go(current + 1);
+        } else if (scrollDir < 0 && scrollState.isAtTop) {
+          e.preventDefault();
+          go(current - 1);
+        }
+        // Otherwise, do nothing and let the element scroll naturally
+        return;
+      }
+
+      // Standard section switching for non-scrollable parts
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 15) return;
+      go(current + scrollDir);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
-  }, [current, go, scrolledToBottom]);
+  }, [current, go, scrollState]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown" || e.key === "PageDown") go(current + 1);
       if (e.key === "ArrowUp" || e.key === "PageUp") go(current - 1);
     };
-
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [current, go]);
@@ -1384,7 +1378,6 @@ export default function Landing() {
       mouseX.set((e.clientX / window.innerWidth - 0.5) * 90);
       mouseY.set((e.clientY / window.innerHeight - 0.5) * 70);
     };
-
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
@@ -1436,16 +1429,13 @@ export default function Landing() {
             )}
             {current === 4 && <RsvpSection dir={dir} />}
             {current === 5 && (
-              <FaqSectionContent 
-                dir={dir} 
-                onScrollComplete={setScrolledToBottom}
+              <FaqSectionContent
+                dir={dir}
+                onScrollStateChange={setScrollState}
               />
             )}
             {current === 6 && (
-              <FooterSection 
-                dir={dir}
-                onScrollComplete={setScrolledToBottom}
-              />
+              <FooterSection dir={dir} onScrollStateChange={setScrollState} />
             )}
           </motion.div>
         </AnimatePresence>
