@@ -117,7 +117,7 @@ const contentVariants = {
   center: {
     y: 0,
     opacity: 1,
-    transition: { delay: 0.18, duration: 0.7, ease: ,[0.22, 1, 0.36, 1] },
+    transition: { delay: 0.18, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
   exit: (d: number) => ({
     y: d > 0 ? -30 : 30,
@@ -200,7 +200,7 @@ function HeroSection({
         <motion.div
           initial={{ opacity: 0, rotate: 8, scale: 0.8 }}
           animate={{ opacity: 1, rotate: 12, scale: 1 }}
-          transition={{ delay: 0.9, duration: 0.5, ease: ,[0.22, 1, 0.36, 1] }}
+          transition={{ delay: 0.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: "absolute",
             top: "6%",
@@ -230,7 +230,7 @@ function HeroSection({
         <motion.div
           initial={{ opacity: 0, rotate: -4, scale: 0.8 }}
           animate={{ opacity: 1, rotate: -8, scale: 1 }}
-          transition={{ delay: 1.0, duration: 0.5, ease: ,[0.22, 1, 0.36, 1] }}
+          transition={{ delay: 1.0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: "absolute",
             bottom: "8%",
@@ -255,7 +255,7 @@ function HeroSection({
         <motion.div
           initial={{ opacity: 0, rotate: 2, scale: 0.8 }}
           animate={{ opacity: 1, rotate: -5, scale: 1 }}
-          transition={{ delay: 1.05, duration: 0.5, ease: ,[0.22, 1, 0.36, 1] }}
+          transition={{ delay: 1.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: "absolute",
             top: "6%",
@@ -306,7 +306,7 @@ function HeroSection({
             transition={{
               delay: 0.45,
               duration: 0.55,
-              ease: ,[0.22, 1, 0.36, 1],
+              ease: [0.22, 1, 0.36, 1],
             }}
           >
             Automake
@@ -399,7 +399,7 @@ function HeroSection({
       </motion.div>
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
         <span
-          className="font-sans text-,[10px] font-semibold uppercase tracking-,[0.2em]"
+          className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em]"
           style={{ color: "rgba(0,229,160,0.7)" }}
         >
           scroll
@@ -413,7 +413,7 @@ function HeroSection({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          animate={{ y: ,[0, 6, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <path d="M12 5v14M5 12l7 7 7-7" />
@@ -457,7 +457,7 @@ function AboutSection({ dir }: { dir: number }) {
       >
         <div className="mb-6">
           <span
-            className="font-sans text-xs font-bold uppercase tracking-,[0.25em]"
+            className="font-sans text-xs font-bold uppercase tracking-[0.25em]"
             style={{ color: "#FF5733" }}
           >
             About the program
@@ -626,7 +626,7 @@ const integrationLogos: Array<{
   size: number;
   rot: number;
   src?: string;
-}> = ,[
+}> = [
   { slug: "notion", name: "Notion", top: "6%", left: "29%", size: 80, rot: 3 },
   { slug: "github", name: "GitHub", top: "8%", left: "53%", size: 80, rot: -6 },
   {
@@ -767,11 +767,11 @@ const integrationLogos: Array<{
 ];
 
 function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
-  const ,[visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 350);
     return () => clearTimeout(t);
-  }, ,[]);
+  }, []);
 
   return (
     <div
@@ -906,7 +906,7 @@ function RsvpSection({ dir }: { dir: number }) {
       >
         <div className="mb-6">
           <span
-            className="font-sans text-xs font-bold uppercase tracking-,[0.25em]"
+            className="font-sans text-xs font-bold uppercase tracking-[0.25em]"
             style={{ color: "#FF5733" }}
           >
             Join Automake
@@ -1021,7 +1021,7 @@ function FaqSectionContent({
 
       return () => element.removeEventListener('scroll', checkScroll);
     }
-  }, ,[onScrollComplete]);
+  }, [onScrollComplete]);
 
   return (
     <div
@@ -1085,7 +1085,7 @@ function FooterSection({
 
       return () => element.removeEventListener('scroll', checkScroll);
     }
-  }, ,[onScrollComplete]);
+  }, [onScrollComplete]);
 
   return (
     <div
@@ -1129,7 +1129,7 @@ function FooterSection({
             href="https://summer.hackclub.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-,[#00E5A0] transition-colors"
+            className="underline hover:text-[#00E5A0] transition-colors"
             style={{ color: "rgba(245,240,232,0.7)" }}
           >
             partnered with GitHub to run Summer of Making
@@ -1139,7 +1139,7 @@ function FooterSection({
             href="https://github.com/hackclub/the-hacker-zephyr"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-,[#00E5A0] transition-colors"
+            className="underline hover:text-[#00E5A0] transition-colors"
             style={{ color: "rgba(245,240,232,0.7)" }}
           >
             hosted the world's longest hackathon on land
@@ -1149,7 +1149,7 @@ function FooterSection({
             href="https://www.youtube.com/watch?v=QvCoISXfcE8"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-,[#00E5A0] transition-colors"
+            className="underline hover:text-[#00E5A0] transition-colors"
             style={{ color: "rgba(245,240,232,0.7)" }}
           >
             ran Canada's largest high school hackathon
@@ -1170,7 +1170,7 @@ function FooterSection({
               className="font-sans text-sm md:text-base space-y-2"
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
-              {,[
+              {[
                 {
                   label: "Philosophy",
                   href: "https://hackclub.com/philosophy/",
@@ -1187,7 +1187,7 @@ function FooterSection({
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block hover:text-,[#00E5A0] transition-colors"
+                  className="block hover:text-[#00E5A0] transition-colors"
                 >
                   {l.label}
                 </a>
@@ -1205,13 +1205,13 @@ function FooterSection({
               className="font-sans text-sm md:text-base space-y-2"
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
-              {,[
+              {[
                 { label: "Showcase", href: "/showcase" },
                 { label: "Guides", href: "/guides" },
                 { label: "Shop", href: "/shop" },
               ].map((l) => (
                 <Link key={l.label} href={l.href}>
-                  <span className="block hover:text-,[#00E5A0] transition-colors cursor-pointer">
+                  <span className="block hover:text-[#00E5A0] transition-colors cursor-pointer">
                     {l.label}
                   </span>
                 </Link>
@@ -1229,7 +1229,7 @@ function FooterSection({
               className="font-sans text-sm md:text-base space-y-2"
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
-              {,[
+              {[
                 {
                   label: "Community Events",
                   href: "https://events.hackclub.com/",
@@ -1246,7 +1246,7 @@ function FooterSection({
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block hover:text-,[#00E5A0] transition-colors"
+                  className="block hover:text-[#00E5A0] transition-colors"
                 >
                   {l.label}
                 </a>
@@ -1266,16 +1266,16 @@ const INTEG_SECTION = 3;
 const INTEG_HOLD = 2;
 
 // Sections that require scrolling to bottom
-const SCROLLABLE_SECTIONS = ,[5, 6]; // FAQ and Footer
+const SCROLLABLE_SECTIONS = [5, 6]; // FAQ and Footer
 
 export default function Landing() {
-  const ,[current, setCurrent] = useState(0);
-  const ,[dir, setDir] = useState(1);
+  const [current, setCurrent] = useState(0);
+  const [dir, setDir] = useState(1);
   const transitioning = useRef(false);
   const touchStartY = useRef(0);
   const intScrollCount = useRef(0);
-  const ,[integLogoY, setIntegLogoY] = useState(0);
-  const ,[scrolledToBottom, setScrolledToBottom] = useState(false);
+  const [integLogoY, setIntegLogoY] = useState(0);
+  const [scrolledToBottom, setScrolledToBottom] = useState(false);
 
   useEffect(() => {
     if (current !== INTEG_SECTION) {
@@ -1284,7 +1284,7 @@ export default function Landing() {
     }
     // Reset scroll state when changing sections
     setScrolledToBottom(false);
-  }, ,[current]);
+  }, [current]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -1316,7 +1316,7 @@ export default function Landing() {
         transitioning.current = false;
       }, TRANSITION_MS);
     },
-    ,[current, scrolledToBottom],
+    [current, scrolledToBottom],
   );
 
   useEffect(() => {
@@ -1348,14 +1348,14 @@ export default function Landing() {
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
-  }, ,[current, go]);
+  }, [current, go]);
 
   useEffect(() => {
     const onStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches,[0].clientY;
+      touchStartY.current = e.touches[0].clientY;
     };
     const onEnd = (e: TouchEvent) => {
-      const diff = touchStartY.current - e.changedTouches,[0].clientY;
+      const diff = touchStartY.current - e.changedTouches[0].clientY;
       if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
     };
 
@@ -1365,7 +1365,7 @@ export default function Landing() {
       window.removeEventListener("touchstart", onStart);
       window.removeEventListener("touchend", onEnd);
     };
-  }, ,[current, go]);
+  }, [current, go]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -1375,7 +1375,7 @@ export default function Landing() {
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, ,[current, go]);
+  }, [current, go]);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -1385,20 +1385,20 @@ export default function Landing() {
 
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, ,[]);
+  }, []);
 
   const containerVariants = {
     enter: (d: number) => ({ y: d > 0 ? "100%" : "-100%", scale: 1 }),
     center: {
       y: 0,
       scale: 1,
-      transition: { duration: 0.88, ease: ,[0.22, 1, 0.36, 1] },
+      transition: { duration: 0.88, ease: [0.22, 1, 0.36, 1] },
     },
     exit: (d: number) => ({
       y: d > 0 ? "-18%" : "18%",
       scale: 0.9,
       opacity: 0,
-      transition: { duration: 0.6, ease: ,[0.4, 0, 1, 1] },
+      transition: { duration: 0.6, ease: [0.4, 0, 1, 1] },
     }),
   };
 
@@ -1449,14 +1449,14 @@ export default function Landing() {
         </AnimatePresence>
 
         <div
-          className="absolute bottom-0 left-0 right-0 h-,[3px] z-50"
+          className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
           style={{ background: "rgba(0,229,160,0.15)" }}
         >
           <motion.div
             className="h-full"
             style={{ background: "#00E5A0" }}
             animate={{ width: `${((current + 1) / TOTAL) * 100}%` }}
-            transition={{ duration: 0.6, ease: ,[0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
       </div>
