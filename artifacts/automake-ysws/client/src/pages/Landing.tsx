@@ -52,7 +52,7 @@ const faqItems = [
 
 /* ─── Accordion ───────────────────────────────────────────── */
 function FaqItem({ q, a }: { q: string; a: string }) {
-  const ,[open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   return (
     <div
       className="rounded-xl overflow-hidden"
@@ -90,7 +90,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: ,[0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
             <div
