@@ -772,7 +772,6 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
     const t = setTimeout(() => setVisible(true), 350);
     return () => clearTimeout(t);
   }, []);
-
   return (
     <div
       className="w-full h-full relative overflow-hidden"
@@ -830,7 +829,6 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
           </div>
         ))}
       </div>
-
       <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
         <motion.div
           custom={dir}
@@ -1007,7 +1005,6 @@ function FaqSectionContent({
   useEffect(() => {
     const checkScroll = () => {
       if (!scrollRef.current) return;
-
       const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
       onScrollComplete(isAtBottom);
@@ -1018,7 +1015,6 @@ function FaqSectionContent({
       element.addEventListener('scroll', checkScroll);
       // Check initial state
       checkScroll();
-
       return () => element.removeEventListener('scroll', checkScroll);
     }
   }, [onScrollComplete]);
@@ -1026,7 +1022,7 @@ function FaqSectionContent({
   return (
     <div
       ref={scrollRef}
-      className="w-full h-full flex flex-col items-center justify-start overflow-auto"
+      className="w-full h-full flex flex-col items-center justify-start overflow-auto scrollable-section"
       style={{ background: "#F5F0E8" }}
     >
       <motion.div
@@ -1071,7 +1067,6 @@ function FooterSection({
   useEffect(() => {
     const checkScroll = () => {
       if (!scrollRef.current) return;
-
       const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
       onScrollComplete(isAtBottom);
@@ -1082,7 +1077,6 @@ function FooterSection({
       element.addEventListener('scroll', checkScroll);
       // Check initial state
       checkScroll();
-
       return () => element.removeEventListener('scroll', checkScroll);
     }
   }, [onScrollComplete]);
@@ -1090,7 +1084,7 @@ function FooterSection({
   return (
     <div
       ref={scrollRef}
-      className="w-full h-full flex flex-col items-center justify-start overflow-auto"
+      className="w-full h-full flex flex-col items-center justify-start overflow-auto scrollable-section"
       style={{ background: "#0F1923" }}
     >
       <motion.div
@@ -1321,7 +1315,18 @@ export default function Landing() {
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
+      // Check if the event originated from a scrollable section
+      const target = e.target as HTMLElement;
+      const scrollableSection = target.closest('.scrollable-section');
+
+      if (scrollableSection) {
+        // Allow natural scrolling within scrollable sections
+        return;
+      }
+
+      // Prevent default for non-scrollable sections
       e.preventDefault();
+
       if (Math.abs(e.deltaY) < 8) return;
       if (transitioning.current) return;
 
@@ -1354,6 +1359,7 @@ export default function Landing() {
     const onStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
     };
+
     const onEnd = (e: TouchEvent) => {
       const diff = touchStartY.current - e.changedTouches[0].clientY;
       if (Math.abs(diff) > 50) go(diff > 0 ? current + 1 : current - 1);
