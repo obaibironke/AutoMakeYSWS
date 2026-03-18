@@ -55,6 +55,11 @@ try {
       credits: userRecord.fields["Credits Earned"] || 0,
     },
   });
-} catch (error) {
-  // Error handling...
+} catch (error: any) {
+  // This sends the ACTUAL error message to your browser console
+  return res.status(500).json({
+    success: false,
+    error: error.message,
+    details: error.response?.data || "No extra details",
+  });
 }
