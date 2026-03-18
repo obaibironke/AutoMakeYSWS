@@ -24,7 +24,7 @@ export default async function handler(req: any, res: any) {
     // Only return what the frontend needs
     return res.status(200).json({
       name: records[0].fields["Name"],
-      hours: records[0].fields["Total Hours"] || 0,
+      hours: records[0].fields["Credits Earned"] || 0,
     });
   } catch (error) {
     return res.status(500).json({ error: "Database connection failed" });
