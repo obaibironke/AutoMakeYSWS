@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "build": "echo 'Serverless functions - no build needed'"
+  },
   "dependencies": {
     "airtable": "^0.12.2",
     "axios": "^1.7.9"
