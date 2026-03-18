@@ -129,8 +129,8 @@ function Router() {
           <Route path="/guides/:id" component={GuideDetail} />
           <Route path="/shop" component={Shop} />
           <Route path="/ship" component={ShippingGuide} />
-          <Route component={NotFound} />
           <Route path="/auth" component={AuthCallback} />
+          <Route component={NotFound} />
         </Switch>
       </main>
     </div>
