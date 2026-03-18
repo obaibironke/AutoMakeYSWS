@@ -2,7 +2,6 @@
   "name": "workspace",
   "version": "0.0.0",
   "license": "MIT",
-  "type": "module",
   "scripts": {
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
@@ -15,7 +14,7 @@
   },
   "dependencies": {
     "airtable": "^0.12.2",
-    "axios": "^1.7.9",
+    "axios": "^1.13.6",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0",
     "tailwind-merge": "^3.5.0"
