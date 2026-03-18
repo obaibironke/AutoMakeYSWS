@@ -54,7 +54,9 @@ function ManifestoPanel({ onClose }: { onClose: () => void }) {
           can change the world, and I hope to prove that you can be the change.
         </p>
         <p style={{ marginTop: "20px", fontSize: "1.1rem", opacity: 0.9 }}>
-          Let this discovery serve as a testament to your curiousity.
+          Let this discovery serve as a testament to your curiousity. The first
+          person that finds this and reports to @Oba on Slack with proof will
+          recieve a special reward.
         </p>
         <button
           onClick={onClose}
