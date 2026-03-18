@@ -1,23 +1,28 @@
-const Airtable = require('airtable');
-const axios = require('axios');
+import Airtable from 'airtable';
+import axios from 'axios';
 
-const base = new Airtable({ 
-  apiKey: process.env.AIRTABLE_API_KEY 
+const base = new Airtable({
+  apiKey: process.env.AIRTABLE_API_KEY
 }).base(process.env.AIRTABLE_BASE_ID);
 
 const table = base('Users');
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
   const { code } = req.body;
 
   try {
-    const tokenResponse = await axios.post("https://auth.hackclub.com/public/api/token", {
-      code,
-      client_id: process.env.HACK_CLUB_CLIENT_ID,
-      client_secret: process.env.HACK_CLUB_CLIENT_SECRET,
-    });
+    const tokenResponse = await axios.post(
+      "https://auth.hackclub.com/public/api/token",
+      {
+        code,
+        client_id: process.env.HACK_CLUB_CLIENT_ID,
+        client_secret: process.env.HACK_CLUB_CLIENT_SECRET,
+      }
+    );
 
     const { id: slackId, name, email, verify_status, ysws_eligible } = tokenResponse.data.user;
 
@@ -49,6 +54,10 @@ module.exports = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+    console.error('Auth verification error:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message
+    });
   }
-};
+}
