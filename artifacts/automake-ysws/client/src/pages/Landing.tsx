@@ -1,7 +1,4 @@
-// ONLY CHANGES ARE MARKED WITH "FIX"
-
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "wouter";
 import {
   motion,
   AnimatePresence,
@@ -11,30 +8,15 @@ import {
 } from "framer-motion";
 import MarqueeStrip from "../components/MarqueeStrip";
 
-const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
+// ✅ FIX: IMPORT YOUR SECTIONS (THIS WAS MISSING)
+import HeroSection from "../components/HeroSection";
+import AboutSection from "../components/AboutSection";
+import HowItWorksSection from "../components/HowItWorksSection";
+import IntegrationsSection from "../components/IntegrationsSection";
+import RsvpSection from "../components/RsvpSection";
+import FaqSectionContent from "../components/FaqSectionContent";
+import FooterSection from "../components/FooterSection";
 
-/* ─── Data ────────────────────────────────────────────────── */
-const steps = [
-  { label: "Build an automation project" },
-  { label: "Log your hours & submit" },
-  { label: "Get reviewed & approved" },
-  { label: "Earn credits & shop rewards" },
-];
-
-const faqItems = [
-  {
-    q: "Who can join?",
-    a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at.",
-  },
-  {
-    q: "How do I get credits?",
-    a: "Build an automation, log your hours, submit it, and get approved.",
-  },
-];
-
-/* KEEP ALL YOUR COMPONENTS EXACTLY THE SAME (HeroSection, etc.) */
-
-/* ─── Main ───────────────────────────────────────────────── */
 const TOTAL = 7;
 const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
@@ -147,7 +129,7 @@ export default function Landing() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // ✅ FIXED (no zoom scale)
+  // ✅ FIXED (removed zoom scaling completely)
   const containerVariants = {
     enter: (d: number) => ({
       y: d > 0 ? "100%" : "-100%",
@@ -176,7 +158,7 @@ export default function Landing() {
 
   return (
     <div>
-      {/* ✅ SAFE IMPROVEMENT */}
+      {/* ✅ SAFE CONTAINER FIX */}
       <div
         style={{
           height: "calc(100vh - 64px)",
@@ -198,7 +180,6 @@ export default function Landing() {
             style={{
               position: "absolute",
               inset: 0,
-              transformOrigin: "center center",
             }}
           >
             {current === 0 && <HeroSection dir={dir} {...blobProps} />}
@@ -220,13 +201,22 @@ export default function Landing() {
           </motion.div>
         </AnimatePresence>
 
+        {/* Progress bar */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
-          style={{ background: "rgba(0,229,160,0.15)" }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "3px",
+            background: "rgba(0,229,160,0.15)",
+          }}
         >
           <motion.div
-            className="h-full"
-            style={{ background: "#00E5A0" }}
+            style={{
+              height: "100%",
+              background: "#00E5A0",
+            }}
             animate={{
               width: `${((current + 1) / TOTAL) * 100}%`,
             }}
