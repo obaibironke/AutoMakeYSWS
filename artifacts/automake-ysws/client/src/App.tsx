@@ -9,6 +9,7 @@ import Guides from "./pages/Guides";
 import GuideDetail from "./pages/GuideDetail";
 import Shop from "./pages/Shop";
 import NotFound from "./pages/NotFound";
+import ShippingGuide from "./pages/ShippingGuide";
 
 function ManifestoPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -126,6 +127,7 @@ function Router() {
           <Route path="/guides" component={Guides} />
           <Route path="/guides/:id" component={GuideDetail} />
           <Route path="/shop" component={Shop} />
+          <Route path="/ship" component={ShippingGuide} />
           <Route component={NotFound} />
         </Switch>
       </main>

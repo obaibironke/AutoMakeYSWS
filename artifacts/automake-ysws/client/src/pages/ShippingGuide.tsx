@@ -18,7 +18,7 @@ export default function ShippingGuide() {
             className="font-sans text-4xl sm:text-5xl font-extrabold leading-tight"
             style={{ color: "#0F1923" }}
           >
-            Automake Shipping Guide
+            How to Ship
           </h1>
         </div>
       </section>
@@ -32,26 +32,25 @@ export default function ShippingGuide() {
               style={{ color: "#0F1923" }}
             >
               A shipped project requires a few essential components to be
-              considered complete. First, you must have a working workflow;
-              while you can be waiting on specific integrations, all other parts
-              of the logic should function correctly[cite: 1]. Additionally,
-              your project must be hosted in a public GitHub repository[cite:
-              2]. Finally, you must provide a link to a Lapse video showing you
-              working on the project. Please note that if the work was not
-              recorded on Lapse, it will not be counted[cite: 3].
+              considered complete. First, you need to have a working workflow.
+              While you can be waiting on specific integrations, all other parts
+              of the workflow should work correctly. Second, your project must
+              be open sourced in a public GitHub repository. Third, you must
+              provide a link to a Lapse video showing you working on the
+              project. For your hours to be counted towards prizes, they need to
+              have been recorded on Lapse.
             </p>
 
             <p
               className="font-sans text-lg leading-relaxed"
               style={{ color: "#0F1923" }}
             >
-              Shipping is a straightforward process. Start by opening your
-              workflow and navigating to the three-dot menu, then simply press
-              download[cite: 4].
+              Shipping is a pretty easy process. Start by opening your workflow
+              and navigating to the three-dot menu, then press download.
             </p>
 
             <img
-              src="/public/guide-images/shipping/workflow-download.png"
+              src="/guide-images/shipping/image2.png"
               alt="n8n workflow download menu"
               className="rounded-lg w-full"
               style={{ border: "2px solid #0F1923" }}
@@ -62,13 +61,13 @@ export default function ShippingGuide() {
               style={{ color: "#0F1923" }}
             >
               Once you have downloaded the workflow, you will have a JSON file
-              saved to your computer[cite: 5]. The next step is to head over to
-              GitHub to create a new repository. Ensure that you set the
-              visibility of this repository to public[cite: 6].
+              saved to your computer. The next step is to go to GitHub to create
+              a new repository. Make sure that your repository visibility is set
+              to public.
             </p>
 
             <img
-              src="/public/guide-images/shipping/github-new-repo.png"
+              src="/guide-images/shipping/image1.png"
               alt="GitHub create new repository screen"
               className="rounded-lg w-full"
               style={{ border: "2px solid #0F1923" }}
@@ -78,14 +77,13 @@ export default function ShippingGuide() {
               className="font-sans text-lg leading-relaxed"
               style={{ color: "#0F1923" }}
             >
-              While a README file is not strictly necessary for your submission,
-              it is strongly recommended. A good README explains to anyone who
-              finds your repository exactly what the project is and how it
-              functions[cite: 7].
+              While a README file is not required for your submission, it is
+              recommended. A good README explains to anyone who finds your
+              repository exactly what the project is and how it functions.
             </p>
 
             <img
-              src="/public/guide-images/shipping/github-repo-preview.png"
+              src="/guide-images/shipping/image3.png"
               alt="GitHub repository preview with README"
               className="rounded-lg w-full"
               style={{ border: "2px solid #0F1923" }}
@@ -96,8 +94,8 @@ export default function ShippingGuide() {
               style={{ color: "#0F1923" }}
             >
               After your repository is set up and your Lapse videos are ready,
-              you are prepared to submit[cite: 8]. All that remains is to fill
-              out the submission form to finalize your project[cite: 9].
+              you are ready to submit. All that you have to do is fill out the
+              submission form so that it can be reviewed.
             </p>
           </div>
 
@@ -114,14 +112,21 @@ export default function ShippingGuide() {
               style={{ color: "#F5F0E8" }}
             >
               Make sure you have your public GitHub link and your Lapse video
-              URL ready before heading to the form.
+              URL ready before going to the form.
             </p>
-            <button
-              className="px-6 py-3 rounded-lg font-bold transition-transform hover:scale-105"
-              style={{ background: "#00E5A0", color: "#0F1923" }}
+            <a
+              href="https://forms.fillout.com/t/3SiyMc86xGus"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-3 rounded-lg font-bold transition-transform hover:scale-105"
+              style={{
+                background: "#00E5A0",
+                color: "#0F1923",
+                textDecoration: "none",
+              }}
             >
               Open Submission Form
-            </button>
+            </a>
           </div>
         </div>
       </section>

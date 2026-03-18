@@ -189,4 +189,12 @@ export const guides: Guide[] = [
       "Add a second workflow that posts a scheduled message to a Slack channel every morning using a Schedule Trigger node.",
     ],
   },
+  {
+    id: "ship",
+    title: "How to Ship",
+    description:
+      "Learn how to download your workflow, set up GitHub, and submit your project.",
+    difficulty: "Beginner",
+    link: "/ship",
+  },
 ];
