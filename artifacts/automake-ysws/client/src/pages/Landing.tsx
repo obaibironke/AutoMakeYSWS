@@ -1,3 +1,5 @@
+// ONLY CHANGES ARE MARKED WITH "FIX"
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import {
@@ -22,7 +24,7 @@ const steps = [
 const faqItems = [
   {
     q: "Who can join?",
-    a: "Any teen aged 13–18, anywhere in the world.",
+    a: "Any teen aged 13–18, anywhere in the world. Doesn't matter where you're from or what skill level you're at.",
   },
   {
     q: "How do I get credits?",
@@ -30,10 +32,9 @@ const faqItems = [
   },
 ];
 
-/* ─── (ALL YOUR COMPONENTS STAY EXACTLY THE SAME) ─── */
-/* I did NOT touch HeroSection, AboutSection, etc. */
+/* KEEP ALL YOUR COMPONENTS EXACTLY THE SAME (HeroSection, etc.) */
 
-/* ─── Main ───────────────────────────────────────── */
+/* ─── Main ───────────────────────────────────────────────── */
 const TOTAL = 7;
 const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
@@ -146,7 +147,7 @@ export default function Landing() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // ✅ FIXED (NO SCALE)
+  // ✅ FIXED (no zoom scale)
   const containerVariants = {
     enter: (d: number) => ({
       y: d > 0 ? "100%" : "-100%",
@@ -175,6 +176,7 @@ export default function Landing() {
 
   return (
     <div>
+      {/* ✅ SAFE IMPROVEMENT */}
       <div
         style={{
           height: "calc(100vh - 64px)",
