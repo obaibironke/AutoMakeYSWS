@@ -10,7 +10,7 @@ export default function Navbar() {
   const [location, setLocation] = useLocation();
 
   // ✅ Hide navbar on dashboard (and any sub-routes)
-  if (location.startsWith("/dashboard")) return null;
+  if (location.startsWith("/dashboard") || location.startsWith("/shop")) return null;
 
   const isSignedIn = !!sessionStorage.getItem("slack_id");
 

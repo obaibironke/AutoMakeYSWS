@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ShopItemCard from "../components/ShopItemCard";
 import { shopItems } from "../data/shopItems";
 import { useLocation } from "wouter";
+import DashboardNav from "../components/DashboardNav";
 
 const HACK_CLUB_AUTH_URL =
   "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
@@ -21,11 +22,13 @@ export default function Shop() {
     setLoading(false);
   }, []);
 
-  // 🚫 Block render until auth check finishes
+  // Prevent flicker before auth check
   if (loading) return null;
 
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
+      <DashboardNav />
+
       {/* Hero */}
       <section className="py-16" style={{ background: "#F5F0E8" }}>
         <div className="max-w-7xl mx-auto px-8 lg:px-16 text-center">
