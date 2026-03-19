@@ -36,20 +36,55 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const userResponse = await axios.get(
       "https://auth.hackclub.com/api/v1/me",
       {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
+        headers: { Authorization: `Bearer ${access_token}` },
       },
     );
 
-    // DEBUG: return raw Hack Club response so we can see all fields
-    // This returns success:true so the frontend won't error out,
-    // and we can see exactly what Hack Club sends back
+    // Fields are nested under identity
+    const {
+      slack_id,
+      first_name,
+      last_name,
+      primary_email,
+      verification_status,
+      ysws_eligible,
+    } = userResponse.data.identity;
+
+    const name = `${first_name} ${last_name}`.trim();
+    const isVerified = verification_status === "verified";
+
+    // Step 3: Check if user already exists
+    const records = await table
+      .select({ filterByFormula: `{Slack ID} = '${slack_id}'` })
+      .firstPage();
+
+    let userRecord;
+
+    if (records.length > 0) {
+      // User exists — just return their data, no writes
+      userRecord = records[0];
+    } else {
+      // New user — create record
+      userRecord = await table.create({
+        "Slack ID": slack_id,
+        Name: name,
+        Email: primary_email,
+        Verified: isVerified ? "Yes" : "No",
+        "YSWS Eligible": ysws_eligible ? "Yes" : "No",
+        "Credits Earned": 0,
+      });
+    }
+
     return res.status(200).json({
       success: true,
-      debug_hack_club_response: userResponse.data,
+      user: {
+        slack_id,
+        name: userRecord.fields["Name"] || name,
+        email: userRecord.fields["Email"] || primary_email,
+        verified: userRecord.fields["Verified"] === "Yes",
+        credits: userRecord.fields["Credits Earned"] || 0,
+      },
     });
-
   } catch (error: any) {
     console.error(
       "Auth error:",
