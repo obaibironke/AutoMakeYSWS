@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(SHOP_TABLE)}?fields[]=Name&fields[]=Description&fields[]=Cost&sort[0][field]=Cost&sort[0][direction]=asc`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(SHOP_TABLE)}?fields[]=Item+Name&fields[]=Item+Description&fields[]=Cost&sort[0][field]=Cost&sort[0][direction]=asc`;
 
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
@@ -24,8 +24,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const items = (data.records || []).map((record: any) => ({
       id: record.id,
-      name: record.fields["Name"] ?? "",
-      description: record.fields["Description"] ?? "",
+      name: record.fields["Item Name"] ?? "",
+      description: record.fields["Item Description"] ?? "",
       cost: record.fields["Cost"] ?? 0,
     }));
 
