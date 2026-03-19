@@ -20,18 +20,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const filter = encodeURIComponent(`{Slack ID Formula} = "${slack_id}"`);
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}&sort[0][field]=Created+Time&sort[0][direction]=desc`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}`;
 
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
     });
 
     const data = await airtableRes.json();
-
-    // Log everything so we can see what's happening
-    console.log("slack_id received:", slack_id);
-    console.log("url called:", url);
-    console.log("airtable raw response:", JSON.stringify(data));
 
     const projects = (data.records || []).map((record: any) => ({
       id: record.id,
