@@ -17,6 +17,7 @@ interface Project {
 }
 
 const statusColors: Record<string, { bg: string; color: string }> = {
+  Unsubmitted: { bg: "rgba(15,25,35,0.08)", color: "#6B7280" },
   "Pending Review": { bg: "rgba(255,193,7,0.15)", color: "#B8860B" },
   Approved: { bg: "rgba(0,229,160,0.15)", color: "#00A372" },
   Rejected: { bg: "rgba(255,87,51,0.15)", color: "#FF5733" },
@@ -73,7 +74,7 @@ export default function ProjectDetail() {
     );
   }
 
-  const statusStyle = statusColors[project.status] ?? { bg: "rgba(15,25,35,0.1)", color: "#0F1923" };
+  const statusStyle = statusColors[project.status] ?? { bg: "rgba(15,25,35,0.08)", color: "#6B7280" };
 
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
@@ -171,6 +172,9 @@ export default function ProjectDetail() {
             <div className="rounded-xl p-5" style={{ background: "#0F1923" }}>
               <h3 className="font-sans text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(245,240,232,0.5)" }}>Review Status</h3>
               <p className="font-sans font-extrabold text-lg" style={{ color: statusStyle.color }}>{project.status}</p>
+              {project.status === "Unsubmitted" && (
+                <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>Fill in the remaining details and submit when ready.</p>
+              )}
               {project.status === "Pending Review" && (
                 <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>Your project is in the queue. Hang tight!</p>
               )}

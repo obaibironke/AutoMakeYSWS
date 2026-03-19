@@ -7,6 +7,7 @@ const HACK_CLUB_AUTH_URL =
   "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
 
 const statusColors: Record<string, { bg: string; color: string }> = {
+  Unsubmitted: { bg: "rgba(15,25,35,0.08)", color: "#6B7280" },
   "Pending Review": { bg: "rgba(255,193,7,0.15)", color: "#B8860B" },
   Approved: { bg: "rgba(0,229,160,0.15)", color: "#00A372" },
   Rejected: { bg: "rgba(255,87,51,0.15)", color: "#FF5733" },
@@ -463,8 +464,8 @@ export default function Dashboard() {
             <div className="space-y-4">
               {projects.map((project) => {
                 const statusStyle = statusColors[project.status] ?? {
-                  bg: "rgba(15,25,35,0.1)",
-                  color: "#0F1923",
+                  bg: "rgba(15,25,35,0.08)",
+                  color: "#6B7280",
                 };
                 return (
                   <Link key={project.id} href={`/projects/${project.id}`}>
