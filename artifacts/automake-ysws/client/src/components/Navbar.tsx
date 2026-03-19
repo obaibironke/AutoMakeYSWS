@@ -9,7 +9,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [location, setLocation] = useLocation();
 
-  // ✅ Hide navbar on dashboard (and any sub-routes)
   if (location.startsWith("/dashboard") || location.startsWith("/shop")) return null;
 
   const isSignedIn = !!sessionStorage.getItem("slack_id");
@@ -25,7 +24,6 @@ export default function Navbar() {
   const links = [
     { label: "Showcase", href: "/showcase" },
     { label: "Guides", href: "/guides" },
-    { label: "Shop", href: "/shop" },
   ];
 
   return (
@@ -146,7 +144,7 @@ export default function Navbar() {
             Dashboard
           </button>
 
-          <a
+
             href={RSVP_URL}
             target="_blank"
             rel="noopener noreferrer"
