@@ -45,6 +45,13 @@ export default function ProjectDetail() {
   const [sessionError, setSessionError] = useState("");
   const [sessionSuccess, setSessionSuccess] = useState(false);
 
+  // Screenshot upload state
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
     if (!slackId) {
@@ -146,6 +153,67 @@ export default function ProjectDetail() {
     }
   };
 
+  // Handle screenshot file selection
+  const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      if (file.size > 5 * 1024 * 1024) {
+        setUploadError("File size must be less than 5MB");
+        return;
+      }
+      setScreenshotFile(file);
+      setUploadError("");
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setScreenshotPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setUploadError("Please select a valid image file");
+    }
+  };
+
+  // Upload screenshot to CDN
+  const handleUploadScreenshot = async () => {
+    if (!screenshotFile) return;
+
+    setUploadLoading(true);
+    setUploadError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", screenshotFile);
+      formData.append("project_id", id);
+
+      const response = await fetch("/api/uploadToCDN", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Upload failed");
+      }
+
+      const data = await response.json();
+
+      // Update local state with the CDN URL
+      setProject((prev) => (prev ? { ...prev, screenshot: data.url } : null));
+      setScreenshotFile(null);
+      setScreenshotPreview(null);
+      setUploadSuccess(true);
+      setTimeout(() => setUploadSuccess(false), 3000);
+    } catch (err) {
+      setUploadError(
+        err instanceof Error ? err.message : "Upload failed. Please try again.",
+      );
+      console.error("Upload error:", err);
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div
@@ -244,6 +312,102 @@ export default function ProjectDetail() {
                 </div>
               )}
             </div>
+
+            {/* Upload Screenshot (only show for Unsubmitted projects) */}
+            {project.status === "Unsubmitted" && (
+              <div
+                className="rounded-xl p-6 bg-white"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
+              >
+                <h2
+                  className="font-sans text-xl font-extrabold mb-5"
+                  style={{ color: "#0F1923" }}
+                >
+                  {project.screenshot ? "Update Screenshot" : "Upload Screenshot"}
+                </h2>
+
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
+                      Project Screenshot
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleScreenshotChange}
+                      className="font-sans text-sm w-full"
+                      style={{ color: "#0F1923" }}
+                    />
+                    <p
+                      className="font-sans text-xs mt-1"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
+                      Max file size: 5MB
+                    </p>
+                  </div>
+
+                  {screenshotPreview && (
+                    <div
+                      className="rounded-lg overflow-hidden"
+                      style={{ border: "2px solid #0F1923" }}
+                    >
+                      <img
+                        src={screenshotPreview}
+                        alt="Preview"
+                        className="w-full object-cover max-h-64"
+                      />
+                    </div>
+                  )}
+
+                  {uploadError && (
+                    <p
+                      className="font-sans text-xs font-bold"
+                      style={{ color: "#FF5733" }}
+                    >
+                      {uploadError}
+                    </p>
+                  )}
+
+                  <button
+                    onClick={handleUploadScreenshot}
+                    disabled={!screenshotFile || uploadLoading || uploadSuccess}
+                    className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
+                    style={{
+                      background: uploadSuccess
+                        ? "#00E5A0"
+                        : uploadLoading || !screenshotFile
+                          ? "#ccc"
+                          : "#0F1923",
+                      color: uploadSuccess
+                        ? "#0F1923"
+                        : uploadLoading || !screenshotFile
+                          ? "#888"
+                          : "#00E5A0",
+                      cursor:
+                        uploadLoading || uploadSuccess || !screenshotFile
+                          ? "not-allowed"
+                          : "pointer",
+                      boxShadow:
+                        uploadLoading || uploadSuccess || !screenshotFile
+                          ? "none"
+                          : "3px 3px 0px #FF5733",
+                    }}
+                  >
+                    {uploadSuccess
+                      ? "✓ Screenshot Uploaded!"
+                      : uploadLoading
+                        ? "Uploading to Hack Club CDN..."
+                        : "Upload Screenshot"}
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Description */}
             <div
