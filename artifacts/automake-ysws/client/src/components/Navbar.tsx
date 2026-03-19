@@ -2,15 +2,29 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 
 const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
+const HACK_CLUB_AUTH_URL =
+  "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
+
+  const isSignedIn = !!sessionStorage.getItem("slack_id");
+
+  const handleDashboard = () => {
+    if (isSignedIn) {
+      setLocation("/dashboard");
+    } else {
+      window.location.href = HACK_CLUB_AUTH_URL;
+    }
+  };
+
   const links = [
     { label: "Showcase", href: "/showcase" },
     { label: "Guides", href: "/guides" },
     { label: "Shop", href: "/shop" },
   ];
+
   return (
     <nav className="sticky top-0 z-50 shadow-sm" style={{ background: "#0F1923" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,6 +49,18 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
+            {/* Dashboard — same style as other nav links */}
+            <button
+              onClick={handleDashboard}
+              className="font-sans text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
+              style={{
+                color: location === "/dashboard" ? "#00E5A0" : "#F5F0E8",
+                borderBottom: location === "/dashboard" ? "2px solid #00E5A0" : "none",
+                paddingBottom: location === "/dashboard" ? "2px" : undefined,
+              }}
+            >
+              Dashboard
+            </button>
             <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
               <span
                 className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
@@ -68,6 +94,13 @@ export default function Navbar() {
               </span>
             </Link>
           ))}
+          <button
+            onClick={() => { setMenuOpen(false); handleDashboard(); }}
+            className="font-sans text-base font-medium cursor-pointer bg-transparent border-none p-0 text-left"
+            style={{ color: "#F5F0E8" }}
+          >
+            Dashboard
+          </button>
           <a href={RSVP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>
             <span
               className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block text-center"
