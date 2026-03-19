@@ -3,7 +3,6 @@ import { Link } from "wouter";
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-[#D1DCCF] flex flex-col items-center justify-center text-center px-4">
-      <div className="text-8xl mb-6">🤖</div>
       <h1 className="font-serif text-5xl font-bold text-[#3B2F3E] mb-4">404</h1>
       <p className="font-sans text-xl text-[#424242] mb-2">
         This page doesn't exist.

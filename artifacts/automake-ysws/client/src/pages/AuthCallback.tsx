@@ -39,7 +39,7 @@ export default function Auth() {
           sessionStorage.setItem("user_name", data.user.name);
 
           // 3. Redirect to Shop to show their "Level Up" progress
-          setTimeout(() => setLocation("/shop"), 1000);
+          setTimeout(() => setLocation("/dashboard"), 1000);
         } else {
           throw new Error(data.error || "AUTH_FAILED");
         }
