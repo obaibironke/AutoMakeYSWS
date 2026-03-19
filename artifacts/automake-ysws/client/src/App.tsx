@@ -81,8 +81,6 @@ function ManifestoPanel({ onClose }: { onClose: () => void }) {
   );
 }
 
-// Call this from the create project modal when it opens/closes
-// by dispatching a custom event
 function isUserTyping(): boolean {
   const active = document.activeElement;
   if (!active) return false;
@@ -93,8 +91,6 @@ function isUserTyping(): boolean {
 }
 
 function isModalOpen(): boolean {
-  // Checks for the create project modal by looking for a known attribute
-  // we'll set on the modal's root element
   return !!document.querySelector("[data-create-project-modal]");
 }
 
@@ -105,10 +101,7 @@ function Router() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't fire if user is typing in any input/textarea/contenteditable
       if (isUserTyping()) return;
-
-      // Don't fire if the create project modal is open
       if (isModalOpen()) return;
 
       const newInput = (input + e.key).slice(-8);
@@ -138,18 +131,22 @@ function Router() {
       </AnimatePresence>
 
       {!shouldHideFlag && (
-
-          href="https://hackclub.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ position: "fixed", top: "100px", left: "0px", zIndex: 9999 }}
+        <div
+          onClick={() => window.open("https://hackclub.com", "_blank")}
+          style={{
+            position: "fixed",
+            top: "100px",
+            left: "0px",
+            zIndex: 9999,
+            cursor: "pointer",
+          }}
         >
           <img
             src="https://assets.hackclub.com/flag-orpheus-left.svg"
             alt="Hack Club"
             style={{ width: "200px" }}
           />
-        </a>
+        </div>
       )}
 
       <Navbar />
