@@ -12,34 +12,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { code } = req.body;
+  const { code, redirect_uri } = req.body;
 
   if (!code) {
     return res.status(400).json({ error: "Missing code" });
   }
 
   try {
+    // Step 1: Exchange code for access token
     const tokenResponse = await axios.post(
-      "https://auth.hackclub.com/public/api/token",
+      "https://auth.hackclub.com/oauth/token",
       {
-        code,
         client_id: process.env.HACK_CLUB_CLIENT_ID,
         client_secret: process.env.HACK_CLUB_CLIENT_SECRET,
+        redirect_uri: redirect_uri || process.env.HACK_CLUB_REDIRECT_URI,
+        code,
+        grant_type: "authorization_code",
       },
     );
 
-    const {
-      id: slackId,
-      name,
-      email,
-      verify_status,
-      ysws_eligible,
-    } = tokenResponse.data.user;
+    const { access_token } = tokenResponse.data;
 
+    // Step 2: Use access token to get user info
+    const userResponse = await axios.get(
+      "https://auth.hackclub.com/api/v1/me",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      },
+    );
+
+    const { id: slackId, name, email, verification_status } = userResponse.data;
+
+    // Step 3: Upsert user in Airtable
     const records = await table
-      .select({
-        filterByFormula: `{Slack ID} = '${slackId}'`,
-      })
+      .select({ filterByFormula: `{Slack ID} = '${slackId}'` })
       .firstPage();
 
     let userRecord;
@@ -49,16 +57,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "Slack ID": slackId,
         Name: name,
         Email: email,
-        Verified: verify_status ? "Yes" : "No",
-        "YSWS Eligible": ysws_eligible ? "Yes" : "No",
+        Verified: verification_status === "verified" ? "Yes" : "No",
         "Credits Earned": 0,
       });
     } else {
       userRecord = await table.update(records[0].id, {
         Name: name,
         Email: email,
-        Verified: verify_status ? "Yes" : "No",
-        "YSWS Eligible": ysws_eligible ? "Yes" : "No",
+        Verified: verification_status === "verified" ? "Yes" : "No",
       });
     }
 
@@ -66,7 +72,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       success: true,
       user: {
         slack_id: slackId,
-        name: name,
+        name,
+        email,
         credits: userRecord.fields["Credits Earned"] || 0,
       },
     });
