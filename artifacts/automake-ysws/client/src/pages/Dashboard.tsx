@@ -9,14 +9,10 @@ const links = [
 
 export default function DashboardNav() {
   const [location, setLocation] = useLocation();
-  const [credits, setCredits] = useState<number>(
-    Number(sessionStorage.getItem("credits")) || 0,
-  );
-  const [userName, setUserName] = useState<string>(
-    sessionStorage.getItem("user_name") || "User",
-  );
+  const [credits, setCredits] = useState<number | null>(null);
+  const [userName, setUserName] = useState<string>("User");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch credits from Airtable via your API
   const fetchCredits = async () => {
     try {
       const slackId = sessionStorage.getItem("slack_id");
@@ -32,11 +28,20 @@ export default function DashboardNav() {
   };
 
   useEffect(() => {
-    // Initial fetch
-    fetchCredits();
+    const slackId = sessionStorage.getItem("slack_id");
+    if (!slackId) {
+      setLoading(false);
+      return;
+    }
 
-    // Poll every 30 seconds
-    const interval = setInterval(fetchCredits, 30000);
+    setUserName(sessionStorage.getItem("user_name") || "User");
+    const initialCredits = Number(sessionStorage.getItem("credits")) || 0;
+    setCredits(initialCredits);
+
+    fetchCredits(); // initial fetch
+    const interval = setInterval(fetchCredits, 30000); // every 30s
+    setLoading(false);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -45,22 +50,18 @@ export default function DashboardNav() {
     setLocation("/");
   };
 
+  if (loading) return null; // prevent rendering until we know user state
+
   return (
     <nav
       className="sticky top-0 z-50 shadow-sm"
-      style={{
-        background: "#0F1923",
-        borderBottom: "1px solid rgba(0,229,160,0.15)",
-      }}
+      style={{ background: "#0F1923", borderBottom: "1px solid rgba(0,229,160,0.15)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/">
-            <span
-              className="font-sans text-2xl font-extrabold tracking-tight cursor-pointer"
-              style={{ color: "#00E5A0" }}
-            >
+            <span className="font-sans text-2xl font-extrabold tracking-tight cursor-pointer" style={{ color: "#00E5A0" }}>
               Automake
             </span>
           </Link>
@@ -73,8 +74,7 @@ export default function DashboardNav() {
                   className="font-sans text-sm font-medium transition-colors cursor-pointer"
                   style={{
                     color: location === link.href ? "#00E5A0" : "#F5F0E8",
-                    borderBottom:
-                      location === link.href ? "2px solid #00E5A0" : "none",
+                    borderBottom: location === link.href ? "2px solid #00E5A0" : "none",
                     paddingBottom: location === link.href ? "2px" : undefined,
                   }}
                 >
@@ -83,14 +83,13 @@ export default function DashboardNav() {
               </Link>
             ))}
 
-            {/* Dashboard button — dynamic */}
+            {/* Dashboard button */}
             <button
               onClick={() => setLocation("/dashboard")}
               className="font-sans text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
               style={{
                 color: location === "/dashboard" ? "#00E5A0" : "#F5F0E8",
-                borderBottom:
-                  location === "/dashboard" ? "2px solid #00E5A0" : "none",
+                borderBottom: location === "/dashboard" ? "2px solid #00E5A0" : "none",
                 paddingBottom: location === "/dashboard" ? "2px" : undefined,
               }}
             >
@@ -98,27 +97,15 @@ export default function DashboardNav() {
             </button>
 
             {/* Credits pill */}
-            <div
-              className="flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{
-                background: "rgba(0,229,160,0.1)",
-                border: "1px solid rgba(0,229,160,0.3)",
-              }}
-            >
-              <span
-                className="font-sans text-xs font-bold"
-                style={{ color: "#00E5A0" }}
-              >
-                {credits} credits
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full" style={{ background: "rgba(0,229,160,0.1)", border: "1px solid rgba(0,229,160,0.3)" }}>
+              <span className="font-sans text-xs font-bold" style={{ color: "#00E5A0" }}>
+                {credits ?? 0} credits
               </span>
             </div>
 
             {/* User + sign out */}
             <div className="flex items-center gap-3">
-              <span
-                className="font-sans text-sm font-semibold"
-                style={{ color: "#F5F0E8" }}
-              >
+              <span className="font-sans text-sm font-semibold" style={{ color: "#F5F0E8" }}>
                 {userName.split(" ")[0]}
               </span>
               <button
