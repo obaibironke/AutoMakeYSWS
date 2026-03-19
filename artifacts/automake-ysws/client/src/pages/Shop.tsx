@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ShopItemCard from "../components/ShopItemCard";
 import { shopItems } from "../data/shopItems";
 import { useLocation } from "wouter";
@@ -8,6 +8,7 @@ const HACK_CLUB_AUTH_URL =
 
 export default function Shop() {
   const [, setLocation] = useLocation();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
@@ -16,7 +17,12 @@ export default function Shop() {
       window.location.href = HACK_CLUB_AUTH_URL;
       return;
     }
+
+    setLoading(false);
   }, []);
+
+  // 🚫 Block render until auth check finishes
+  if (loading) return null;
 
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
