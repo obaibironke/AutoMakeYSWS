@@ -307,22 +307,11 @@ export default function ProjectDetail() {
                           </span>
                         )}
                       </div>
-                      {session.notes && (
-                        <p className="font-sans text-sm leading-relaxed mb-2" style={{ color: "rgba(15,25,35,0.7)" }}>
-                          {session.notes}
-                        </p>
-                      )}
-                      {session.lapseSession && (
-
-                          href={session.lapseSession}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-sans text-xs font-bold underline"
-                          style={{ color: "#0F1923" }}
-                        >
-                          View Lapse Session →
-                        </a>
-                      )}
+                  {session.notes && (
+                    <p className="font-sans text-sm leading-relaxed" style={{ color: "rgba(15,25,35,0.7)" }}>
+                      {session.notes}
+                    </p>
+                  )}
                     </div>
                   ))}
                 </div>
