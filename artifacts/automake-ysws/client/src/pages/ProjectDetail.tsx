@@ -232,7 +232,6 @@ export default function ProjectDetail() {
         throw new Error(errorData.error || "Delete failed");
       }
 
-      // Clear screenshot from local state
       setProject((prev) => (prev ? { ...prev, screenshot: null } : null));
       setScreenshotHovered(false);
     } catch (err) {
@@ -325,7 +324,11 @@ export default function ProjectDetail() {
             <div
               className="rounded-xl overflow-hidden relative"
               style={{ border: "2px solid #0F1923" }}
-              onMouseEnter={() => project.screenshot && project.status === "Unsubmitted" && setScreenshotHovered(true)}
+              onMouseEnter={() =>
+                project.screenshot &&
+                project.status === "Unsubmitted" &&
+                setScreenshotHovered(true)
+              }
               onMouseLeave={() => setScreenshotHovered(false)}
             >
               {project.screenshot ? (
@@ -336,7 +339,6 @@ export default function ProjectDetail() {
                     className="w-full object-cover"
                     style={{ display: "block" }}
                   />
-                  {/* Delete overlay — only on Unsubmitted projects */}
                   {project.status === "Unsubmitted" && (
                     <div
                       style={{
@@ -369,7 +371,6 @@ export default function ProjectDetail() {
                         }}
                       >
                         {deleteLoading ? (
-                          // Spinner
                           <div
                             style={{
                               width: 20,
@@ -381,7 +382,6 @@ export default function ProjectDetail() {
                             }}
                           />
                         ) : (
-                          // Trash icon
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="22"
@@ -418,12 +418,15 @@ export default function ProjectDetail() {
 
             {/* Delete error */}
             {deleteError && (
-              <p className="font-sans text-xs font-bold" style={{ color: "#FF5733" }}>
+              <p
+                className="font-sans text-xs font-bold"
+                style={{ color: "#FF5733" }}
+              >
                 {deleteError}
               </p>
             )}
 
-            {/* Upload Screenshot (only show for Unsubmitted projects) */}
+            {/* Upload Screenshot */}
             {project.status === "Unsubmitted" && (
               <div
                 className="rounded-xl p-6 bg-white"
@@ -438,7 +441,6 @@ export default function ProjectDetail() {
                 >
                   {project.screenshot ? "Update Screenshot" : "Upload Screenshot"}
                 </h2>
-
                 <div className="space-y-4">
                   <div>
                     <label
@@ -704,53 +706,56 @@ export default function ProjectDetail() {
                   Work Sessions
                 </h2>
                 <div className="space-y-3">
-                  {sessions.map((session) => (
-                    <div
-                      key={session.id}
-                      className="rounded-lg p-4"
-                      style={{
-                        background: "#F5F0E8",
-                        border: "1px solid rgba(15,25,35,0.1)",
-                      }}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span
-                          className="font-sans font-extrabold text-sm"
-                          style={{ color: "#0F1923" }}
-                        >
-                          {session.hours}{" "}
-                          {session.hours === 1 ? "hour" : "hours"}
-                        </span>
-                        {session.date && (
+                  {sessions.map((session) => {
+                    const lapseUrl = session.lapseSession;
+                    return (
+                      <div
+                        key={session.id}
+                        className="rounded-lg p-4"
+                        style={{
+                          background: "#F5F0E8",
+                          border: "1px solid rgba(15,25,35,0.1)",
+                        }}
+                      >
+                        <div className="flex items-center justify-between mb-1">
                           <span
-                            className="font-sans text-xs"
-                            style={{ color: "rgba(15,25,35,0.4)" }}
+                            className="font-sans font-extrabold text-sm"
+                            style={{ color: "#0F1923" }}
                           >
-                            {new Date(session.date).toLocaleDateString()}
+                            {session.hours}{" "}
+                            {session.hours === 1 ? "hour" : "hours"}
                           </span>
+                          {session.date && (
+                            <span
+                              className="font-sans text-xs"
+                              style={{ color: "rgba(15,25,35,0.4)" }}
+                            >
+                              {new Date(session.date).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                        {session.notes && (
+                          <p
+                            className="font-sans text-sm leading-relaxed mb-2"
+                            style={{ color: "rgba(15,25,35,0.7)" }}
+                          >
+                            {session.notes}
+                          </p>
+                        )}
+                        {lapseUrl && (
+
+                            href={lapseUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-sans text-xs font-bold underline"
+                            style={{ color: "#0F1923" }}
+                          >
+                            View Lapse Session →
+                          </a>
                         )}
                       </div>
-                      {session.notes && (
-                        <p
-                          className="font-sans text-sm leading-relaxed mb-2"
-                          style={{ color: "rgba(15,25,35,0.7)" }}
-                        >
-                          {session.notes}
-                        </p>
-                      )}
-                      {session.lapseSession && (
-
-                          href={String(session.lapseSession)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-sans text-xs font-bold underline"
-                          style={{ color: "#0F1923" }}
-                        >
-                          View Lapse Session →
-                        </a>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -902,7 +907,6 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      {/* Keyframe for spinner inside delete button */}
       <style>{`
         @keyframes spin {
           to { transform: rotate(360deg); }
