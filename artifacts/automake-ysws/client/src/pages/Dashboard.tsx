@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import DashboardNav from "../components/DashboardNav";
 
 const HACK_CLUB_AUTH_URL =
@@ -21,6 +21,159 @@ interface Project {
   hoursLogged: number | null;
 }
 
+function CreateProjectModal({
+  onClose,
+  onCreated,
+}: {
+  onClose: () => void;
+  onCreated: (projectId: number) => void;
+}) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleCreate = async () => {
+    if (!name.trim() || !description.trim()) {
+      setError("Both fields are required.");
+      return;
+    }
+
+    const slackId = sessionStorage.getItem("slack_id");
+    if (!slackId) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/createProject", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slack_id: slackId, name, description }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong.");
+        setLoading(false);
+        return;
+      }
+
+      onCreated(data.projectId);
+    } catch (err) {
+      setError("Something went wrong.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ background: "rgba(15,25,35,0.6)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 30 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="bg-white rounded-2xl p-8 w-full max-w-lg"
+        style={{ border: "2px solid #0F1923", boxShadow: "6px 6px 0px #0F1923" }}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-sans text-2xl font-extrabold" style={{ color: "#0F1923" }}>
+            New Project
+          </h2>
+          <button
+            onClick={onClose}
+            className="font-sans text-sm font-bold cursor-pointer"
+            style={{ color: "rgba(15,25,35,0.4)" }}
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="space-y-5">
+          <div>
+            <label className="font-sans text-xs font-bold uppercase tracking-widest block mb-2" style={{ color: "rgba(15,25,35,0.5)" }}>
+              Project Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Slack Standup Bot"
+              className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
+              style={{
+                border: "2px solid #0F1923",
+                background: "#F5F0E8",
+                color: "#0F1923",
+              }}
+            />
+          </div>
+
+          <div>
+            <label className="font-sans text-xs font-bold uppercase tracking-widest block mb-2" style={{ color: "rgba(15,25,35,0.5)" }}>
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What does your project do?"
+              rows={4}
+              className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
+              style={{
+                border: "2px solid #0F1923",
+                background: "#F5F0E8",
+                color: "#0F1923",
+              }}
+            />
+          </div>
+
+          {error && (
+            <p className="font-sans text-xs font-bold" style={{ color: "#FF5733" }}>
+              {error}
+            </p>
+          )}
+
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={onClose}
+              className="font-sans font-bold px-5 py-3 rounded-lg text-sm cursor-pointer flex-1"
+              style={{
+                background: "white",
+                color: "#0F1923",
+                border: "2px solid #0F1923",
+                boxShadow: "3px 3px 0px #0F1923",
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleCreate}
+              disabled={loading}
+              className="font-sans font-bold px-5 py-3 rounded-lg text-sm cursor-pointer flex-1 transition-all"
+              style={{
+                background: loading ? "#ccc" : "#00E5A0",
+                color: "#0F1923",
+                border: "none",
+                boxShadow: loading ? "none" : "3px 3px 0px #0F1923",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+            >
+              {loading ? "Creating..." : "Create & Continue →"}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function Dashboard() {
   const [, setLocation] = useLocation();
   const [userName, setUserName] = useState("");
@@ -28,6 +181,7 @@ export default function Dashboard() {
   const [projectsSubmitted, setProjectsSubmitted] = useState(0);
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
@@ -83,11 +237,26 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleProjectCreated = (projectId: number) => {
+    setShowCreateModal(false);
+    setLocation(`/projects/${projectId}`);
+  };
+
   const firstName = userName.split(" ")[0];
 
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       <DashboardNav />
+
+      <AnimatePresence>
+        {showCreateModal && (
+          <CreateProjectModal
+            onClose={() => setShowCreateModal(false)}
+            onCreated={handleProjectCreated}
+          />
+        )}
+      </AnimatePresence>
+
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -137,6 +306,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-sans text-2xl font-extrabold" style={{ color: "#0F1923" }}>Your Projects</h2>
             <button
+              onClick={() => setShowCreateModal(true)}
               className="font-sans text-sm font-bold px-5 py-2.5 rounded-lg cursor-pointer transition-all"
               style={{ background: "#0F1923", color: "#00E5A0", boxShadow: "3px 3px 0px #FF5733" }}
               onMouseEnter={(e) => {
@@ -148,7 +318,7 @@ export default function Dashboard() {
                 (e.currentTarget as HTMLElement).style.transform = "";
               }}
             >
-              + Submit Project
+              + Create Project
             </button>
           </div>
 
@@ -157,7 +327,6 @@ export default function Dashboard() {
               <div className="w-8 h-8 rounded-full border-4 animate-spin" style={{ borderColor: "#00E5A0", borderTopColor: "transparent" }} />
             </div>
           ) : projects.length === 0 ? (
-            // Empty state
             <div
               className="flex flex-col items-center justify-center rounded-2xl py-24 text-center"
               style={{ border: "2px dashed rgba(15,25,35,0.2)", background: "rgba(255,255,255,0.5)" }}
@@ -176,10 +345,11 @@ export default function Dashboard() {
               </p>
               <div className="flex gap-3">
                 <button
+                  onClick={() => setShowCreateModal(true)}
                   className="font-sans font-bold px-6 py-3 rounded-lg text-sm cursor-pointer transition-all"
                   style={{ background: "#00E5A0", color: "#0F1923", boxShadow: "3px 3px 0px #0F1923" }}
                 >
-                  Submit your first project
+                  Create your first project
                 </button>
                 <Link href="/guides">
                   <span
@@ -192,7 +362,6 @@ export default function Dashboard() {
               </div>
             </div>
           ) : (
-            // Project list
             <div className="space-y-4">
               {projects.map((project) => {
                 const statusStyle = statusColors[project.status] ?? { bg: "rgba(15,25,35,0.1)", color: "#0F1923" };
@@ -204,15 +373,13 @@ export default function Dashboard() {
                       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "5px 5px 0px #0F1923")}
                       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "3px 3px 0px #0F1923")}
                     >
-                      <div className="flex items-center gap-4">
-                        <div>
-                          <p className="font-sans font-extrabold text-base" style={{ color: "#0F1923" }}>{project.name}</p>
-                          {project.submittedAt && (
-                            <p className="font-sans text-xs mt-0.5" style={{ color: "rgba(15,25,35,0.45)" }}>
-                              Submitted {new Date(project.submittedAt).toLocaleDateString()}
-                            </p>
-                          )}
-                        </div>
+                      <div>
+                        <p className="font-sans font-extrabold text-base" style={{ color: "#0F1923" }}>{project.name}</p>
+                        {project.submittedAt && (
+                          <p className="font-sans text-xs mt-0.5" style={{ color: "rgba(15,25,35,0.45)" }}>
+                            Submitted {new Date(project.submittedAt).toLocaleDateString()}
+                          </p>
+                        )}
                       </div>
                       <div className="flex items-center gap-4">
                         {project.creditsAwarded != null && (
