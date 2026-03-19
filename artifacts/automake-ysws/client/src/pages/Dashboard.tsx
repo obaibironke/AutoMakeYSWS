@@ -133,8 +133,31 @@ export default function Dashboard() {
       window.location.href = HACK_CLUB_AUTH_URL;
       return;
     }
+
     setUserName(sessionStorage.getItem("user_name") || "");
     setCredits(Number(sessionStorage.getItem("credits")) || 0);
+
+    const fetchCredits = async () => {
+      try {
+        const res = await fetch("/api/getUser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slack_id: slackId }),
+        });
+        const data = await res.json();
+        if (data?.user) {
+          const newCredits = data.user.credits;
+          setCredits(newCredits);
+          sessionStorage.setItem("credits", String(newCredits));
+        }
+      } catch (err) {
+        console.error("Failed to fetch credits:", err);
+      }
+    };
+
+    fetchCredits(); // run immediately
+    const interval = setInterval(fetchCredits, 30000); // then every 30s
+    return () => clearInterval(interval); // cleanup on unmount
   }, []);
 
   const firstName = userName.split(" ")[0];
