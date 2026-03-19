@@ -1,4 +1,8 @@
 // api/uploadToCDN.ts
+import formidable from "formidable";
+import fs from "fs";
+import FormData from "form-data";
+
 export const config = {
   api: {
     bodyParser: false,
@@ -17,17 +21,40 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Forward the multipart form data to Hack Club CDN
-    const cdnResponse = await fetch(
-      "https://cdn.hackclub.com/api/v4/upload",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${CDN_API_KEY}`,
-        },
-        body: req,
-      }
-    );
+    // Parse the incoming form data
+    const form = formidable({});
+    const [fields, files] = await form.parse(req);
+
+    const file = files.file?.[0];
+    const projectId = fields.project_id?.[0];
+
+    if (!file) {
+      return res.status(400).json({ error: "No file provided" });
+    }
+
+    if (!projectId) {
+      return res.status(400).json({ error: "No project_id provided" });
+    }
+
+    // Create a new FormData instance for the CDN upload
+    const formData = new FormData();
+    formData.append("file", fs.createReadStream(file.filepath), {
+      filename: file.originalFilename || "screenshot.png",
+      contentType: file.mimetype || "image/png",
+    });
+
+    // Upload to Hack Club CDN
+    const cdnResponse = await fetch("https://cdn.hackclub.com/api/v4/upload", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${CDN_API_KEY}`,
+        ...formData.getHeaders(),
+      },
+      body: formData,
+    });
+
+    // Clean up the temporary file
+    fs.unlinkSync(file.filepath);
 
     if (!cdnResponse.ok) {
       const errorData = await cdnResponse.json();
@@ -46,12 +73,9 @@ export default async function handler(req, res) {
 
     const cdnData = await cdnResponse.json();
 
-    // Extract project_id from form data (you'll need to parse it properly)
-    // For now, we'll assume it's passed and update the database
-    // You may need to use a library like 'formidable' to parse multipart data properly
-
     // Update your database with the CDN URL
-    // await db.query('UPDATE projects SET screenshot = $1 WHERE id = $2', [cdnData.url, project_id]);
+    // Example (adjust to your database setup):
+    // await db.query('UPDATE projects SET screenshot = $1 WHERE id = $2', [cdnData.url, projectId]);
 
     return res.status(200).json({
       url: cdnData.url,
