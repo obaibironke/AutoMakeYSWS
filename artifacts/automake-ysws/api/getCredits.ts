@@ -20,12 +20,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const filter = encodeURIComponent(`{Slack ID} = "${slack_id}"`);
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}?filterByFormula=${filter}&fields[]=Credits+Earned&fields[]=Projects+Submitted`;
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}?filterByFormula=${filter}&fields[]=Credits&fields[]=Projects+Submitted`;
 
     const airtableRes = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers: { Authorization: `Bearer ${apiKey}` },
     });
 
     const data = await airtableRes.json();
@@ -36,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     return res.status(200).json({
-      credits: record.fields["Credits Earned"] ?? 0,
+      credits: record.fields["Credits"] ?? 0,
       projectsSubmitted: record.fields["Projects Submitted"] ?? 0,
     });
   } catch (err) {

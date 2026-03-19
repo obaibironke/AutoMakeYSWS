@@ -19,7 +19,7 @@ export default function Shop() {
   const [shopItems, setShopItems] = useState<ShopItem[]>([]);
   const [itemsLoading, setItemsLoading] = useState(true);
   const [credits, setCredits] = useState(
-    Number(sessionStorage.getItem("credits")) || 0,
+    Number(sessionStorage.getItem("credits")) || 0
   );
   const [purchaseState, setPurchaseState] = useState<{
     itemId: string | null;
@@ -35,20 +35,34 @@ export default function Shop() {
     }
     setAuthLoading(false);
 
-    // Fetch shop items from Airtable via backend
-    const fetchItems = async () => {
+    // Fetch shop items and fresh credits in parallel
+    const fetchAll = async () => {
       try {
-        const res = await fetch("/api/getShopItems");
-        const data = await res.json();
-        if (data.items) setShopItems(data.items);
+        const [itemsRes, creditsRes] = await Promise.all([
+          fetch("/api/getShopItems"),
+          fetch("/api/getCredits", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ slack_id: slackId }),
+          }),
+        ]);
+
+        const itemsData = await itemsRes.json();
+        const creditsData = await creditsRes.json();
+
+        if (itemsData.items) setShopItems(itemsData.items);
+        if (typeof creditsData.credits === "number") {
+          setCredits(creditsData.credits);
+          sessionStorage.setItem("credits", String(creditsData.credits));
+        }
       } catch (err) {
-        console.error("Failed to load shop items:", err);
+        console.error("Failed to load shop data:", err);
       } finally {
         setItemsLoading(false);
       }
     };
 
-    fetchItems();
+    fetchAll();
   }, []);
 
   const handlePurchase = async (item: ShopItem) => {
@@ -72,10 +86,7 @@ export default function Shop() {
             ? `You need ${data.required} credits but only have ${data.available}.`
             : data.error || "Purchase failed.";
         setPurchaseState({ itemId: item.id, status: "error", message: msg });
-        setTimeout(
-          () => setPurchaseState({ itemId: null, status: "idle", message: "" }),
-          3000,
-        );
+        setTimeout(() => setPurchaseState({ itemId: null, status: "idle", message: "" }), 3000);
         return;
       }
 
@@ -83,25 +94,11 @@ export default function Shop() {
       setCredits(data.newBalance);
       sessionStorage.setItem("credits", String(data.newBalance));
 
-      setPurchaseState({
-        itemId: item.id,
-        status: "success",
-        message: "Item Unlocked!",
-      });
-      setTimeout(
-        () => setPurchaseState({ itemId: null, status: "idle", message: "" }),
-        3000,
-      );
+      setPurchaseState({ itemId: item.id, status: "success", message: "Item Unlocked!" });
+      setTimeout(() => setPurchaseState({ itemId: null, status: "idle", message: "" }), 3000);
     } catch (err) {
-      setPurchaseState({
-        itemId: item.id,
-        status: "error",
-        message: "Something went wrong.",
-      });
-      setTimeout(
-        () => setPurchaseState({ itemId: null, status: "idle", message: "" }),
-        3000,
-      );
+      setPurchaseState({ itemId: item.id, status: "error", message: "Something went wrong." });
+      setTimeout(() => setPurchaseState({ itemId: null, status: "idle", message: "" }), 3000);
     }
   };
 
@@ -133,10 +130,7 @@ export default function Shop() {
           >
             <span
               className="font-sans font-bold"
-              style={{
-                color: "#0F1923",
-                fontSize: "clamp(0.85rem, 1vw, 1.1rem)",
-              }}
+              style={{ color: "#0F1923", fontSize: "clamp(0.85rem, 1vw, 1.1rem)" }}
             >
               You have{" "}
               <span style={{ color: "#00E5A0" }}>{credits} credits</span> to
@@ -153,10 +147,7 @@ export default function Shop() {
             <div className="flex justify-center py-24">
               <div
                 className="w-8 h-8 rounded-full border-4 animate-spin"
-                style={{
-                  borderColor: "#00E5A0",
-                  borderTopColor: "transparent",
-                }}
+                style={{ borderColor: "#00E5A0", borderTopColor: "transparent" }}
               />
             </div>
           ) : (

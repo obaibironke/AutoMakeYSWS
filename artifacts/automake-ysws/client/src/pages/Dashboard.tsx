@@ -1,126 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
+import DashboardNav from "../components/DashboardNav";
 
 const HACK_CLUB_AUTH_URL =
   "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
-
-function DashboardNav() {
-  const [location, setLocation] = useLocation();
-
-  const links = [
-    { label: "Showcase", href: "/showcase" },
-    { label: "Guides", href: "/guides" },
-  ];
-
-  const handleSignOut = () => {
-    sessionStorage.clear();
-    setLocation("/");
-  };
-
-  const userName = sessionStorage.getItem("user_name") || "User";
-  const credits = sessionStorage.getItem("credits") || "0";
-
-  return (
-    <nav
-      className="sticky top-0 z-50 shadow-sm"
-      style={{
-        background: "#0F1923",
-        borderBottom: "1px solid rgba(0,229,160,0.15)",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/">
-            <span
-              className="font-sans text-2xl font-extrabold tracking-tight cursor-pointer"
-              style={{ color: "#00E5A0" }}
-            >
-              Automake
-            </span>
-          </Link>
-
-          <div className="hidden md:flex items-center gap-8">
-            {links.map((link) => (
-              <Link key={link.href} href={link.href}>
-                <span
-                  className="font-sans text-sm font-medium transition-colors cursor-pointer"
-                  style={{
-                    color: location === link.href ? "#00E5A0" : "#F5F0E8",
-                    borderBottom:
-                      location === link.href ? "2px solid #00E5A0" : "none",
-                    paddingBottom: location === link.href ? "2px" : undefined,
-                  }}
-                >
-                  {link.label}
-                </span>
-              </Link>
-            ))}
-
-            <span
-              className="font-sans text-sm font-medium"
-              style={{
-                color: "#00E5A0",
-                borderBottom: "2px solid #00E5A0",
-                paddingBottom: "2px",
-              }}
-            >
-              Dashboard
-            </span>
-
-            <Link href="/shop">
-              <span
-                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
-                style={{
-                  background: "#FF5733",
-                  color: "white",
-                  boxShadow: "2px 2px 0px #F5F0E8",
-                }}
-              >
-                Shop
-              </span>
-            </Link>
-
-            <div
-              className="flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{
-                background: "rgba(0,229,160,0.1)",
-                border: "1px solid rgba(0,229,160,0.3)",
-              }}
-            >
-              <span
-                className="font-sans text-xs font-bold"
-                style={{ color: "#00E5A0" }}
-              >
-                {credits} credits
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span
-                className="font-sans text-sm font-semibold"
-                style={{ color: "#F5F0E8" }}
-              >
-                {userName.split(" ")[0]}
-              </span>
-              <button
-                onClick={handleSignOut}
-                className="font-sans text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-all"
-                style={{
-                  background: "rgba(255,87,51,0.15)",
-                  color: "#FF5733",
-                  border: "1px solid rgba(255,87,51,0.3)",
-                }}
-              >
-                Sign out
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
@@ -175,7 +59,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       <DashboardNav />
-
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -210,7 +93,7 @@ export default function Dashboard() {
           className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12"
         >
           {[
-            { label: "Credits Earned", value: credits, accent: "#00E5A0" },
+            { label: "Credits", value: credits, accent: "#00E5A0" },
             {
               label: "Projects Submitted",
               value: projectsSubmitted,

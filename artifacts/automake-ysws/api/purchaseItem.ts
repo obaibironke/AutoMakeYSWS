@@ -34,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       airtableFetch(
         `${encodeURIComponent(USERS_TABLE)}?filterByFormula=${encodeURIComponent(
           `{Slack ID} = "${slack_id}"`
-        )}&fields[]=Credits+Earned&fields[]=Slack+ID`
+        )}&fields[]=Credits&fields[]=Slack+ID`
       ),
       airtableFetch(`${encodeURIComponent(SHOP_TABLE)}/${item_id}`),
     ]);
@@ -52,15 +52,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const userRecordId = userRecord.id;
-    const creditsEarned: number = userRecord.fields["Credits Earned"] ?? 0;
+    const currentBalance: number = userRecord.fields["Credits"] ?? 0;
     const itemCost: number = itemData.fields["Cost"] ?? 0;
 
     // 2. GATEKEEPER — check balance
-    if (creditsEarned < itemCost) {
+    if (currentBalance < itemCost) {
       return res.status(400).json({
         error: "Insufficient credits",
         required: itemCost,
-        available: creditsEarned,
+        available: currentBalance,
       });
     }
 
@@ -83,8 +83,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({ error: "Failed to create order" });
     }
 
-    // 4. FEEDBACK — return new balance
-    const newBalance = creditsEarned - itemCost;
+    // 4. FEEDBACK — return new balance (Credits field will auto-update via rollup)
+    const newBalance = currentBalance - itemCost;
     return res.status(200).json({
       success: true,
       orderId: orderData.id,

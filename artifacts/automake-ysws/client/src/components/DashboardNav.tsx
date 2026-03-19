@@ -51,7 +51,6 @@ export default function DashboardNav() {
                 </span>
               </Link>
             ))}
-
             <Link href="/shop">
               <span
                 className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
@@ -64,7 +63,6 @@ export default function DashboardNav() {
                 Shop
               </span>
             </Link>
-
             <div
               className="flex items-center gap-2 px-4 py-1.5 rounded-full"
               style={{
@@ -79,7 +77,6 @@ export default function DashboardNav() {
                 {credits} credits
               </span>
             </div>
-
             <div className="flex items-center gap-3">
               <span
                 className="font-sans text-sm font-semibold"
