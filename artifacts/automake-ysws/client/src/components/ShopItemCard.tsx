@@ -20,26 +20,18 @@ export default function ShopItemCard({ item }: ShopItemCardProps) {
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <h3
-          className="font-sans text-lg font-bold leading-tight flex-1"
+          className="font-sans text-lg font-bold leading-tight"
           style={{ color: "#0F1923" }}
         >
           {item.name}
         </h3>
-        <span
-          className="font-sans text-xs font-bold px-2.5 py-1 rounded-full shrink-0"
-          style={{ background: "#00E5A0", color: "#0F1923" }}
-        >
-          {item.category}
-        </span>
       </div>
-
       <p
         className="font-sans text-sm leading-relaxed flex-1 mb-6"
         style={{ color: "#0F1923" }}
       >
         {item.description}
       </p>
-
       <div className="flex items-center justify-between mt-auto">
         <div className="flex items-center gap-1.5">
           <span
