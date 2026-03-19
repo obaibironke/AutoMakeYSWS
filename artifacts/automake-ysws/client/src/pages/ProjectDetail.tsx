@@ -46,14 +46,16 @@ export default function ProjectDetail() {
   const [sessionSuccess, setSessionSuccess] = useState(false);
 
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
-  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(
+    null,
+  );
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState("");
-  const [screenshotHovered, setScreenshotHovered] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
@@ -85,7 +87,7 @@ export default function ProjectDetail() {
         if (data.sessions) {
           setSessions(data.sessions);
           setTotalHours(
-            data.sessions.reduce((sum: number, s: Session) => sum + s.hours, 0)
+            data.sessions.reduce((sum: number, s: Session) => sum + s.hours, 0),
           );
         }
       } catch (err) {
@@ -177,27 +179,21 @@ export default function ProjectDetail() {
 
   const handleUploadScreenshot = async () => {
     if (!screenshotFile) return;
-
     setUploadLoading(true);
     setUploadError("");
-
     try {
       const formData = new FormData();
       formData.append("file", screenshotFile);
       formData.append("project_id", id);
-
       const response = await fetch("/api/uploadToCDN", {
         method: "POST",
         body: formData,
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Upload failed");
       }
-
       const data = await response.json();
-
       setProject((prev) => (prev ? { ...prev, screenshot: data.url } : null));
       setScreenshotFile(null);
       setScreenshotPreview(null);
@@ -205,7 +201,7 @@ export default function ProjectDetail() {
       setTimeout(() => setUploadSuccess(false), 3000);
     } catch (err) {
       setUploadError(
-        err instanceof Error ? err.message : "Upload failed. Please try again."
+        err instanceof Error ? err.message : "Upload failed. Please try again.",
       );
     } finally {
       setUploadLoading(false);
@@ -213,28 +209,24 @@ export default function ProjectDetail() {
   };
 
   const handleDeleteScreenshot = async () => {
-    if (!project?.screenshot) return;
-
     setDeleteLoading(true);
     setDeleteError("");
-
     try {
       const response = await fetch("/api/deleteScreenshot", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ project_id: id }),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Delete failed");
       }
-
       setProject((prev) => (prev ? { ...prev, screenshot: null } : null));
-      setScreenshotHovered(false);
+      setDeleteSuccess(true);
+      setTimeout(() => setDeleteSuccess(false), 3000);
     } catch (err) {
       setDeleteError(
-        err instanceof Error ? err.message : "Failed to delete screenshot."
+        err instanceof Error ? err.message : "Failed to delete screenshot.",
       );
     } finally {
       setDeleteLoading(false);
@@ -292,7 +284,7 @@ export default function ProjectDetail() {
             className="font-sans text-sm hover:underline cursor-pointer mb-8 inline-block"
             style={{ color: "#0F1923" }}
           >
-            ← Back to Dashboard
+            Back to Dashboard
           </span>
         </Link>
 
@@ -315,91 +307,18 @@ export default function ProjectDetail() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-
             {/* Screenshot */}
             <div
-              className="rounded-xl overflow-hidden relative"
+              className="rounded-xl overflow-hidden"
               style={{ border: "2px solid #0F1923" }}
-              onMouseEnter={() =>
-                project.screenshot &&
-                project.status === "Unsubmitted" &&
-                setScreenshotHovered(true)
-              }
-              onMouseLeave={() => setScreenshotHovered(false)}
             >
               {project.screenshot ? (
-                <>
-                  <img
-                    src={project.screenshot}
-                    alt={project.name}
-                    className="w-full object-cover"
-                    style={{ display: "block" }}
-                  />
-                  {project.status === "Unsubmitted" && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        background: "rgba(255,87,51,0.45)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        opacity: screenshotHovered ? 1 : 0,
-                        transition: "opacity 0.2s ease",
-                        pointerEvents: screenshotHovered ? "auto" : "none",
-                      }}
-                    >
-                      <button
-                        onClick={handleDeleteScreenshot}
-                        disabled={deleteLoading}
-                        title="Delete screenshot"
-                        style={{
-                          background: "rgba(255,255,255,0.15)",
-                          border: "2px solid white",
-                          borderRadius: "50%",
-                          width: 52,
-                          height: 52,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: deleteLoading ? "not-allowed" : "pointer",
-                          backdropFilter: "blur(4px)",
-                        }}
-                      >
-                        {deleteLoading ? (
-                          <div
-                            style={{
-                              width: 20,
-                              height: 20,
-                              border: "3px solid white",
-                              borderTopColor: "transparent",
-                              borderRadius: "50%",
-                              animation: "spin 0.7s linear infinite",
-                            }}
-                          />
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="22"
-                            height="22"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="white"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polyline points="3 6 5 6 21 6" />
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                            <path d="M10 11v6" />
-                            <path d="M14 11v6" />
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                          </svg>
-                        )}
-                      </button>
-                    </div>
-                  )}
-                </>
+                <img
+                  src={project.screenshot}
+                  alt={project.name}
+                  className="w-full object-cover"
+                  style={{ display: "block" }}
+                />
               ) : (
                 <div className="w-full h-48 flex items-center justify-center bg-white">
                   <p
@@ -412,16 +331,7 @@ export default function ProjectDetail() {
               )}
             </div>
 
-            {deleteError && (
-              <p
-                className="font-sans text-xs font-bold"
-                style={{ color: "#FF5733" }}
-              >
-                {deleteError}
-              </p>
-            )}
-
-            {/* Upload Screenshot */}
+            {/* Upload / Delete Screenshot — only for Unsubmitted */}
             {project.status === "Unsubmitted" && (
               <div
                 className="rounded-xl p-6 bg-white"
@@ -434,7 +344,9 @@ export default function ProjectDetail() {
                   className="font-sans text-xl font-extrabold mb-5"
                   style={{ color: "#0F1923" }}
                 >
-                  {project.screenshot ? "Update Screenshot" : "Upload Screenshot"}
+                  {project.screenshot
+                    ? "Update Screenshot"
+                    : "Upload Screenshot"}
                 </h2>
                 <div className="space-y-4">
                   <div>
@@ -507,11 +419,58 @@ export default function ProjectDetail() {
                     }}
                   >
                     {uploadSuccess
-                      ? "✓ Screenshot Uploaded!"
+                      ? "✓ Uploaded!"
                       : uploadLoading
-                        ? "Uploading to Hack Club CDN..."
+                        ? "Uploading..."
                         : "Upload Screenshot"}
                   </button>
+
+                  {/* Delete button — only show if there's an existing screenshot */}
+                  {project.screenshot && (
+                    <div>
+                      {deleteError && (
+                        <p
+                          className="font-sans text-xs font-bold mb-2"
+                          style={{ color: "#FF5733" }}
+                        >
+                          {deleteError}
+                        </p>
+                      )}
+                      <button
+                        onClick={handleDeleteScreenshot}
+                        disabled={deleteLoading || deleteSuccess}
+                        className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
+                        style={{
+                          background: deleteSuccess
+                            ? "#00E5A0"
+                            : deleteLoading
+                              ? "#ccc"
+                              : "transparent",
+                          color: deleteSuccess
+                            ? "#0F1923"
+                            : deleteLoading
+                              ? "#888"
+                              : "#FF5733",
+                          cursor:
+                            deleteLoading || deleteSuccess
+                              ? "not-allowed"
+                              : "pointer",
+                          border: "2px solid",
+                          borderColor: deleteSuccess
+                            ? "#00E5A0"
+                            : deleteLoading
+                              ? "#ccc"
+                              : "#FF5733",
+                        }}
+                      >
+                        {deleteSuccess
+                          ? "✓ Screenshot Removed"
+                          : deleteLoading
+                            ? "Removing..."
+                            : "Delete Screenshot"}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -701,58 +660,58 @@ export default function ProjectDetail() {
                   Work Sessions
                 </h2>
                 <div className="space-y-3">
-                  {sessions.map((session) => {
-                    const lapseUrl = session.lapseSession;
-                    const lapseLink = lapseUrl ? (
-
-                        href={lapseUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-sans text-xs font-bold underline"
-                        style={{ color: "#0F1923" }}
-                      >
-                        View Lapse Session →
-                      </a>
-                    ) : null;
-
-                    return (
-                      <div
-                        key={session.id}
-                        className="rounded-lg p-4"
-                        style={{
-                          background: "#F5F0E8",
-                          border: "1px solid rgba(15,25,35,0.1)",
-                        }}
-                      >
-                        <div className="flex items-center justify-between mb-1">
+                  {sessions.map((session) => (
+                    <div
+                      key={session.id}
+                      className="rounded-lg p-4"
+                      style={{
+                        background: "#F5F0E8",
+                        border: "1px solid rgba(15,25,35,0.1)",
+                      }}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span
+                          className="font-sans font-extrabold text-sm"
+                          style={{ color: "#0F1923" }}
+                        >
+                          {session.hours}{" "}
+                          {session.hours === 1 ? "hour" : "hours"}
+                        </span>
+                        {session.date && (
                           <span
-                            className="font-sans font-extrabold text-sm"
-                            style={{ color: "#0F1923" }}
+                            className="font-sans text-xs"
+                            style={{ color: "rgba(15,25,35,0.4)" }}
                           >
-                            {session.hours}{" "}
-                            {session.hours === 1 ? "hour" : "hours"}
+                            {new Date(session.date).toLocaleDateString()}
                           </span>
-                          {session.date && (
-                            <span
-                              className="font-sans text-xs"
-                              style={{ color: "rgba(15,25,35,0.4)" }}
-                            >
-                              {new Date(session.date).toLocaleDateString()}
-                            </span>
-                          )}
-                        </div>
-                        {session.notes && (
-                          <p
-                            className="font-sans text-sm leading-relaxed mb-2"
-                            style={{ color: "rgba(15,25,35,0.7)" }}
-                          >
-                            {session.notes}
-                          </p>
                         )}
-                        {lapseLink}
                       </div>
-                    );
-                  })}
+                      {session.notes && (
+                        <p
+                          className="font-sans text-sm leading-relaxed mb-2"
+                          style={{ color: "rgba(15,25,35,0.7)" }}
+                        >
+                          {session.notes}
+                        </p>
+                      )}
+                      {session.lapseSession && (
+                        <p
+                          className="font-sans text-xs font-bold"
+                          style={{ color: "#0F1923" }}
+                        >
+                          Lapse:{" "}
+                          <span
+                            className="underline cursor-pointer"
+                            onClick={() =>
+                              window.open(session.lapseSession, "_blank")
+                            }
+                          >
+                            View Session
+                          </span>
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -814,41 +773,27 @@ export default function ProjectDetail() {
             </div>
 
             {project.repoUrl && (
-
-                href={project.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
+              <div
+                className="rounded-xl p-5 bg-white cursor-pointer transition-all"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
+                onClick={() => window.open(project.repoUrl!, "_blank")}
               >
-                <div
-                  className="rounded-xl p-5 bg-white transition-all cursor-pointer"
-                  style={{
-                    border: "2px solid #0F1923",
-                    boxShadow: "3px 3px 0px #0F1923",
-                  }}
-                  onMouseEnter={(e) =>
-                    ((e.currentTarget as HTMLElement).style.boxShadow =
-                      "5px 5px 0px #0F1923")
-                  }
-                  onMouseLeave={(e) =>
-                    ((e.currentTarget as HTMLElement).style.boxShadow =
-                      "3px 3px 0px #0F1923")
-                  }
+                <h3
+                  className="font-sans font-bold text-sm mb-1"
+                  style={{ color: "#0F1923" }}
                 >
-                  <h3
-                    className="font-sans font-bold text-sm mb-1"
-                    style={{ color: "#0F1923" }}
-                  >
-                    Repository
-                  </h3>
-                  <p
-                    className="font-sans text-xs truncate"
-                    style={{ color: "rgba(15,25,35,0.5)" }}
-                  >
-                    {project.repoUrl}
-                  </p>
-                </div>
-              </a>
+                  Repository
+                </h3>
+                <p
+                  className="font-sans text-xs truncate"
+                  style={{ color: "rgba(15,25,35,0.5)" }}
+                >
+                  {project.repoUrl}
+                </p>
+              </div>
             )}
 
             <div className="rounded-xl p-5" style={{ background: "#0F1923" }}>
@@ -900,12 +845,6 @@ export default function ProjectDetail() {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 }
