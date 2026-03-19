@@ -33,8 +33,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const [userRes, itemRes] = await Promise.all([
       airtableFetch(
         `${encodeURIComponent(USERS_TABLE)}?filterByFormula=${encodeURIComponent(
-          `{Slack ID} = "${slack_id}"`,
-        )}&fields[]=Credits+Earned&fields[]=Slack+ID`,
+          `{Slack ID} = "${slack_id}"`
+        )}&fields[]=Credits+Earned&fields[]=Slack+ID`
       ),
       airtableFetch(`${encodeURIComponent(SHOP_TABLE)}/${item_id}`),
     ]);
@@ -69,7 +69,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: "POST",
       body: JSON.stringify({
         fields: {
-          User: [userRecordId],
+          Users: [userRecordId],
           Item: [item_id],
           "Credits Spent": itemCost,
         },
