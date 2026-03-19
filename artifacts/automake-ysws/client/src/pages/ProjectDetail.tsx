@@ -740,7 +740,7 @@ export default function ProjectDetail() {
                       )}
                       {session.lapseSession && (
 
-                          href={session.lapseSession as string}
+                          href={String(session.lapseSession)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="font-sans text-xs font-bold underline"
