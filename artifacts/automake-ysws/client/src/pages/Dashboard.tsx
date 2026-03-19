@@ -1,52 +1,50 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 import DashboardNav from "../components/DashboardNav";
-import axios from "axios";
+
+const HACK_CLUB_AUTH_URL =
+  "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
 
 export default function Dashboard() {
-  const [userName, setUserName] = useState(
-    sessionStorage.getItem("user_name") || "User",
-  );
-  const [credits, setCredits] = useState(
-    Number(sessionStorage.getItem("credits") || 0),
-  );
-  const [verified, setVerified] = useState(false);
+  const [, setLocation] = useLocation();
 
-  const fetchUserData = async () => {
+  const [userName, setUserName] = useState("");
+  const [credits, setCredits] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
     const slackId = sessionStorage.getItem("slack_id");
-    if (!slackId) return false; // not signed in
+    if (!slackId) {
+      window.location.href = HACK_CLUB_AUTH_URL;
+      return;
+    }
 
     try {
-      const res = await axios.get(`/api/getUser?slack_id=${slackId}`);
-      const user = res.data.user;
-      if (!user) return false;
-
-      setCredits(user.credits ?? 0);
-      setUserName(user.name ?? "User");
-      setVerified(user.verified ?? false);
-
-      sessionStorage.setItem("credits", String(user.credits ?? 0));
-      sessionStorage.setItem("user_name", user.name ?? "User");
-
-      return true;
+      const res = await fetch("/api/getUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slack_id: slackId }),
+      });
+      const data = await res.json();
+      if (data?.user) {
+        setUserName(data.user.name);
+        setCredits(data.user.credits);
+        setLoading(false);
+      }
     } catch (err) {
       console.error("Failed to fetch user data:", err);
-      return false;
     }
   };
 
   useEffect(() => {
-    const slackId = sessionStorage.getItem("slack_id");
-    if (!slackId) {
-      window.location.href = "/auth";
-      return;
-    }
+    fetchData(); // initial fetch
 
-    fetchUserData();
-
-    const interval = setInterval(fetchUserData, 30000);
+    const interval = setInterval(fetchData, 30000); // poll every 30 seconds
     return () => clearInterval(interval);
   }, []);
+
+  if (loading) return null; // prevents blank page / flicker
 
   const firstName = userName.split(" ")[0];
 
@@ -87,48 +85,34 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12"
         >
-          <div
-            className="bg-white rounded-xl p-6"
-            style={{
-              border: "2px solid #0F1923",
-              boxShadow: "3px 3px 0px #0F1923",
-            }}
-          >
-            <p
-              className="font-sans text-xs font-bold uppercase tracking-widest mb-2"
-              style={{ color: "rgba(15,25,35,0.45)" }}
+          {[
+            { label: "Credits Earned", value: credits, accent: "#00E5A0" },
+            { label: "Projects Submitted", value: 0, accent: "#FF5733" },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-xl p-6"
+              style={{
+                border: "2px solid #0F1923",
+                boxShadow: "3px 3px 0px #0F1923",
+              }}
             >
-              Credits Earned
-            </p>
-            <p
-              className="font-sans text-3xl font-extrabold"
-              style={{ color: "#00E5A0" }}
-            >
-              {credits}
-            </p>
-          </div>
-          <div
-            className="bg-white rounded-xl p-6"
-            style={{
-              border: "2px solid #0F1923",
-              boxShadow: "3px 3px 0px #0F1923",
-            }}
-          >
-            <p
-              className="font-sans text-xs font-bold uppercase tracking-widest mb-2"
-              style={{ color: "rgba(15,25,35,0.45)" }}
-            >
-              Projects Submitted
-            </p>
-            <p
-              className="font-sans text-3xl font-extrabold"
-              style={{ color: "#FF5733" }}
-            >
-              0
-            </p>
-          </div>
+              <p
+                className="font-sans text-xs font-bold uppercase tracking-widest mb-2"
+                style={{ color: "rgba(15,25,35,0.45)" }}
+              >
+                {stat.label}
+              </p>
+              <p
+                className="font-sans text-3xl font-extrabold"
+                style={{ color: stat.accent }}
+              >
+                {stat.value}
+              </p>
+            </div>
+          ))}
         </motion.div>
 
         {/* Projects section */}
@@ -231,7 +215,7 @@ export default function Dashboard() {
               >
                 Submit your first project
               </button>
-              <a href="/guides">
+              <Link href="/guides">
                 <span
                   className="font-sans font-bold px-6 py-3 rounded-lg text-sm cursor-pointer transition-all inline-block"
                   style={{
@@ -253,7 +237,7 @@ export default function Dashboard() {
                 >
                   Browse Guides
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </motion.div>
