@@ -81,6 +81,23 @@ function ManifestoPanel({ onClose }: { onClose: () => void }) {
   );
 }
 
+// Call this from the create project modal when it opens/closes
+// by dispatching a custom event
+function isUserTyping(): boolean {
+  const active = document.activeElement;
+  if (!active) return false;
+  const tag = active.tagName.toLowerCase();
+  if (tag === "input" || tag === "textarea" || tag === "select") return true;
+  if ((active as HTMLElement).isContentEditable) return true;
+  return false;
+}
+
+function isModalOpen(): boolean {
+  // Checks for the create project modal by looking for a known attribute
+  // we'll set on the modal's root element
+  return !!document.querySelector("[data-create-project-modal]");
+}
+
 function Router() {
   const [showManifesto, setShowManifesto] = useState(false);
   const [input, setInput] = useState("");
@@ -88,6 +105,12 @@ function Router() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't fire if user is typing in any input/textarea/contenteditable
+      if (isUserTyping()) return;
+
+      // Don't fire if the create project modal is open
+      if (isModalOpen()) return;
+
       const newInput = (input + e.key).slice(-8);
       setInput(newInput);
 
@@ -115,7 +138,7 @@ function Router() {
       </AnimatePresence>
 
       {!shouldHideFlag && (
-        <a
+
           href="https://hackclub.com"
           target="_blank"
           rel="noopener noreferrer"

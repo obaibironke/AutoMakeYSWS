@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 
-const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
 const HACK_CLUB_AUTH_URL =
   "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
 
@@ -9,7 +8,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [location, setLocation] = useLocation();
 
-  // ✅ Hide navbar on dashboard (and any sub-routes)
   if (
     location.startsWith("/dashboard") ||
     location.startsWith("/shop") ||
@@ -19,7 +17,7 @@ export default function Navbar() {
 
   const isSignedIn = !!sessionStorage.getItem("slack_id");
 
-  const handleDashboard = () => {
+  const handleSignIn = () => {
     if (isSignedIn) {
       setLocation("/dashboard");
     } else {
@@ -66,30 +64,16 @@ export default function Navbar() {
             ))}
 
             <button
-              onClick={handleDashboard}
-              className="font-sans text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
+              onClick={handleSignIn}
+              className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block border-none"
               style={{
-                color: location === "/dashboard" ? "#00E5A0" : "#F5F0E8",
-                borderBottom:
-                  location === "/dashboard" ? "2px solid #00E5A0" : "none",
-                paddingBottom: location === "/dashboard" ? "2px" : undefined,
+                background: "#00E5A0",
+                color: "#0F1923",
+                boxShadow: "2px 2px 0px #F5F0E8",
               }}
             >
-              Dashboard
+              {isSignedIn ? "Dashboard" : "Sign In"}
             </button>
-
-            <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
-              <span
-                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
-                style={{
-                  background: "#00E5A0",
-                  color: "#0F1923",
-                  boxShadow: "2px 2px 0px #F5F0E8",
-                }}
-              >
-                RSVP
-              </span>
-            </a>
           </div>
 
           <button
@@ -98,21 +82,15 @@ export default function Navbar() {
             aria-label="Toggle menu"
           >
             <span
-              className={`block w-6 h-0.5 transition-transform duration-300 ${
-                menuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
+              className={`block w-6 h-0.5 transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
               style={{ background: "#F5F0E8" }}
             />
             <span
-              className={`block w-6 h-0.5 transition-opacity duration-300 ${
-                menuOpen ? "opacity-0" : ""
-              }`}
+              className={`block w-6 h-0.5 transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`}
               style={{ background: "#F5F0E8" }}
             />
             <span
-              className={`block w-6 h-0.5 transition-transform duration-300 ${
-                menuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
+              className={`block w-6 h-0.5 transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
               style={{ background: "#F5F0E8" }}
             />
           </button>
@@ -142,27 +120,16 @@ export default function Navbar() {
           <button
             onClick={() => {
               setMenuOpen(false);
-              handleDashboard();
+              handleSignIn();
             }}
-            className="font-sans text-base font-medium cursor-pointer bg-transparent border-none p-0 text-left"
-            style={{ color: "#F5F0E8" }}
+            className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block border-none text-left"
+            style={{
+              background: "#00E5A0",
+              color: "#0F1923",
+            }}
           >
-            Dashboard
+            {isSignedIn ? "Dashboard" : "Sign In"}
           </button>
-
-          <a
-            href={RSVP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
-          >
-            <span
-              className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block text-center"
-              style={{ background: "#00E5A0", color: "#0F1923" }}
-            >
-              RSVP
-            </span>
-          </a>
         </div>
       )}
     </nav>
