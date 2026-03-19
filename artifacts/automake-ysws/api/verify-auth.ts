@@ -43,6 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     );
 
     const { id: slackId, name, email, verification_status } = userResponse.data;
+    return res.status(200).json({ debug: userResponse.data });
 
     // Step 3: Upsert user in Airtable
     const records = await table
