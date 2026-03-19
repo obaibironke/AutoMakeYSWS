@@ -42,41 +42,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
     );
 
-    const { id: slackId, name, email, verification_status } = userResponse.data;
-    return res.status(200).json({ debug: userResponse.data });
-
-    // Step 3: Upsert user in Airtable
-    const records = await table
-      .select({ filterByFormula: `{Slack ID} = '${slackId}'` })
-      .firstPage();
-
-    let userRecord;
-
-    if (records.length === 0) {
-      userRecord = await table.create({
-        "Slack ID": slackId,
-        Name: name,
-        Email: email,
-        Verified: verification_status === "verified" ? "Yes" : "No",
-        "Credits Earned": 0,
-      });
-    } else {
-      userRecord = await table.update(records[0].id, {
-        Name: name,
-        Email: email,
-        Verified: verification_status === "verified" ? "Yes" : "No",
-      });
-    }
-
+    // DEBUG: return raw Hack Club response so we can see all fields
+    // This returns success:true so the frontend won't error out,
+    // and we can see exactly what Hack Club sends back
     return res.status(200).json({
       success: true,
-      user: {
-        slack_id: slackId,
-        name,
-        email,
-        credits: userRecord.fields["Credits Earned"] || 0,
-      },
+      debug_hack_club_response: userResponse.data,
     });
+
   } catch (error: any) {
     console.error(
       "Auth error:",
