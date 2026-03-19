@@ -6,6 +6,7 @@ export default function DashboardNav() {
   const links = [
     { label: "Showcase", href: "/showcase" },
     { label: "Guides", href: "/guides" },
+    { label: "Dashboard", href: "/dashboard" },
   ];
 
   const handleSignOut = () => {
@@ -34,7 +35,6 @@ export default function DashboardNav() {
               Automake
             </span>
           </Link>
-
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -51,17 +51,6 @@ export default function DashboardNav() {
                 </span>
               </Link>
             ))}
-
-            <span
-              className="font-sans text-sm font-medium"
-              style={{
-                color: "#00E5A0",
-                borderBottom: "2px solid #00E5A0",
-                paddingBottom: "2px",
-              }}
-            >
-              Dashboard
-            </span>
 
             <Link href="/shop">
               <span
