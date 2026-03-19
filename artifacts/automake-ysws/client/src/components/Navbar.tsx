@@ -149,6 +149,7 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
+          >
             <span
               className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block text-center"
               style={{ background: "#00E5A0", color: "#0F1923" }}
