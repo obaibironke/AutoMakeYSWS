@@ -45,14 +45,12 @@ export default function ProjectDetail() {
   const [sessionError, setSessionError] = useState("");
   const [sessionSuccess, setSessionSuccess] = useState(false);
 
-  // Screenshot upload state
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  // Screenshot delete state
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState("");
   const [screenshotHovered, setScreenshotHovered] = useState(false);
@@ -298,7 +296,6 @@ export default function ProjectDetail() {
           </span>
         </Link>
 
-        {/* Header */}
         <div className="mb-10">
           <div className="flex flex-wrap items-center gap-3 mb-3">
             <span
@@ -317,7 +314,6 @@ export default function ProjectDetail() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main */}
           <div className="lg:col-span-2 space-y-8">
 
             {/* Screenshot */}
@@ -416,7 +412,6 @@ export default function ProjectDetail() {
               )}
             </div>
 
-            {/* Delete error */}
             {deleteError && (
               <p
                 className="font-sans text-xs font-bold"
@@ -708,6 +703,18 @@ export default function ProjectDetail() {
                 <div className="space-y-3">
                   {sessions.map((session) => {
                     const lapseUrl = session.lapseSession;
+                    const lapseLink = lapseUrl ? (
+
+                        href={lapseUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-sans text-xs font-bold underline"
+                        style={{ color: "#0F1923" }}
+                      >
+                        View Lapse Session →
+                      </a>
+                    ) : null;
+
                     return (
                       <div
                         key={session.id}
@@ -742,17 +749,7 @@ export default function ProjectDetail() {
                             {session.notes}
                           </p>
                         )}
-                        {lapseUrl && (
-
-                            href={lapseUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-sans text-xs font-bold underline"
-                            style={{ color: "#0F1923" }}
-                          >
-                            View Lapse Session →
-                          </a>
-                        )}
+                        {lapseLink}
                       </div>
                     );
                   })}
@@ -763,7 +760,6 @@ export default function ProjectDetail() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-            {/* Stats */}
             <div
               className="rounded-xl p-5 bg-white"
               style={{
@@ -817,7 +813,6 @@ export default function ProjectDetail() {
               </div>
             </div>
 
-            {/* Repo link */}
             {project.repoUrl && (
 
                 href={project.repoUrl}
@@ -856,7 +851,6 @@ export default function ProjectDetail() {
               </a>
             )}
 
-            {/* Status card */}
             <div className="rounded-xl p-5" style={{ background: "#0F1923" }}>
               <h3
                 className="font-sans text-xs font-bold uppercase tracking-widest mb-2"
