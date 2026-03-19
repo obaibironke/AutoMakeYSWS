@@ -2,10 +2,9 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import axios from "axios";
 import Airtable from "airtable";
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  process.env.AIRTABLE_BASE_ID!,
-);
-const table = base("Automake")("Active Users");
+const table = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
+  .base(process.env.AIRTABLE_BASE_ID!)
+  .table("Active Users");
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
