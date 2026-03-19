@@ -126,6 +126,7 @@ export default function Dashboard() {
   const [, setLocation] = useLocation();
   const [userName, setUserName] = useState("");
   const [credits, setCredits] = useState(0);
+  const [projectsSubmitted, setProjectsSubmitted] = useState(0);
 
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
@@ -136,28 +137,37 @@ export default function Dashboard() {
 
     setUserName(sessionStorage.getItem("user_name") || "");
     setCredits(Number(sessionStorage.getItem("credits")) || 0);
+    setProjectsSubmitted(
+      Number(sessionStorage.getItem("projects_submitted")) || 0,
+    );
 
-    const fetchCredits = async () => {
+    const fetchStats = async () => {
       try {
-        const res = await fetch("/api/getUser", {
+        const res = await fetch("/api/getCredits", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ slack_id: slackId }),
         });
         const data = await res.json();
-        if (data?.user) {
-          const newCredits = data.user.credits;
-          setCredits(newCredits);
-          sessionStorage.setItem("credits", String(newCredits));
+        if (typeof data.credits === "number") {
+          setCredits(data.credits);
+          sessionStorage.setItem("credits", String(data.credits));
+        }
+        if (typeof data.projectsSubmitted === "number") {
+          setProjectsSubmitted(data.projectsSubmitted);
+          sessionStorage.setItem(
+            "projects_submitted",
+            String(data.projectsSubmitted),
+          );
         }
       } catch (err) {
-        console.error("Failed to fetch credits:", err);
+        console.error("Failed to fetch stats:", err);
       }
     };
 
-    fetchCredits(); // run immediately
-    const interval = setInterval(fetchCredits, 30000); // then every 30s
-    return () => clearInterval(interval); // cleanup on unmount
+    fetchStats();
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const firstName = userName.split(" ")[0];
@@ -201,7 +211,11 @@ export default function Dashboard() {
         >
           {[
             { label: "Credits Earned", value: credits, accent: "#00E5A0" },
-            { label: "Projects Submitted", value: 0, accent: "#FF5733" },
+            {
+              label: "Projects Submitted",
+              value: projectsSubmitted,
+              accent: "#FF5733",
+            },
           ].map((stat, i) => (
             <div
               key={i}
