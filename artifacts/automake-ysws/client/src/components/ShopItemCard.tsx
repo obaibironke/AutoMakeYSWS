@@ -1,10 +1,51 @@
-import type { ShopItem } from "../data/shopItems";
+import type { ShopItem } from "../pages/Shop";
+
+interface PurchaseState {
+  itemId: string | null;
+  status: "idle" | "loading" | "success" | "error";
+  message: string;
+}
 
 interface ShopItemCardProps {
   item: ShopItem;
+  userCredits: number;
+  purchaseState: PurchaseState;
+  onPurchase: (item: ShopItem) => void;
 }
 
-export default function ShopItemCard({ item }: ShopItemCardProps) {
+export default function ShopItemCard({
+  item,
+  userCredits,
+  purchaseState,
+  onPurchase,
+}: ShopItemCardProps) {
+  const canAfford = userCredits >= item.cost;
+  const isLoading = purchaseState.status === "loading";
+  const isSuccess = purchaseState.status === "success";
+  const isError = purchaseState.status === "error";
+
+  const buttonStyle = isSuccess
+    ? { background: "#00E5A0", color: "#0F1923", border: "none" }
+    : isError
+      ? {
+          background: "rgba(255,87,51,0.15)",
+          color: "#FF5733",
+          border: "1px solid rgba(255,87,51,0.3)",
+        }
+      : canAfford
+        ? { background: "#0F1923", color: "#00E5A0", border: "none" }
+        : { background: "#ccc", color: "#888", border: "1px solid #bbb" };
+
+  const buttonLabel = isLoading
+    ? "Processing..."
+    : isSuccess
+      ? "✓ Unlocked!"
+      : isError
+        ? purchaseState.message
+        : canAfford
+          ? "Unlock"
+          : "Locked";
+
   return (
     <div
       className="bg-white rounded-xl p-6 flex flex-col transition-all duration-200"
@@ -18,7 +59,7 @@ export default function ShopItemCard({ item }: ShopItemCardProps) {
           "3px 3px 0px #0F1923")
       }
     >
-      <div className="flex items-start justify-between gap-3 mb-3">
+      <div className="mb-3">
         <h3
           className="font-sans text-lg font-bold leading-tight"
           style={{ color: "#0F1923" }}
@@ -33,24 +74,23 @@ export default function ShopItemCard({ item }: ShopItemCardProps) {
         {item.description}
       </p>
       <div className="flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-1.5">
-          <span
-            className="font-sans text-2xl font-bold"
-            style={{ color: "#0F1923" }}
-          >
-            {item.cost.toLocaleString()} credits
-          </span>
-        </div>
+        <span
+          className="font-sans text-2xl font-bold"
+          style={{ color: "#0F1923" }}
+        >
+          {item.cost.toLocaleString()} credits
+        </span>
         <button
-          disabled
-          className="font-sans text-sm font-semibold px-5 py-2.5 rounded-lg cursor-not-allowed"
+          disabled={!canAfford || isLoading || isSuccess}
+          onClick={() => onPurchase(item)}
+          className="font-sans text-sm font-semibold px-5 py-2.5 rounded-lg transition-all"
           style={{
-            background: "#ccc",
-            color: "#888",
-            border: "1px solid #bbb",
+            ...buttonStyle,
+            cursor:
+              canAfford && !isLoading && !isSuccess ? "pointer" : "not-allowed",
           }}
         >
-          Locked
+          {buttonLabel}
         </button>
       </div>
     </div>
