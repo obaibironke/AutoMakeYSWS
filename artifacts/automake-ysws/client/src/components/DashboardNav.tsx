@@ -1,9 +1,6 @@
-interface DashboardNavProps {
-  credits: number;
-  userName: string;
-}
+import { Link, useLocation } from "wouter";
 
-export default function DashboardNav({ credits, userName }: DashboardNavProps) {
+export default function DashboardNav() {
   const [location, setLocation] = useLocation();
 
   const links = [
@@ -15,6 +12,9 @@ export default function DashboardNav({ credits, userName }: DashboardNavProps) {
     sessionStorage.clear();
     setLocation("/");
   };
+
+  const userName = sessionStorage.getItem("user_name") || "User";
+  const credits = sessionStorage.getItem("credits") || "0";
 
   return (
     <nav
@@ -52,21 +52,30 @@ export default function DashboardNav({ credits, userName }: DashboardNavProps) {
               </Link>
             ))}
 
-            {/* Dashboard button */}
-            <button
-              onClick={() => setLocation("/dashboard")}
-              className="font-sans text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
+            <span
+              className="font-sans text-sm font-medium"
               style={{
-                color: location === "/dashboard" ? "#00E5A0" : "#F5F0E8",
-                borderBottom:
-                  location === "/dashboard" ? "2px solid #00E5A0" : "none",
-                paddingBottom: location === "/dashboard" ? "2px" : undefined,
+                color: "#00E5A0",
+                borderBottom: "2px solid #00E5A0",
+                paddingBottom: "2px",
               }}
             >
               Dashboard
-            </button>
+            </span>
 
-            {/* Credits pill */}
+            <Link href="/shop">
+              <span
+                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
+                style={{
+                  background: "#FF5733",
+                  color: "white",
+                  boxShadow: "2px 2px 0px #F5F0E8",
+                }}
+              >
+                Shop
+              </span>
+            </Link>
+
             <div
               className="flex items-center gap-2 px-4 py-1.5 rounded-full"
               style={{
@@ -82,7 +91,6 @@ export default function DashboardNav({ credits, userName }: DashboardNavProps) {
               </span>
             </div>
 
-            {/* User + sign out */}
             <div className="flex items-center gap-3">
               <span
                 className="font-sans text-sm font-semibold"
