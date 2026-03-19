@@ -19,7 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const filter = encodeURIComponent(`{Slack ID (from User)} = "${slack_id}"`);
+    const filter = encodeURIComponent(`{Slack ID} = "${slack_id}"`);
     const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}&sort[0][field]=Created+Time&sort[0][direction]=desc`;
 
     const airtableRes = await fetch(url, {

@@ -1,26 +1,27 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const BASE_ID = "appqHPb7zQXJeFYIZ";
-const PROJECTS_TABLE = "Projects";
+const AIRTABLE_BASE_ID = "appqHPb7zQXJeFYIZ";
+const AIRTABLE_TABLE = "Active Users";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "GET") {
+  if (req.method !== "POST" && req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { id } = req.query;
-  if (!id) {
-    return res.status(400).json({ error: "Missing project id" });
+  const slack_id = req.method === "POST" ? req.body?.slack_id : req.query?.slack_id;
+
+  if (!slack_id) {
+    return res.status(400).json({ error: "Missing slack_id" });
   }
 
   const apiKey = process.env.AIRTABLE_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "Missing API key" });
+    return res.status(500).json({ error: "Missing Airtable API key" });
   }
 
   try {
-    const filter = encodeURIComponent(`{Project ID} = "${id}"`);
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}`;
+    const filter = encodeURIComponent(`{Slack ID} = "${slack_id}"`);
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}?filterByFormula=${filter}&fields[]=Credits&fields[]=Projects+Submitted`;
 
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
@@ -30,26 +31,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const record = data.records?.[0];
 
     if (!record) {
-      return res.status(404).json({ error: "Project not found" });
+      return res.status(404).json({ error: "User not found" });
     }
 
     return res.status(200).json({
-      project: {
-        id: record.fields["Project ID"],
-        recordId: record.id,
-        name: record.fields["Project Name"] ?? "",
-        description: record.fields["Description"] ?? "",
-        status: record.fields["Status"] ?? "Pending Review",
-        submittedAt: record.fields["Submitted At"] ?? null,
-        repoUrl: record.fields["Repo URL"] ?? null,
-        howToTest: record.fields["How to test?"] ?? null,
-        screenshot: record.fields["Screenshot"]?.[0]?.url ?? null,
-        creditsAwarded: record.fields["Credits Awarded"] ?? null,
-        hoursLogged: record.fields["Hours Logged"] ?? null,
-      },
+      credits: record.fields["Credits"] ?? 0,
+      projectsSubmitted: record.fields["Projects Submitted"] ?? 0,
     });
   } catch (err) {
-    console.error("Failed to fetch project:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    console.error("Airtable fetch error:", err);
+    return res.status(500).json({ error: "Failed to fetch from Airtable" });
   }
 }
