@@ -33,8 +33,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Step 1: find the user's Airtable record ID
     const userRes = await airtableFetch(
       `${encodeURIComponent(USERS_TABLE)}?filterByFormula=${encodeURIComponent(
-        `{Slack ID} = "${slack_id}"`
-      )}&fields[]=Slack+ID`
+        `{Slack ID Formula} = "${slack_id}"`,
+      )}&fields[]=Slack+ID`,
     );
     const userData = await userRes.json();
     const userRecord = userData.records?.[0];
@@ -44,7 +44,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Step 2: filter projects by the user's record ID via the User linked field
-    const filter = encodeURIComponent(`FIND("${userRecord.id}", ARRAYJOIN(User))`);
+    const filter = encodeURIComponent(
+      `FIND("${userRecord.id}", ARRAYJOIN(User))`,
+    );
     const url = `${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}&sort[0][field]=Created+Time&sort[0][direction]=desc`;
 
     const projectsRes = await airtableFetch(url);
