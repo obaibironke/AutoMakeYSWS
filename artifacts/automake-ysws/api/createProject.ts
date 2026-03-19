@@ -51,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         fields: {
           "Project Name": name,
           Description: description,
-          Status: "Pending Review",
+          Status: "Unsubmitted",
           User: [userRecord.id],
         },
       }),
