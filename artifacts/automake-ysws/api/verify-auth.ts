@@ -32,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const { access_token } = tokenResponse.data;
 
-    // Step 2: Use access token to get user info
+    // Step 2: Get user info
     const userResponse = await axios.get(
       "https://auth.hackclub.com/api/v1/me",
       {
@@ -40,7 +40,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
     );
 
-    // Fields are nested under identity
     const {
       slack_id,
       first_name,
@@ -53,7 +52,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const name = `${first_name} ${last_name}`.trim();
     const isVerified = verification_status === "verified";
 
-    // Step 3: Check if user already exists
+    // Step 3: Check if user already exists in Airtable
     const records = await table
       .select({ filterByFormula: `{Slack ID} = '${slack_id}'` })
       .firstPage();
@@ -61,7 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let userRecord;
 
     if (records.length > 0) {
-      // User exists — just return their data, no writes
+      // User already exists — just return their existing data
       userRecord = records[0];
     } else {
       // New user — create record
