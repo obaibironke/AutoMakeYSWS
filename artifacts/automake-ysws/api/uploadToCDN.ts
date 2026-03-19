@@ -14,8 +14,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const CDN_API_KEY = process.env.CDN_API_KEY;
+  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+
   if (!CDN_API_KEY) {
     return res.status(500).json({ error: "CDN API key not configured" });
+  }
+  if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
+    return res.status(500).json({ error: "Airtable not configured" });
   }
 
   try {
@@ -68,13 +74,46 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!cdnResponse.ok) {
       return res.status(cdnResponse.status).json({
         error: cdnData.error || "CDN upload failed",
-        // Surface quota details if it's a 402
         ...(cdnData.quota && { quota: cdnData.quota }),
       });
     }
 
-    // Update your database here if needed:
-    // await db.query('UPDATE projects SET screenshot = $1 WHERE id = $2', [cdnData.url, projectId]);
+    // Save screenshot URL to Airtable — projectId is the record ID directly
+    // since the Project ID field is a formula returning the record ID
+    const airtableResponse = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Projects/${projectId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fields: {
+            Screenshot: cdnData.url, // fixed: was "Screenshots"
+          },
+        }),
+      },
+    );
+
+    const airtableContentType =
+      airtableResponse.headers.get("content-type") || "";
+    if (!airtableContentType.includes("application/json")) {
+      const text = await airtableResponse.text();
+      console.error("Airtable returned non-JSON response:", text);
+      return res
+        .status(502)
+        .json({ error: "Airtable returned unexpected response" });
+    }
+
+    const airtableData = await airtableResponse.json();
+
+    if (!airtableResponse.ok) {
+      console.error("Airtable error:", airtableData);
+      return res.status(airtableResponse.status).json({
+        error: airtableData.error?.message || "Failed to save to Airtable",
+      });
+    }
 
     return res.status(200).json({
       url: cdnData.url,

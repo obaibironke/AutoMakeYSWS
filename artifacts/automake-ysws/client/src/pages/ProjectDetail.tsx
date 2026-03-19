@@ -52,6 +52,11 @@ export default function ProjectDetail() {
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
+  // Screenshot delete state
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+  const [screenshotHovered, setScreenshotHovered] = useState(false);
+
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
     if (!slackId) {
@@ -82,7 +87,7 @@ export default function ProjectDetail() {
         if (data.sessions) {
           setSessions(data.sessions);
           setTotalHours(
-            data.sessions.reduce((sum: number, s: Session) => sum + s.hours, 0),
+            data.sessions.reduce((sum: number, s: Session) => sum + s.hours, 0)
           );
         }
       } catch (err) {
@@ -153,7 +158,6 @@ export default function ProjectDetail() {
     }
   };
 
-  // Handle screenshot file selection
   const handleScreenshotChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
@@ -163,7 +167,6 @@ export default function ProjectDetail() {
       }
       setScreenshotFile(file);
       setUploadError("");
-      // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setScreenshotPreview(reader.result as string);
@@ -174,7 +177,6 @@ export default function ProjectDetail() {
     }
   };
 
-  // Upload screenshot to CDN
   const handleUploadScreenshot = async () => {
     if (!screenshotFile) return;
 
@@ -198,7 +200,6 @@ export default function ProjectDetail() {
 
       const data = await response.json();
 
-      // Update local state with the CDN URL
       setProject((prev) => (prev ? { ...prev, screenshot: data.url } : null));
       setScreenshotFile(null);
       setScreenshotPreview(null);
@@ -206,11 +207,40 @@ export default function ProjectDetail() {
       setTimeout(() => setUploadSuccess(false), 3000);
     } catch (err) {
       setUploadError(
-        err instanceof Error ? err.message : "Upload failed. Please try again.",
+        err instanceof Error ? err.message : "Upload failed. Please try again."
       );
-      console.error("Upload error:", err);
     } finally {
       setUploadLoading(false);
+    }
+  };
+
+  const handleDeleteScreenshot = async () => {
+    if (!project?.screenshot) return;
+
+    setDeleteLoading(true);
+    setDeleteError("");
+
+    try {
+      const response = await fetch("/api/deleteScreenshot", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: id }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Delete failed");
+      }
+
+      // Clear screenshot from local state
+      setProject((prev) => (prev ? { ...prev, screenshot: null } : null));
+      setScreenshotHovered(false);
+    } catch (err) {
+      setDeleteError(
+        err instanceof Error ? err.message : "Failed to delete screenshot."
+      );
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -290,17 +320,90 @@ export default function ProjectDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main */}
           <div className="lg:col-span-2 space-y-8">
+
             {/* Screenshot */}
             <div
-              className="rounded-xl overflow-hidden"
+              className="rounded-xl overflow-hidden relative"
               style={{ border: "2px solid #0F1923" }}
+              onMouseEnter={() => project.screenshot && project.status === "Unsubmitted" && setScreenshotHovered(true)}
+              onMouseLeave={() => setScreenshotHovered(false)}
             >
               {project.screenshot ? (
-                <img
-                  src={project.screenshot}
-                  alt={project.name}
-                  className="w-full object-cover"
-                />
+                <>
+                  <img
+                    src={project.screenshot}
+                    alt={project.name}
+                    className="w-full object-cover"
+                    style={{ display: "block" }}
+                  />
+                  {/* Delete overlay — only on Unsubmitted projects */}
+                  {project.status === "Unsubmitted" && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "rgba(255,87,51,0.45)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: screenshotHovered ? 1 : 0,
+                        transition: "opacity 0.2s ease",
+                        pointerEvents: screenshotHovered ? "auto" : "none",
+                      }}
+                    >
+                      <button
+                        onClick={handleDeleteScreenshot}
+                        disabled={deleteLoading}
+                        title="Delete screenshot"
+                        style={{
+                          background: "rgba(255,255,255,0.15)",
+                          border: "2px solid white",
+                          borderRadius: "50%",
+                          width: 52,
+                          height: 52,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: deleteLoading ? "not-allowed" : "pointer",
+                          backdropFilter: "blur(4px)",
+                        }}
+                      >
+                        {deleteLoading ? (
+                          // Spinner
+                          <div
+                            style={{
+                              width: 20,
+                              height: 20,
+                              border: "3px solid white",
+                              borderTopColor: "transparent",
+                              borderRadius: "50%",
+                              animation: "spin 0.7s linear infinite",
+                            }}
+                          />
+                        ) : (
+                          // Trash icon
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                            <path d="M10 11v6" />
+                            <path d="M14 11v6" />
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="w-full h-48 flex items-center justify-center bg-white">
                   <p
@@ -312,6 +415,13 @@ export default function ProjectDetail() {
                 </div>
               )}
             </div>
+
+            {/* Delete error */}
+            {deleteError && (
+              <p className="font-sans text-xs font-bold" style={{ color: "#FF5733" }}>
+                {deleteError}
+              </p>
+            )}
 
             {/* Upload Screenshot (only show for Unsubmitted projects) */}
             {project.status === "Unsubmitted" && (
@@ -629,7 +739,7 @@ export default function ProjectDetail() {
                         </p>
                       )}
                       {session.lapseSession && (
-                        <a
+
                           href={session.lapseSession}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -704,7 +814,7 @@ export default function ProjectDetail() {
 
             {/* Repo link */}
             {project.repoUrl && (
-              <a
+
                 href={project.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -791,6 +901,13 @@ export default function ProjectDetail() {
           </div>
         </div>
       </div>
+
+      {/* Keyframe for spinner inside delete button */}
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
