@@ -19,9 +19,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Filter by the Name (from User) lookup or by User linked field
     const filter = encodeURIComponent(`{Slack ID (from User)} = "${slack_id}"`);
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}&sort[0][field]=Submitted+At&sort[0][direction]=desc`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}?filterByFormula=${filter}&sort[0][field]=Created+Time&sort[0][direction]=desc`;
 
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
@@ -30,10 +29,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const data = await airtableRes.json();
 
     const projects = (data.records || []).map((record: any) => ({
-      id: record.fields["Project ID"],
+      id: record.id,
       name: record.fields["Project Name"] ?? "",
       status: record.fields["Status"] ?? "Pending Review",
-      submittedAt: record.fields["Submitted At"] ?? null,
       creditsAwarded: record.fields["Credits Awarded"] ?? null,
       hoursLogged: record.fields["Hours Logged"] ?? null,
     }));

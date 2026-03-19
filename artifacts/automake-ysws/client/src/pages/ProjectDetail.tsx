@@ -5,12 +5,10 @@ const HACK_CLUB_AUTH_URL =
   "https://auth.hackclub.com/oauth/authorize?client_id=c89f85642fe94c65cbead982b0b7e9b8&redirect_uri=http://automake.dino.icu/auth&response_type=code&scope=profile%20email%20name%20slack_id%20verification_status";
 
 interface Project {
-  id: number;
-  recordId: string;
+  id: string;
   name: string;
   description: string;
   status: string;
-  submittedAt: string | null;
   repoUrl: string | null;
   howToTest: string | null;
   screenshot: string | null;
@@ -81,7 +79,6 @@ export default function ProjectDetail() {
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-        {/* Back */}
         <Link href="/dashboard">
           <span className="font-sans text-sm hover:underline cursor-pointer mb-8 inline-block" style={{ color: "#0F1923" }}>
             ← Back to Dashboard
@@ -97,11 +94,6 @@ export default function ProjectDetail() {
             >
               {project.status}
             </span>
-            {project.submittedAt && (
-              <span className="font-sans text-xs" style={{ color: "rgba(15,25,35,0.5)" }}>
-                Submitted {new Date(project.submittedAt).toLocaleDateString()}
-              </span>
-            )}
           </div>
           <h1 className="font-sans text-4xl sm:text-5xl font-extrabold mb-2" style={{ color: "#0F1923" }}>
             {project.name}
@@ -176,10 +168,7 @@ export default function ProjectDetail() {
             )}
 
             {/* Status card */}
-            <div
-              className="rounded-xl p-5"
-              style={{ background: "#0F1923" }}
-            >
+            <div className="rounded-xl p-5" style={{ background: "#0F1923" }}>
               <h3 className="font-sans text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(245,240,232,0.5)" }}>Review Status</h3>
               <p className="font-sans font-extrabold text-lg" style={{ color: statusStyle.color }}>{project.status}</p>
               {project.status === "Pending Review" && (

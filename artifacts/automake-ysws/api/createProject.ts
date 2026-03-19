@@ -33,7 +33,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // First find the user's record ID
     const userRes = await airtableFetch(
       `${encodeURIComponent(USERS_TABLE)}?filterByFormula=${encodeURIComponent(
         `{Slack ID} = "${slack_id}"`,
@@ -46,7 +45,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Create the project
     const createRes = await airtableFetch(encodeURIComponent(PROJECTS_TABLE), {
       method: "POST",
       body: JSON.stringify({
@@ -68,7 +66,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({
       success: true,
-      projectId: createData.fields["Project ID"],
       recordId: createData.id,
     });
   } catch (err) {
