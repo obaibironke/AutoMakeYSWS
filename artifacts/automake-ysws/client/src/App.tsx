@@ -1,4 +1,4 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
@@ -84,6 +84,7 @@ function ManifestoPanel({ onClose }: { onClose: () => void }) {
 function Router() {
   const [showManifesto, setShowManifesto] = useState(false);
   const [input, setInput] = useState("");
+  const [location] = useLocation();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,6 +101,11 @@ function Router() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [input]);
 
+  const hideFlagRoutes = ["/dashboard", "/shop"];
+  const shouldHideFlag = hideFlagRoutes.some((route) =>
+    location.startsWith(route),
+  );
+
   return (
     <div>
       <AnimatePresence>
@@ -108,19 +114,23 @@ function Router() {
         )}
       </AnimatePresence>
 
-      <a
-        href="https://hackclub.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ position: "fixed", top: "100px", left: "0px", zIndex: 9999 }}
-      >
-        <img
-          src="https://assets.hackclub.com/flag-orpheus-left.svg"
-          alt="Hack Club"
-          style={{ width: "200px" }}
-        />
-      </a>
+      {!shouldHideFlag && (
+        <a
+          href="https://hackclub.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ position: "fixed", top: "100px", left: "0px", zIndex: 9999 }}
+        >
+          <img
+            src="https://assets.hackclub.com/flag-orpheus-left.svg"
+            alt="Hack Club"
+            style={{ width: "200px" }}
+          />
+        </a>
+      )}
+
       <Navbar />
+
       <main>
         <Switch>
           <Route path="/" component={Landing} />
