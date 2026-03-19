@@ -35,6 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       hours: record.fields["Hours"] ?? 0,
       notes: record.fields["Notes"] ?? "",
       date: record.fields["Date"] ?? "",
+      lapseSession: record.fields["Link to Lapse Session"] ?? "",
     }));
 
     return res.status(200).json({ sessions });

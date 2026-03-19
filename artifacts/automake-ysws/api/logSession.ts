@@ -8,9 +8,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { project_id, hours, notes } = req.body;
+  const { project_id, hours, notes, lapseSession } = req.body;
 
-  if (!project_id || !hours) {
+  if (!project_id || !hours || !notes || !lapseSession) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -32,7 +32,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           fields: {
             Project: [project_id],
             Hours: Number(hours),
-            Notes: notes || "",
+            Notes: notes,
+            "Link to Lapse Session": lapseSession,
             Date: new Date().toISOString().split("T")[0],
           },
         }),
@@ -53,6 +54,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         hours: data.fields["Hours"],
         notes: data.fields["Notes"],
         date: data.fields["Date"],
+        lapseSession: data.fields["Link to Lapse Session"],
       },
     });
   } catch (err) {
