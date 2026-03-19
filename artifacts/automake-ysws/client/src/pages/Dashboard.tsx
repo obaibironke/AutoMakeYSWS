@@ -10,7 +10,11 @@ export default function Dashboard() {
   const [, setLocation] = useLocation();
 
   const [userName, setUserName] = useState("");
-  const [credits, setCredits] = useState(0);
+  const [credits, setCredits] = useState(() => {
+    // Initialize from localStorage so the value is immediately available
+    const cached = localStorage.getItem("credits");
+    return cached ? parseInt(cached, 10) : 0;
+  });
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -29,11 +33,20 @@ export default function Dashboard() {
       const data = await res.json();
       if (data?.user) {
         setUserName(data.user.name);
-        setCredits(data.user.credits);
-        setLoading(false);
+        const newCredits = data.user.credits;
+        setCredits(newCredits);
+        // Save updated credits to localStorage after every successful poll
+        localStorage.setItem("credits", String(newCredits));
       }
     } catch (err) {
       console.error("Failed to fetch user data:", err);
+      // On error, restore name from localStorage if available so the page
+      // doesn't go blank — credits are already seeded from localStorage above
+      const cachedName = localStorage.getItem("userName");
+      if (cachedName) setUserName(cachedName);
+    } finally {
+      // Always stop the loading spinner, even on failure, to prevent blank page
+      setLoading(false);
     }
   };
 
@@ -43,6 +56,11 @@ export default function Dashboard() {
     const interval = setInterval(fetchData, 30000); // poll every 30 seconds
     return () => clearInterval(interval);
   }, []);
+
+  // Also persist userName to localStorage whenever it changes
+  useEffect(() => {
+    if (userName) localStorage.setItem("userName", userName);
+  }, [userName]);
 
   if (loading) return null; // prevents blank page / flicker
 
