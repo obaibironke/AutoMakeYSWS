@@ -11,7 +11,6 @@ import MarqueeStrip from "../components/MarqueeStrip";
 
 const RSVP_URL = "https://forms.fillout.com/t/aMV1bXZoGvus";
 
-/* ─── Data ────────────────────────────────────────────────── */
 const steps = [
   { label: "Build an automation project" },
   { label: "Log your hours & submit" },
@@ -50,7 +49,6 @@ const faqItems = [
   },
 ];
 
-/* ─── Accordion ───────────────────────────────────────────── */
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -111,7 +109,6 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* ─── Section content variants ────────────────────────────── */
 const contentVariants = {
   enter: (d: number) => ({ y: d > 0 ? 90 : -90, opacity: 0 }),
   center: {
@@ -126,7 +123,6 @@ const contentVariants = {
   }),
 };
 
-/* ─── Scrollable section hook ────────────────────────────── */
 function useScrollBoundary(
   onScrollStateChange: (state: {
     isAtTop: boolean;
@@ -147,17 +143,12 @@ function useScrollBoundary(
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-
     el.addEventListener("scroll", checkScroll);
     checkScroll();
-
-    // Re-check whenever the content height changes (e.g. FAQ expanding)
     const ro = new ResizeObserver(() => checkScroll());
     ro.observe(el);
-    // Also observe the inner content so expanding children trigger it
     const inner = el.firstElementChild;
     if (inner) ro.observe(inner);
-
     return () => {
       el.removeEventListener("scroll", checkScroll);
       ro.disconnect();
@@ -167,7 +158,6 @@ function useScrollBoundary(
   return scrollRef;
 }
 
-/* ─── Hero ───────────────────────────────────────────────── */
 function HeroSection({
   dir,
   blobX,
@@ -389,7 +379,7 @@ function HeroSection({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75, duration: 0.5 }}
         >
-          <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
+          <span onClick={() => window.open(RSVP_URL, "_blank")}>
             <motion.span
               whileHover={{ rotate: -1, y: 2 }}
               whileTap={{ scale: 0.97 }}
@@ -412,7 +402,7 @@ function HeroSection({
             >
               RSVP Now
             </motion.span>
-          </a>
+          </span>
           <Link href="/guides">
             <motion.span
               whileHover={{ rotate: 1, y: 2 }}
@@ -465,7 +455,6 @@ function HeroSection({
   );
 }
 
-/* ─── About ──────────────────────────────────────────────── */
 function AboutSection({ dir }: { dir: number }) {
   return (
     <div
@@ -572,7 +561,6 @@ function AboutSection({ dir }: { dir: number }) {
   );
 }
 
-/* ─── How It Works ───────────────────────────────────────── */
 function HowItWorksSection({ dir }: { dir: number }) {
   return (
     <div
@@ -659,7 +647,6 @@ function HowItWorksSection({ dir }: { dir: number }) {
   );
 }
 
-/* ─── Integrations ───────────────────────────────────────── */
 const integrationLogos: Array<{
   slug: string;
   name: string;
@@ -912,7 +899,6 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
   );
 }
 
-/* ─── RSVP Section ───────────────────────────────────────── */
 function RsvpSection({ dir }: { dir: number }) {
   return (
     <div
@@ -980,7 +966,7 @@ function RsvpSection({ dir }: { dir: number }) {
           Guides are free and open to everyone, you don't need to sign up to
           start.
         </p>
-        <a href={RSVP_URL} target="_blank" rel="noopener noreferrer">
+        <span onClick={() => window.open(RSVP_URL, "_blank")}>
           <motion.span
             whileHover={{ rotate: -1, y: 2 }}
             whileTap={{ scale: 0.97 }}
@@ -1003,7 +989,7 @@ function RsvpSection({ dir }: { dir: number }) {
           >
             RSVP →
           </motion.span>
-        </a>
+        </span>
         <div className="mt-10 flex items-center justify-center gap-4">
           <div
             style={{
@@ -1035,7 +1021,6 @@ function RsvpSection({ dir }: { dir: number }) {
   );
 }
 
-/* ─── FAQ ────────────────────────────────────────────────── */
 function FaqSectionContent({
   dir,
   onScrollStateChange,
@@ -1047,7 +1032,6 @@ function FaqSectionContent({
   }) => void;
 }) {
   const scrollRef = useScrollBoundary(onScrollStateChange);
-
   return (
     <div
       ref={scrollRef}
@@ -1083,7 +1067,6 @@ function FaqSectionContent({
   );
 }
 
-/* ─── Footer Section ─────────────────────────────────────── */
 function FooterSection({
   dir,
   onScrollStateChange,
@@ -1095,7 +1078,6 @@ function FooterSection({
   }) => void;
 }) {
   const scrollRef = useScrollBoundary(onScrollStateChange);
-
   return (
     <div
       ref={scrollRef}
@@ -1115,15 +1097,15 @@ function FooterSection({
           style={{ color: "#F5F0E8" }}
         >
           A project by{" "}
-          <a
-            href="https://hackclub.com?utm_source=automake"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline transition-colors"
+          <span
+            className="underline transition-colors cursor-pointer"
             style={{ color: "#00E5A0" }}
+            onClick={() =>
+              window.open("https://hackclub.com?utm_source=automake", "_blank")
+            }
           >
             Hack Club
-          </a>{" "}
+          </span>{" "}
           built by @Oba.
         </p>
         <p
@@ -1134,35 +1116,41 @@ function FooterSection({
           schoolers. We believe you learn best by building so we're creating
           community and providing grants so you can make awesome projects. In
           the past few years, we've{" "}
-          <a
-            href="https://summer.hackclub.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-[#00E5A0] transition-colors"
+          <span
+            className="underline cursor-pointer"
             style={{ color: "rgba(245,240,232,0.7)" }}
+            onClick={() =>
+              window.open("https://summer.hackclub.com/", "_blank")
+            }
           >
             partnered with GitHub to run Summer of Making
-          </a>
+          </span>
           ,{" "}
-          <a
-            href="https://github.com/hackclub/the-hacker-zephyr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-[#00E5A0] transition-colors"
+          <span
+            className="underline cursor-pointer"
             style={{ color: "rgba(245,240,232,0.7)" }}
+            onClick={() =>
+              window.open(
+                "https://github.com/hackclub/the-hacker-zephyr",
+                "_blank",
+              )
+            }
           >
             hosted the world's longest hackathon on land
-          </a>
+          </span>
           , and{" "}
-          <a
-            href="https://www.youtube.com/watch?v=QvCoISXfcE8"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-[#00E5A0] transition-colors"
+          <span
+            className="underline cursor-pointer"
             style={{ color: "rgba(245,240,232,0.7)" }}
+            onClick={() =>
+              window.open(
+                "https://www.youtube.com/watch?v=QvCoISXfcE8",
+                "_blank",
+              )
+            }
           >
             ran Canada's largest high school hackathon
-          </a>
+          </span>
           .<br />
           <br />
           At Hack Club, students aren't just learning, they're shipping.
@@ -1191,15 +1179,13 @@ function FooterSection({
                 { label: "Branding", href: "https://hackclub.com/brand/" },
                 { label: "Donate", href: "https://hackclub.com/philanthropy/" },
               ].map((l) => (
-                <a
+                <span
                   key={l.label}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block hover:text-[#00E5A0] transition-colors"
+                  className="block cursor-pointer hover:text-[#00E5A0] transition-colors"
+                  onClick={() => window.open(l.href, "_blank")}
                 >
                   {l.label}
-                </a>
+                </span>
               ))}
             </div>
           </div>
@@ -1215,19 +1201,30 @@ function FooterSection({
               style={{ color: "rgba(245,240,232,0.7)" }}
             >
               {[
-                { label: "Showcase", href: "/showcase" },
-                { label: "Guides", href: "/guides" },
+                { label: "Showcase", href: "/showcase", external: false },
+                { label: "Guides", href: "/guides", external: false },
                 {
                   label: "Github Repository",
-                  href: "https://github.com/obaibironke/AutoMakeYSWS"
+                  href: "https://github.com/obaibironke/AutoMakeYSWS",
+                  external: true,
                 },
-              ].map((l) => (
-                <Link key={l.label} href={l.href}>
-                  <span className="block hover:text-[#00E5A0] transition-colors cursor-pointer">
+              ].map((l) =>
+                l.external ? (
+                  <span
+                    key={l.label}
+                    className="block cursor-pointer hover:text-[#00E5A0] transition-colors"
+                    onClick={() => window.open(l.href, "_blank")}
+                  >
                     {l.label}
                   </span>
-                </Link>
-              ))}
+                ) : (
+                  <Link key={l.label} href={l.href}>
+                    <span className="block cursor-pointer hover:text-[#00E5A0] transition-colors">
+                      {l.label}
+                    </span>
+                  </Link>
+                ),
+              )}
             </div>
           </div>
           <div className="flex flex-col">
@@ -1253,15 +1250,13 @@ function FooterSection({
                   href: "https://hackclub.com/conduct/",
                 },
               ].map((l) => (
-                <a
+                <span
                   key={l.label}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block hover:text-[#00E5A0] transition-colors"
+                  className="block cursor-pointer hover:text-[#00E5A0] transition-colors"
+                  onClick={() => window.open(l.href, "_blank")}
                 >
                   {l.label}
-                </a>
+                </span>
               ))}
             </div>
           </div>
@@ -1271,7 +1266,6 @@ function FooterSection({
   );
 }
 
-/* ─── Main ───────────────────────────────────────────────── */
 const TOTAL = 7;
 const TRANSITION_MS = 900;
 const INTEG_SECTION = 3;
