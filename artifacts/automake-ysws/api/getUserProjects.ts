@@ -28,6 +28,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const data = await airtableRes.json();
 
+    // Log everything so we can see what's happening
+    console.log("slack_id received:", slack_id);
+    console.log("url called:", url);
+    console.log("airtable raw response:", JSON.stringify(data));
+
     const projects = (data.records || []).map((record: any) => ({
       id: record.id,
       name: record.fields["Project Name"] ?? "",
