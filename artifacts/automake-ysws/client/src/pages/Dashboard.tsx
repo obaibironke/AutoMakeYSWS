@@ -9,8 +9,12 @@ const links = [
 
 export default function DashboardNav() {
   const [location, setLocation] = useLocation();
-  const [credits, setCredits] = useState<number>(Number(sessionStorage.getItem("credits")) || 0);
-  const [userName, setUserName] = useState<string>(sessionStorage.getItem("user_name") || "User");
+  const [credits, setCredits] = useState<number>(
+    Number(sessionStorage.getItem("credits")) || 0,
+  );
+  const [userName, setUserName] = useState<string>(
+    sessionStorage.getItem("user_name") || "User",
+  );
 
   // Fetch credits from Airtable via your API
   const fetchCredits = async () => {
@@ -69,7 +73,8 @@ export default function DashboardNav() {
                   className="font-sans text-sm font-medium transition-colors cursor-pointer"
                   style={{
                     color: location === link.href ? "#00E5A0" : "#F5F0E8",
-                    borderBottom: location === link.href ? "2px solid #00E5A0" : "none",
+                    borderBottom:
+                      location === link.href ? "2px solid #00E5A0" : "none",
                     paddingBottom: location === link.href ? "2px" : undefined,
                   }}
                 >
@@ -84,7 +89,8 @@ export default function DashboardNav() {
               className="font-sans text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
               style={{
                 color: location === "/dashboard" ? "#00E5A0" : "#F5F0E8",
-                borderBottom: location === "/dashboard" ? "2px solid #00E5A0" : "none",
+                borderBottom:
+                  location === "/dashboard" ? "2px solid #00E5A0" : "none",
                 paddingBottom: location === "/dashboard" ? "2px" : undefined,
               }}
             >

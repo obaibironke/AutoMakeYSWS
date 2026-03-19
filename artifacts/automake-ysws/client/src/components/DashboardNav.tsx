@@ -1,13 +1,12 @@
-import { useState } from "react";
 import { Link, useLocation } from "wouter";
-
-const links = [
-  { label: "Showcase", href: "/showcase" },
-  { label: "Guides", href: "/guides" },
-];
 
 export default function DashboardNav() {
   const [location, setLocation] = useLocation();
+
+  const links = [
+    { label: "Showcase", href: "/showcase" },
+    { label: "Guides", href: "/guides" },
+  ];
 
   const handleSignOut = () => {
     sessionStorage.clear();
@@ -27,7 +26,6 @@ export default function DashboardNav() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link href="/">
             <span
               className="font-sans text-2xl font-extrabold tracking-tight cursor-pointer"
@@ -37,7 +35,6 @@ export default function DashboardNav() {
             </span>
           </Link>
 
-          {/* Nav links */}
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -55,21 +52,30 @@ export default function DashboardNav() {
               </Link>
             ))}
 
-            {/* Dashboard button — dynamic */}
-            <button
-              onClick={() => setLocation("/dashboard")}
-              className="font-sans text-sm font-medium transition-colors cursor-pointer bg-transparent border-none p-0"
+            <span
+              className="font-sans text-sm font-medium"
               style={{
-                color: location === "/dashboard" ? "#00E5A0" : "#F5F0E8",
-                borderBottom:
-                  location === "/dashboard" ? "2px solid #00E5A0" : "none",
-                paddingBottom: location === "/dashboard" ? "2px" : undefined,
+                color: "#00E5A0",
+                borderBottom: "2px solid #00E5A0",
+                paddingBottom: "2px",
               }}
             >
               Dashboard
-            </button>
+            </span>
 
-            {/* Credits pill */}
+            <Link href="/shop">
+              <span
+                className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer transition-all inline-block"
+                style={{
+                  background: "#FF5733",
+                  color: "white",
+                  boxShadow: "2px 2px 0px #F5F0E8",
+                }}
+              >
+                Shop
+              </span>
+            </Link>
+
             <div
               className="flex items-center gap-2 px-4 py-1.5 rounded-full"
               style={{
@@ -85,7 +91,6 @@ export default function DashboardNav() {
               </span>
             </div>
 
-            {/* User + sign out */}
             <div className="flex items-center gap-3">
               <span
                 className="font-sans text-sm font-semibold"
