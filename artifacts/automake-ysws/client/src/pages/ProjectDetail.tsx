@@ -42,7 +42,11 @@ function SubmitModal({
   error,
 }: {
   onClose: () => void;
-  onSubmit: (repoUrl: string, howToTest: string, extraResources: string) => void;
+  onSubmit: (
+    repoUrl: string,
+    howToTest: string,
+    extraResources: string,
+  ) => void;
   loading: boolean;
   error: string;
 }) {
@@ -81,10 +85,16 @@ function SubmitModal({
         exit={{ opacity: 0, y: 30 }}
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white rounded-2xl p-8 w-full max-w-lg"
-        style={{ border: "2px solid #0F1923", boxShadow: "6px 6px 0px #0F1923" }}
+        style={{
+          border: "2px solid #0F1923",
+          boxShadow: "6px 6px 0px #0F1923",
+        }}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-sans text-2xl font-extrabold" style={{ color: "#0F1923" }}>
+          <h2
+            className="font-sans text-2xl font-extrabold"
+            style={{ color: "#0F1923" }}
+          >
             Submit Project
           </h2>
           <button
@@ -110,7 +120,11 @@ function SubmitModal({
               onChange={(e) => setRepoUrl(e.target.value)}
               placeholder="https://github.com/you/your-automation"
               className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
-              style={{ border: "2px solid #0F1923", background: "#F5F0E8", color: "#0F1923" }}
+              style={{
+                border: "2px solid #0F1923",
+                background: "#F5F0E8",
+                color: "#0F1923",
+              }}
             />
           </div>
 
@@ -127,7 +141,11 @@ function SubmitModal({
               placeholder="Describe how a reviewer can test your automation..."
               rows={4}
               className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
-              style={{ border: "2px solid #0F1923", background: "#F5F0E8", color: "#0F1923" }}
+              style={{
+                border: "2px solid #0F1923",
+                background: "#F5F0E8",
+                color: "#0F1923",
+              }}
             />
           </div>
 
@@ -150,12 +168,19 @@ function SubmitModal({
               placeholder="e.g. WhatsApp Business API Credits — needed to send messages via the WhatsApp node"
               rows={3}
               className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
-              style={{ border: "2px solid #0F1923", background: "#F5F0E8", color: "#0F1923" }}
+              style={{
+                border: "2px solid #0F1923",
+                background: "#F5F0E8",
+                color: "#0F1923",
+              }}
             />
           </div>
 
           {(validationError || error) && (
-            <p className="font-sans text-xs font-bold" style={{ color: "#FF5733" }}>
+            <p
+              className="font-sans text-xs font-bold"
+              style={{ color: "#FF5733" }}
+            >
               {validationError || error}
             </p>
           )}
@@ -196,6 +221,14 @@ function SubmitModal({
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
+
+  // Check auth synchronously before first render — prevents any flash
+  const currentSlackId = sessionStorage.getItem("slack_id");
+  if (!currentSlackId) {
+    window.location.href = HACK_CLUB_AUTH_URL;
+    return null;
+  }
+
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -209,7 +242,9 @@ export default function ProjectDetail() {
   const [sessionSuccess, setSessionSuccess] = useState(false);
 
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
-  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(
+    null,
+  );
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -225,13 +260,13 @@ export default function ProjectDetail() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const currentSlackId = sessionStorage.getItem("slack_id");
-  const isOwner = !!(project && currentSlackId && project.ownerSlackId === currentSlackId);
+  const isOwner = !!(project && project.ownerSlackId === currentSlackId);
 
   const missingScreenshot = !project?.screenshot;
   const missingDescription = !project?.description?.trim();
   const missingSessions = sessions.length === 0;
-  const canSubmit = !missingScreenshot && !missingDescription && !missingSessions;
+  const canSubmit =
+    !missingScreenshot && !missingDescription && !missingSessions;
   const missingItems = [
     missingScreenshot && "a project image",
     missingDescription && "a description",
@@ -239,11 +274,7 @@ export default function ProjectDetail() {
   ].filter(Boolean) as string[];
 
   useEffect(() => {
-    const slackId = sessionStorage.getItem("slack_id");
-    if (!slackId) {
-      window.location.href = HACK_CLUB_AUTH_URL;
-      return;
-    }
+    const slackId = currentSlackId;
 
     const fetchProject = async () => {
       try {
@@ -268,7 +299,7 @@ export default function ProjectDetail() {
         if (data.sessions) {
           setSessions(data.sessions);
           setTotalHours(
-            data.sessions.reduce((sum: number, s: Session) => sum + s.hours, 0)
+            data.sessions.reduce((sum: number, s: Session) => sum + s.hours, 0),
           );
         }
       } catch (err) {
@@ -283,7 +314,7 @@ export default function ProjectDetail() {
   const handleSubmitProject = async (
     repoUrl: string,
     howToTest: string,
-    extraResources: string
+    extraResources: string,
   ) => {
     setSubmitLoading(true);
     setSubmitError("");
@@ -292,7 +323,7 @@ export default function ProjectDetail() {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "x-slack-id": currentSlackId ?? "",
+          "x-slack-id": currentSlackId,
         },
         body: JSON.stringify({
           project_id: id,
@@ -309,13 +340,13 @@ export default function ProjectDetail() {
         throw new Error(data.error || "Failed to submit project");
       }
       setProject((prev) =>
-        prev ? { ...prev, status: "Pending Review", repoUrl, howToTest } : null
+        prev ? { ...prev, status: "Pending Review", repoUrl, howToTest } : null,
       );
       setSubmitSuccess(true);
       setShowSubmitModal(false);
     } catch (err) {
       setSubmitError(
-        err instanceof Error ? err.message : "Failed to submit project."
+        err instanceof Error ? err.message : "Failed to submit project.",
       );
     } finally {
       setSubmitLoading(false);
@@ -344,7 +375,7 @@ export default function ProjectDetail() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-slack-id": currentSlackId ?? "",
+          "x-slack-id": currentSlackId,
         },
         body: JSON.stringify({
           project_id: id,
@@ -413,7 +444,7 @@ export default function ProjectDetail() {
       formData.append("project_id", id);
       const response = await fetch("/api/uploadToCDN", {
         method: "POST",
-        headers: { "x-slack-id": currentSlackId ?? "" },
+        headers: { "x-slack-id": currentSlackId },
         body: formData,
       });
       if (!response.ok) {
@@ -428,7 +459,7 @@ export default function ProjectDetail() {
       setTimeout(() => setUploadSuccess(false), 3000);
     } catch (err) {
       setUploadError(
-        err instanceof Error ? err.message : "Upload failed. Please try again."
+        err instanceof Error ? err.message : "Upload failed. Please try again.",
       );
     } finally {
       setUploadLoading(false);
@@ -443,7 +474,7 @@ export default function ProjectDetail() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "x-slack-id": currentSlackId ?? "",
+          "x-slack-id": currentSlackId,
         },
         body: JSON.stringify({ project_id: id }),
       });
@@ -456,7 +487,7 @@ export default function ProjectDetail() {
       setTimeout(() => setDeleteSuccess(false), 3000);
     } catch (err) {
       setDeleteError(
-        err instanceof Error ? err.message : "Failed to delete image."
+        err instanceof Error ? err.message : "Failed to delete image.",
       );
     } finally {
       setDeleteLoading(false);
@@ -465,20 +496,35 @@ export default function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#F5F0E8" }}>
-        <div className="w-8 h-8 rounded-full border-4 animate-spin" style={{ borderColor: "#00E5A0", borderTopColor: "transparent" }} />
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "#F5F0E8" }}
+      >
+        <div
+          className="w-8 h-8 rounded-full border-4 animate-spin"
+          style={{ borderColor: "#00E5A0", borderTopColor: "transparent" }}
+        />
       </div>
     );
   }
 
   if (notFound || !project) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "#F5F0E8" }}>
-        <h1 className="font-sans text-3xl font-extrabold" style={{ color: "#0F1923" }}>
+      <div
+        className="min-h-screen flex flex-col items-center justify-center gap-4"
+        style={{ background: "#F5F0E8" }}
+      >
+        <h1
+          className="font-sans text-3xl font-extrabold"
+          style={{ color: "#0F1923" }}
+        >
           Project not found
         </h1>
         <Link href="/dashboard">
-          <span className="font-sans cursor-pointer underline" style={{ color: "#0F1923" }}>
+          <span
+            className="font-sans cursor-pointer underline"
+            style={{ color: "#0F1923" }}
+          >
             Back to Dashboard
           </span>
         </Link>
@@ -508,7 +554,10 @@ export default function ProjectDetail() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link href="/dashboard">
-          <span className="font-sans text-sm hover:underline cursor-pointer mb-8 inline-block" style={{ color: "#0F1923" }}>
+          <span
+            className="font-sans text-sm hover:underline cursor-pointer mb-8 inline-block"
+            style={{ color: "#0F1923" }}
+          >
             Back to Dashboard
           </span>
         </Link>
@@ -530,33 +579,63 @@ export default function ProjectDetail() {
               </span>
             )}
           </div>
-          <h1 className="font-sans text-4xl sm:text-5xl font-extrabold mb-2" style={{ color: "#0F1923" }}>
+          <h1
+            className="font-sans text-4xl sm:text-5xl font-extrabold mb-2"
+            style={{ color: "#0F1923" }}
+          >
             {project.name}
           </h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-
             {/* Image */}
-            <div className="rounded-xl overflow-hidden" style={{ border: "2px solid #0F1923" }}>
+            <div
+              className="rounded-xl overflow-hidden"
+              style={{ border: "2px solid #0F1923" }}
+            >
               {project.screenshot ? (
-                <img src={project.screenshot} alt={project.name} className="w-full object-cover" style={{ display: "block" }} />
+                <img
+                  src={project.screenshot}
+                  alt={project.name}
+                  className="w-full object-cover"
+                  style={{ display: "block" }}
+                />
               ) : (
                 <div className="w-full h-48 flex items-center justify-center bg-white">
-                  <p className="font-sans text-sm" style={{ color: "rgba(15,25,35,0.4)" }}>No image provided</p>
+                  <p
+                    className="font-sans text-sm"
+                    style={{ color: "rgba(15,25,35,0.4)" }}
+                  >
+                    No image provided
+                  </p>
                 </div>
               )}
             </div>
 
             {/* Upload / Delete Image — only for owner + Unsubmitted */}
             {isOwner && project.status === "Unsubmitted" && (
-              <div className="rounded-xl p-6 bg-white" style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}>
-                <h2 className="font-sans text-xl font-extrabold mb-5" style={{ color: "#0F1923" }}>
+              <div
+                className="rounded-xl p-6 bg-white"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
+              >
+                <h2
+                  className="font-sans text-xl font-extrabold mb-5"
+                  style={{ color: "#0F1923" }}
+                >
                   {project.screenshot ? "Update Image" : "Upload Image"}
                 </h2>
                 <div className="space-y-4">
-                  <input ref={fileInputRef} type="file" accept="image/*" onChange={handleScreenshotChange} style={{ display: "none" }} />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleScreenshotChange}
+                    style={{ display: "none" }}
+                  />
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     className="font-sans font-bold px-6 py-4 rounded-lg text-base w-full flex items-center justify-center gap-3"
@@ -568,55 +647,122 @@ export default function ProjectDetail() {
                       cursor: "pointer",
                     }}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                       <circle cx="8.5" cy="8.5" r="1.5" />
                       <polyline points="21 15 16 10 5 21" />
                     </svg>
                     {screenshotFile ? screenshotFile.name : "Choose Image"}
                   </button>
-                  <p className="font-sans text-xs text-center" style={{ color: "rgba(15,25,35,0.5)" }}>
+                  <p
+                    className="font-sans text-xs text-center"
+                    style={{ color: "rgba(15,25,35,0.5)" }}
+                  >
                     Max file size: 5MB · PNG, JPG, GIF, WEBP
                   </p>
                   {screenshotPreview && (
-                    <div className="rounded-lg overflow-hidden" style={{ border: "2px solid #0F1923" }}>
-                      <img src={screenshotPreview} alt="Preview" className="w-full object-cover max-h-64" />
+                    <div
+                      className="rounded-lg overflow-hidden"
+                      style={{ border: "2px solid #0F1923" }}
+                    >
+                      <img
+                        src={screenshotPreview}
+                        alt="Preview"
+                        className="w-full object-cover max-h-64"
+                      />
                     </div>
                   )}
                   {uploadError && (
-                    <p className="font-sans text-xs font-bold" style={{ color: "#FF5733" }}>{uploadError}</p>
+                    <p
+                      className="font-sans text-xs font-bold"
+                      style={{ color: "#FF5733" }}
+                    >
+                      {uploadError}
+                    </p>
                   )}
                   <button
                     onClick={handleUploadScreenshot}
                     disabled={!screenshotFile || uploadLoading || uploadSuccess}
                     className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
                     style={{
-                      background: uploadSuccess ? "#00E5A0" : uploadLoading || !screenshotFile ? "#ccc" : "#0F1923",
-                      color: uploadSuccess ? "#0F1923" : uploadLoading || !screenshotFile ? "#888" : "#00E5A0",
-                      cursor: uploadLoading || uploadSuccess || !screenshotFile ? "not-allowed" : "pointer",
-                      boxShadow: uploadLoading || uploadSuccess || !screenshotFile ? "none" : "3px 3px 0px #FF5733",
+                      background: uploadSuccess
+                        ? "#00E5A0"
+                        : uploadLoading || !screenshotFile
+                          ? "#ccc"
+                          : "#0F1923",
+                      color: uploadSuccess
+                        ? "#0F1923"
+                        : uploadLoading || !screenshotFile
+                          ? "#888"
+                          : "#00E5A0",
+                      cursor:
+                        uploadLoading || uploadSuccess || !screenshotFile
+                          ? "not-allowed"
+                          : "pointer",
+                      boxShadow:
+                        uploadLoading || uploadSuccess || !screenshotFile
+                          ? "none"
+                          : "3px 3px 0px #FF5733",
                     }}
                   >
-                    {uploadSuccess ? "✓ Image Uploaded!" : uploadLoading ? "Uploading..." : "Upload Image"}
+                    {uploadSuccess
+                      ? "✓ Image Uploaded!"
+                      : uploadLoading
+                        ? "Uploading..."
+                        : "Upload Image"}
                   </button>
                   {project.screenshot && (
                     <div>
                       {deleteError && (
-                        <p className="font-sans text-xs font-bold mb-2" style={{ color: "#FF5733" }}>{deleteError}</p>
+                        <p
+                          className="font-sans text-xs font-bold mb-2"
+                          style={{ color: "#FF5733" }}
+                        >
+                          {deleteError}
+                        </p>
                       )}
                       <button
                         onClick={handleDeleteScreenshot}
                         disabled={deleteLoading || deleteSuccess}
                         className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
                         style={{
-                          background: deleteSuccess ? "#00E5A0" : deleteLoading ? "#ccc" : "transparent",
-                          color: deleteSuccess ? "#0F1923" : deleteLoading ? "#888" : "#FF5733",
-                          cursor: deleteLoading || deleteSuccess ? "not-allowed" : "pointer",
+                          background: deleteSuccess
+                            ? "#00E5A0"
+                            : deleteLoading
+                              ? "#ccc"
+                              : "transparent",
+                          color: deleteSuccess
+                            ? "#0F1923"
+                            : deleteLoading
+                              ? "#888"
+                              : "#FF5733",
+                          cursor:
+                            deleteLoading || deleteSuccess
+                              ? "not-allowed"
+                              : "pointer",
                           border: "2px solid",
-                          borderColor: deleteSuccess ? "#00E5A0" : deleteLoading ? "#ccc" : "#FF5733",
+                          borderColor: deleteSuccess
+                            ? "#00E5A0"
+                            : deleteLoading
+                              ? "#ccc"
+                              : "#FF5733",
                         }}
                       >
-                        {deleteSuccess ? "✓ Image Removed" : deleteLoading ? "Removing..." : "Delete Image"}
+                        {deleteSuccess
+                          ? "✓ Image Removed"
+                          : deleteLoading
+                            ? "Removing..."
+                            : "Delete Image"}
                       </button>
                     </div>
                   )}
@@ -625,72 +771,167 @@ export default function ProjectDetail() {
             )}
 
             {/* Description */}
-            <div className="rounded-xl p-6 bg-white" style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}>
-              <h2 className="font-sans text-xl font-extrabold mb-3" style={{ color: "#0F1923" }}>Description</h2>
-              <p className="font-sans text-sm leading-relaxed" style={{ color: "#0F1923" }}>{project.description}</p>
+            <div
+              className="rounded-xl p-6 bg-white"
+              style={{
+                border: "2px solid #0F1923",
+                boxShadow: "3px 3px 0px #0F1923",
+              }}
+            >
+              <h2
+                className="font-sans text-xl font-extrabold mb-3"
+                style={{ color: "#0F1923" }}
+              >
+                Description
+              </h2>
+              <p
+                className="font-sans text-sm leading-relaxed"
+                style={{ color: "#0F1923" }}
+              >
+                {project.description}
+              </p>
             </div>
 
             {/* How to test */}
             {project.howToTest && (
-              <div className="rounded-xl p-6 bg-white" style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}>
-                <h2 className="font-sans text-xl font-extrabold mb-3" style={{ color: "#0F1923" }}>How to Test</h2>
-                <p className="font-sans text-sm leading-relaxed" style={{ color: "#0F1923" }}>{project.howToTest}</p>
+              <div
+                className="rounded-xl p-6 bg-white"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
+              >
+                <h2
+                  className="font-sans text-xl font-extrabold mb-3"
+                  style={{ color: "#0F1923" }}
+                >
+                  How to Test
+                </h2>
+                <p
+                  className="font-sans text-sm leading-relaxed"
+                  style={{ color: "#0F1923" }}
+                >
+                  {project.howToTest}
+                </p>
               </div>
             )}
 
             {/* Log a session — only for owner */}
             {isOwner && (
-              <div className="rounded-xl p-6 bg-white" style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}>
-                <h2 className="font-sans text-xl font-extrabold mb-5" style={{ color: "#0F1923" }}>Log a Work Session</h2>
+              <div
+                className="rounded-xl p-6 bg-white"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
+              >
+                <h2
+                  className="font-sans text-xl font-extrabold mb-5"
+                  style={{ color: "#0F1923" }}
+                >
+                  Log a Work Session
+                </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="font-sans text-xs font-bold uppercase tracking-widest block mb-2" style={{ color: "rgba(15,25,35,0.5)" }}>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
                       Hours Spent
                     </label>
                     <input
-                      type="number" min="0.5" step="0.5" value={sessionHours}
+                      type="number"
+                      min="0.5"
+                      step="0.5"
+                      value={sessionHours}
                       onChange={(e) => setSessionHours(e.target.value)}
                       placeholder="e.g. 2"
                       className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
-                      style={{ border: "2px solid #0F1923", background: "#F5F0E8", color: "#0F1923" }}
+                      style={{
+                        border: "2px solid #0F1923",
+                        background: "#F5F0E8",
+                        color: "#0F1923",
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="font-sans text-xs font-bold uppercase tracking-widest block mb-2" style={{ color: "rgba(15,25,35,0.5)" }}>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
                       What did you work on?
                     </label>
                     <textarea
-                      value={sessionNotes} onChange={(e) => setSessionNotes(e.target.value)}
+                      value={sessionNotes}
+                      onChange={(e) => setSessionNotes(e.target.value)}
                       placeholder="e.g. Built the Slack webhook integration and tested with 3 scenarios"
-                      rows={3} className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
-                      style={{ border: "2px solid #0F1923", background: "#F5F0E8", color: "#0F1923" }}
+                      rows={3}
+                      className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
+                      style={{
+                        border: "2px solid #0F1923",
+                        background: "#F5F0E8",
+                        color: "#0F1923",
+                      }}
                     />
                   </div>
                   <div>
-                    <label className="font-sans text-xs font-bold uppercase tracking-widest block mb-2" style={{ color: "rgba(15,25,35,0.5)" }}>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
                       Lapse Session Link
                     </label>
                     <input
-                      type="url" value={sessionLapse} onChange={(e) => setSessionLapse(e.target.value)}
+                      type="url"
+                      value={sessionLapse}
+                      onChange={(e) => setSessionLapse(e.target.value)}
                       placeholder="https://lapse.hackclub.com/..."
                       className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
-                      style={{ border: "2px solid #0F1923", background: "#F5F0E8", color: "#0F1923" }}
+                      style={{
+                        border: "2px solid #0F1923",
+                        background: "#F5F0E8",
+                        color: "#0F1923",
+                      }}
                     />
                   </div>
                   {sessionError && (
-                    <p className="font-sans text-xs font-bold" style={{ color: "#FF5733" }}>{sessionError}</p>
+                    <p
+                      className="font-sans text-xs font-bold"
+                      style={{ color: "#FF5733" }}
+                    >
+                      {sessionError}
+                    </p>
                   )}
                   <button
-                    onClick={handleLogSession} disabled={sessionLoading || sessionSuccess}
+                    onClick={handleLogSession}
+                    disabled={sessionLoading || sessionSuccess}
                     className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
                     style={{
-                      background: sessionSuccess ? "#00E5A0" : sessionLoading ? "#ccc" : "#0F1923",
-                      color: sessionSuccess ? "#0F1923" : sessionLoading ? "#888" : "#00E5A0",
-                      cursor: sessionLoading || sessionSuccess ? "not-allowed" : "pointer",
-                      boxShadow: sessionLoading || sessionSuccess ? "none" : "3px 3px 0px #FF5733",
+                      background: sessionSuccess
+                        ? "#00E5A0"
+                        : sessionLoading
+                          ? "#ccc"
+                          : "#0F1923",
+                      color: sessionSuccess
+                        ? "#0F1923"
+                        : sessionLoading
+                          ? "#888"
+                          : "#00E5A0",
+                      cursor:
+                        sessionLoading || sessionSuccess
+                          ? "not-allowed"
+                          : "pointer",
+                      boxShadow:
+                        sessionLoading || sessionSuccess
+                          ? "none"
+                          : "3px 3px 0px #FF5733",
                     }}
                   >
-                    {sessionSuccess ? "✓ Session Logged!" : sessionLoading ? "Logging..." : "Log Session"}
+                    {sessionSuccess
+                      ? "✓ Session Logged!"
+                      : sessionLoading
+                        ? "Logging..."
+                        : "Log Session"}
                   </button>
                 </div>
               </div>
@@ -698,30 +939,66 @@ export default function ProjectDetail() {
 
             {/* Session history — visible to everyone */}
             {sessions.length > 0 && (
-              <div className="rounded-xl p-6 bg-white" style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}>
-                <h2 className="font-sans text-xl font-extrabold mb-5" style={{ color: "#0F1923" }}>Work Sessions</h2>
+              <div
+                className="rounded-xl p-6 bg-white"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
+              >
+                <h2
+                  className="font-sans text-xl font-extrabold mb-5"
+                  style={{ color: "#0F1923" }}
+                >
+                  Work Sessions
+                </h2>
                 <div className="space-y-3">
                   {sessions.map((session) => (
-                    <div key={session.id} className="rounded-lg p-4" style={{ background: "#F5F0E8", border: "1px solid rgba(15,25,35,0.1)" }}>
+                    <div
+                      key={session.id}
+                      className="rounded-lg p-4"
+                      style={{
+                        background: "#F5F0E8",
+                        border: "1px solid rgba(15,25,35,0.1)",
+                      }}
+                    >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-sans font-extrabold text-sm" style={{ color: "#0F1923" }}>
-                          {session.hours} {session.hours === 1 ? "hour" : "hours"}
+                        <span
+                          className="font-sans font-extrabold text-sm"
+                          style={{ color: "#0F1923" }}
+                        >
+                          {session.hours}{" "}
+                          {session.hours === 1 ? "hour" : "hours"}
                         </span>
                         {session.date && (
-                          <span className="font-sans text-xs" style={{ color: "rgba(15,25,35,0.4)" }}>
+                          <span
+                            className="font-sans text-xs"
+                            style={{ color: "rgba(15,25,35,0.4)" }}
+                          >
                             {new Date(session.date).toLocaleDateString()}
                           </span>
                         )}
                       </div>
                       {session.notes && (
-                        <p className="font-sans text-sm leading-relaxed mb-2" style={{ color: "rgba(15,25,35,0.7)" }}>
+                        <p
+                          className="font-sans text-sm leading-relaxed mb-2"
+                          style={{ color: "rgba(15,25,35,0.7)" }}
+                        >
                           {session.notes}
                         </p>
                       )}
                       {session.lapseSession && (
-                        <p className="font-sans text-xs font-bold" style={{ color: "#0F1923" }}>
+                        <p
+                          className="font-sans text-xs font-bold"
+                          style={{ color: "#0F1923" }}
+                        >
                           Lapse:{" "}
-                          <span className="underline cursor-pointer" onClick={() => window.open(session.lapseSession, "_blank")}>
+                          <span
+                            className="underline cursor-pointer"
+                            onClick={() =>
+                              window.open(session.lapseSession, "_blank")
+                            }
+                          >
                             View Session
                           </span>
                         </p>
@@ -735,27 +1012,39 @@ export default function ProjectDetail() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-
             {/* Submit button — only for owner + Unsubmitted */}
             {isOwner && project.status === "Unsubmitted" && (
               <div className="space-y-3">
                 {!canSubmit && (
                   <div
                     className="rounded-lg p-3"
-                    style={{ background: "rgba(255,87,51,0.08)", border: "1px solid rgba(255,87,51,0.2)" }}
+                    style={{
+                      background: "rgba(255,87,51,0.08)",
+                      border: "1px solid rgba(255,87,51,0.2)",
+                    }}
                   >
-                    <p className="font-sans text-xs font-bold mb-1" style={{ color: "#FF5733" }}>
+                    <p
+                      className="font-sans text-xs font-bold mb-1"
+                      style={{ color: "#FF5733" }}
+                    >
                       Before submitting you need:
                     </p>
                     {missingItems.map((item) => (
-                      <p key={item} className="font-sans text-xs" style={{ color: "#FF5733" }}>
+                      <p
+                        key={item}
+                        className="font-sans text-xs"
+                        style={{ color: "#FF5733" }}
+                      >
                         · {item}
                       </p>
                     ))}
                   </div>
                 )}
                 {submitSuccess && (
-                  <p className="font-sans text-xs font-bold" style={{ color: "#00A372" }}>
+                  <p
+                    className="font-sans text-xs font-bold"
+                    style={{ color: "#00A372" }}
+                  >
                     ✓ Submitted for Review!
                   </p>
                 )}
@@ -764,10 +1053,22 @@ export default function ProjectDetail() {
                   disabled={!canSubmit || submitSuccess}
                   className="font-sans font-bold px-6 py-4 rounded-lg text-base transition-all w-full"
                   style={{
-                    background: submitSuccess ? "#00E5A0" : !canSubmit ? "#ccc" : "#0F1923",
-                    color: submitSuccess ? "#0F1923" : !canSubmit ? "#888" : "#00E5A0",
-                    cursor: !canSubmit || submitSuccess ? "not-allowed" : "pointer",
-                    boxShadow: !canSubmit || submitSuccess ? "none" : "3px 3px 0px #FF5733",
+                    background: submitSuccess
+                      ? "#00E5A0"
+                      : !canSubmit
+                        ? "#ccc"
+                        : "#0F1923",
+                    color: submitSuccess
+                      ? "#0F1923"
+                      : !canSubmit
+                        ? "#888"
+                        : "#00E5A0",
+                    cursor:
+                      !canSubmit || submitSuccess ? "not-allowed" : "pointer",
+                    boxShadow:
+                      !canSubmit || submitSuccess
+                        ? "none"
+                        : "3px 3px 0px #FF5733",
                   }}
                 >
                   {submitSuccess ? "✓ Submitted for Review!" : "Submit Project"}
@@ -776,21 +1077,54 @@ export default function ProjectDetail() {
             )}
 
             {/* Stats */}
-            <div className="rounded-xl p-5 bg-white" style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}>
-              <h3 className="font-sans font-extrabold text-sm uppercase tracking-widest mb-4" style={{ color: "rgba(15,25,35,0.45)" }}>
+            <div
+              className="rounded-xl p-5 bg-white"
+              style={{
+                border: "2px solid #0F1923",
+                boxShadow: "3px 3px 0px #0F1923",
+              }}
+            >
+              <h3
+                className="font-sans font-extrabold text-sm uppercase tracking-widest mb-4"
+                style={{ color: "rgba(15,25,35,0.45)" }}
+              >
                 Stats
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="font-sans text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "rgba(15,25,35,0.45)" }}>Credits Awarded</p>
-                  <p className="font-sans text-2xl font-extrabold" style={{ color: "#00E5A0" }}>
-                    {project.creditsAwarded ?? <span style={{ color: "rgba(15,25,35,0.3)" }}>Pending</span>}
+                  <p
+                    className="font-sans text-xs font-bold uppercase tracking-widest mb-1"
+                    style={{ color: "rgba(15,25,35,0.45)" }}
+                  >
+                    Credits Awarded
+                  </p>
+                  <p
+                    className="font-sans text-2xl font-extrabold"
+                    style={{ color: "#00E5A0" }}
+                  >
+                    {project.creditsAwarded ?? (
+                      <span style={{ color: "rgba(15,25,35,0.3)" }}>
+                        Pending
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div>
-                  <p className="font-sans text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "rgba(15,25,35,0.45)" }}>Total Hours</p>
-                  <p className="font-sans text-2xl font-extrabold" style={{ color: "#0F1923" }}>
-                    {totalHours > 0 ? totalHours : <span style={{ color: "rgba(15,25,35,0.3)" }}>—</span>}
+                  <p
+                    className="font-sans text-xs font-bold uppercase tracking-widest mb-1"
+                    style={{ color: "rgba(15,25,35,0.45)" }}
+                  >
+                    Total Hours
+                  </p>
+                  <p
+                    className="font-sans text-2xl font-extrabold"
+                    style={{ color: "#0F1923" }}
+                  >
+                    {totalHours > 0 ? (
+                      totalHours
+                    ) : (
+                      <span style={{ color: "rgba(15,25,35,0.3)" }}>—</span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -799,43 +1133,77 @@ export default function ProjectDetail() {
             {project.repoUrl && (
               <div
                 className="rounded-xl p-5 bg-white cursor-pointer transition-all"
-                style={{ border: "2px solid #0F1923", boxShadow: "3px 3px 0px #0F1923" }}
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
                 onClick={() => window.open(project.repoUrl!, "_blank")}
               >
-                <h3 className="font-sans font-bold text-sm mb-1" style={{ color: "#0F1923" }}>Repository</h3>
-                <p className="font-sans text-xs truncate" style={{ color: "rgba(15,25,35,0.5)" }}>{project.repoUrl}</p>
+                <h3
+                  className="font-sans font-bold text-sm mb-1"
+                  style={{ color: "#0F1923" }}
+                >
+                  Repository
+                </h3>
+                <p
+                  className="font-sans text-xs truncate"
+                  style={{ color: "rgba(15,25,35,0.5)" }}
+                >
+                  {project.repoUrl}
+                </p>
               </div>
             )}
 
             <div className="rounded-xl p-5" style={{ background: "#0F1923" }}>
-              <h3 className="font-sans text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(245,240,232,0.5)" }}>
+              <h3
+                className="font-sans text-xs font-bold uppercase tracking-widest mb-2"
+                style={{ color: "rgba(245,240,232,0.5)" }}
+              >
                 Review Status
               </h3>
-              <p className="font-sans font-extrabold text-lg" style={{ color: statusStyle.color }}>
+              <p
+                className="font-sans font-extrabold text-lg"
+                style={{ color: statusStyle.color }}
+              >
                 {project.status}
               </p>
               {project.status === "Unsubmitted" && (
-                <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>
+                <p
+                  className="font-sans text-xs mt-2"
+                  style={{ color: "rgba(245,240,232,0.5)" }}
+                >
                   Fill in the remaining details and submit when ready.
                 </p>
               )}
               {project.status === "Pending Review" && (
-                <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>
+                <p
+                  className="font-sans text-xs mt-2"
+                  style={{ color: "rgba(245,240,232,0.5)" }}
+                >
                   Your project is in the queue. Hang tight!
                 </p>
               )}
               {project.status === "Accepted" && (
-                <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>
+                <p
+                  className="font-sans text-xs mt-2"
+                  style={{ color: "rgba(245,240,232,0.5)" }}
+                >
                   Your project has been accepted and credits awarded.
                 </p>
               )}
               {project.status === "Approved" && (
-                <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>
+                <p
+                  className="font-sans text-xs mt-2"
+                  style={{ color: "rgba(245,240,232,0.5)" }}
+                >
                   Your project has been approved and credits awarded.
                 </p>
               )}
               {project.status === "Rejected" && (
-                <p className="font-sans text-xs mt-2" style={{ color: "rgba(245,240,232,0.5)" }}>
+                <p
+                  className="font-sans text-xs mt-2"
+                  style={{ color: "rgba(245,240,232,0.5)" }}
+                >
                   Your project was not approved this time.
                 </p>
               )}

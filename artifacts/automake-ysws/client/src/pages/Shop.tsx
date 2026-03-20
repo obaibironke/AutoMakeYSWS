@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ShopItemCard from "../components/ShopItemCard";
-import { useLocation } from "wouter";
 import DashboardNav from "../components/DashboardNav";
 
 const HACK_CLUB_AUTH_URL =
@@ -14,12 +13,17 @@ export interface ShopItem {
 }
 
 export default function Shop() {
-  const [, setLocation] = useLocation();
-  const [authLoading, setAuthLoading] = useState(true);
+  // Check auth synchronously before first render — prevents any flash
+  const slackId = sessionStorage.getItem("slack_id");
+  if (!slackId) {
+    window.location.href = HACK_CLUB_AUTH_URL;
+    return null;
+  }
+
   const [shopItems, setShopItems] = useState<ShopItem[]>([]);
   const [itemsLoading, setItemsLoading] = useState(true);
   const [credits, setCredits] = useState(
-    Number(sessionStorage.getItem("credits")) || 0
+    Number(sessionStorage.getItem("credits")) || 0,
   );
   const [purchaseState, setPurchaseState] = useState<{
     itemId: string | null;
@@ -28,14 +32,6 @@ export default function Shop() {
   }>({ itemId: null, status: "idle", message: "" });
 
   useEffect(() => {
-    const slackId = sessionStorage.getItem("slack_id");
-    if (!slackId) {
-      window.location.href = HACK_CLUB_AUTH_URL;
-      return;
-    }
-    setAuthLoading(false);
-
-    // Fetch shop items and fresh credits in parallel
     const fetchAll = async () => {
       try {
         const [itemsRes, creditsRes] = await Promise.all([
@@ -66,16 +62,16 @@ export default function Shop() {
   }, []);
 
   const handlePurchase = async (item: ShopItem) => {
-    const slackId = sessionStorage.getItem("slack_id");
-    if (!slackId) return;
-
     setPurchaseState({ itemId: item.id, status: "loading", message: "" });
 
     try {
       const res = await fetch("/api/purchaseItem", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slack_id: slackId, item_id: item.id }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-slack-id": slackId,
+        },
+        body: JSON.stringify({ item_id: item.id }),
       });
 
       const data = await res.json();
@@ -86,29 +82,42 @@ export default function Shop() {
             ? `You need ${data.required} credits but only have ${data.available}.`
             : data.error || "Purchase failed.";
         setPurchaseState({ itemId: item.id, status: "error", message: msg });
-        setTimeout(() => setPurchaseState({ itemId: null, status: "idle", message: "" }), 3000);
+        setTimeout(
+          () => setPurchaseState({ itemId: null, status: "idle", message: "" }),
+          3000,
+        );
         return;
       }
 
-      // Update credits locally immediately
       setCredits(data.newBalance);
       sessionStorage.setItem("credits", String(data.newBalance));
 
-      setPurchaseState({ itemId: item.id, status: "success", message: "Item Unlocked!" });
-      setTimeout(() => setPurchaseState({ itemId: null, status: "idle", message: "" }), 3000);
+      setPurchaseState({
+        itemId: item.id,
+        status: "success",
+        message: "Item Unlocked!",
+      });
+      setTimeout(
+        () => setPurchaseState({ itemId: null, status: "idle", message: "" }),
+        3000,
+      );
     } catch (err) {
-      setPurchaseState({ itemId: item.id, status: "error", message: "Something went wrong." });
-      setTimeout(() => setPurchaseState({ itemId: null, status: "idle", message: "" }), 3000);
+      setPurchaseState({
+        itemId: item.id,
+        status: "error",
+        message: "Something went wrong.",
+      });
+      setTimeout(
+        () => setPurchaseState({ itemId: null, status: "idle", message: "" }),
+        3000,
+      );
     }
   };
-
-  if (authLoading) return null;
 
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       <DashboardNav />
 
-      {/* Hero */}
       <section className="py-16" style={{ background: "#F5F0E8" }}>
         <div className="max-w-7xl mx-auto px-8 lg:px-16 text-center">
           <h1
@@ -130,7 +139,10 @@ export default function Shop() {
           >
             <span
               className="font-sans font-bold"
-              style={{ color: "#0F1923", fontSize: "clamp(0.85rem, 1vw, 1.1rem)" }}
+              style={{
+                color: "#0F1923",
+                fontSize: "clamp(0.85rem, 1vw, 1.1rem)",
+              }}
             >
               You have{" "}
               <span style={{ color: "#00E5A0" }}>{credits} credits</span> to
@@ -140,14 +152,16 @@ export default function Shop() {
         </div>
       </section>
 
-      {/* Grid */}
       <section className="pb-16">
         <div className="max-w-7xl mx-auto px-8 lg:px-16">
           {itemsLoading ? (
             <div className="flex justify-center py-24">
               <div
                 className="w-8 h-8 rounded-full border-4 animate-spin"
-                style={{ borderColor: "#00E5A0", borderTopColor: "transparent" }}
+                style={{
+                  borderColor: "#00E5A0",
+                  borderTopColor: "transparent",
+                }}
               />
             </div>
           ) : (
