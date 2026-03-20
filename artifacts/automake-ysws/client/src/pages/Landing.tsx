@@ -371,7 +371,7 @@ function HeroSection({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
         >
-          Build an automation that solves a real problem, get a SBC to host it.
+          Build an automation that solves a real problem, get an SBC to host it.
         </motion.p>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"
