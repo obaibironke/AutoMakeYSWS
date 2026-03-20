@@ -20,13 +20,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}/${id}`;
-
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
     });
 
     const record = await airtableRes.json();
-
     if (!record?.id) {
       return res.status(404).json({ error: "Project not found" });
     }
@@ -39,9 +37,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         status: record.fields["Status"] ?? "Pending Review",
         repoUrl: record.fields["Repo URL"] ?? null,
         howToTest: record.fields["How to test?"] ?? null,
-        screenshot: record.fields["Screenshot"]?.[0]?.url ?? null,
+        screenshot: record.fields["Screenshot"] ?? null,
         creditsAwarded: record.fields["Credits Awarded"] ?? null,
         hoursLogged: record.fields["Hours Logged"] ?? null,
+        ownerSlackId: record.fields["Slack ID Formula"] ?? null,
       },
     });
   } catch (err) {

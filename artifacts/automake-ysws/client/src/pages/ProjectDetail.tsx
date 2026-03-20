@@ -15,6 +15,7 @@ interface Project {
   screenshot: string | null;
   creditsAwarded: number | null;
   hoursLogged: number | null;
+  ownerSlackId: string | null;
 }
 
 interface Session {
@@ -59,6 +60,14 @@ export default function ProjectDetail() {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Derive ownership once project loads
+  const currentSlackId = sessionStorage.getItem("slack_id");
+  const isOwner = !!(
+    project &&
+    currentSlackId &&
+    project.ownerSlackId === currentSlackId
+  );
 
   useEffect(() => {
     const slackId = sessionStorage.getItem("slack_id");
@@ -300,6 +309,15 @@ export default function ProjectDetail() {
             >
               {project.status}
             </span>
+            {/* Show a read-only badge if the viewer is not the owner */}
+            {!isOwner && (
+              <span
+                className="font-sans text-xs font-bold px-3 py-1 rounded-full"
+                style={{ background: "rgba(15,25,35,0.08)", color: "#6B7280" }}
+              >
+                View Only
+              </span>
+            )}
           </div>
           <h1
             className="font-sans text-4xl sm:text-5xl font-extrabold mb-2"
@@ -335,8 +353,8 @@ export default function ProjectDetail() {
               )}
             </div>
 
-            {/* Upload / Delete Image — only for Unsubmitted */}
-            {project.status === "Unsubmitted" && (
+            {/* Upload / Delete Image — only for owner + Unsubmitted */}
+            {isOwner && project.status === "Unsubmitted" && (
               <div
                 className="rounded-xl p-6 bg-white"
                 style={{
@@ -351,7 +369,6 @@ export default function ProjectDetail() {
                   {project.screenshot ? "Update Image" : "Upload Image"}
                 </h2>
                 <div className="space-y-4">
-                  {/* Hidden file input */}
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -359,8 +376,6 @@ export default function ProjectDetail() {
                     onChange={handleScreenshotChange}
                     style={{ display: "none" }}
                   />
-
-                  {/* Big green file picker button */}
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     className="font-sans font-bold px-6 py-4 rounded-lg text-base w-full flex items-center justify-center gap-3"
@@ -389,14 +404,12 @@ export default function ProjectDetail() {
                     </svg>
                     {screenshotFile ? screenshotFile.name : "Choose Image"}
                   </button>
-
                   <p
                     className="font-sans text-xs text-center"
                     style={{ color: "rgba(15,25,35,0.5)" }}
                   >
                     Max file size: 5MB · PNG, JPG, GIF, WEBP
                   </p>
-
                   {screenshotPreview && (
                     <div
                       className="rounded-lg overflow-hidden"
@@ -409,7 +422,6 @@ export default function ProjectDetail() {
                       />
                     </div>
                   )}
-
                   {uploadError && (
                     <p
                       className="font-sans text-xs font-bold"
@@ -418,7 +430,6 @@ export default function ProjectDetail() {
                       {uploadError}
                     </p>
                   )}
-
                   <button
                     onClick={handleUploadScreenshot}
                     disabled={!screenshotFile || uploadLoading || uploadSuccess}
@@ -450,7 +461,6 @@ export default function ProjectDetail() {
                         ? "Uploading..."
                         : "Upload Image"}
                   </button>
-
                   {project.screenshot && (
                     <div>
                       {deleteError && (
@@ -546,126 +556,128 @@ export default function ProjectDetail() {
               </div>
             )}
 
-            {/* Log a session */}
-            <div
-              className="rounded-xl p-6 bg-white"
-              style={{
-                border: "2px solid #0F1923",
-                boxShadow: "3px 3px 0px #0F1923",
-              }}
-            >
-              <h2
-                className="font-sans text-xl font-extrabold mb-5"
-                style={{ color: "#0F1923" }}
+            {/* Log a session — only for owner */}
+            {isOwner && (
+              <div
+                className="rounded-xl p-6 bg-white"
+                style={{
+                  border: "2px solid #0F1923",
+                  boxShadow: "3px 3px 0px #0F1923",
+                }}
               >
-                Log a Work Session
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <label
-                    className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
-                    style={{ color: "rgba(15,25,35,0.5)" }}
-                  >
-                    Hours Spent
-                  </label>
-                  <input
-                    type="number"
-                    min="0.5"
-                    step="0.5"
-                    value={sessionHours}
-                    onChange={(e) => setSessionHours(e.target.value)}
-                    placeholder="e.g. 2"
-                    className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
-                    style={{
-                      border: "2px solid #0F1923",
-                      background: "#F5F0E8",
-                      color: "#0F1923",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
-                    style={{ color: "rgba(15,25,35,0.5)" }}
-                  >
-                    What did you work on?
-                  </label>
-                  <textarea
-                    value={sessionNotes}
-                    onChange={(e) => setSessionNotes(e.target.value)}
-                    placeholder="e.g. Built the Slack webhook integration and tested with 3 scenarios"
-                    rows={3}
-                    className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
-                    style={{
-                      border: "2px solid #0F1923",
-                      background: "#F5F0E8",
-                      color: "#0F1923",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
-                    style={{ color: "rgba(15,25,35,0.5)" }}
-                  >
-                    Lapse Session Link
-                  </label>
-                  <input
-                    type="url"
-                    value={sessionLapse}
-                    onChange={(e) => setSessionLapse(e.target.value)}
-                    placeholder="https://lapse.hackclub.com/..."
-                    className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
-                    style={{
-                      border: "2px solid #0F1923",
-                      background: "#F5F0E8",
-                      color: "#0F1923",
-                    }}
-                  />
-                </div>
-                {sessionError && (
-                  <p
-                    className="font-sans text-xs font-bold"
-                    style={{ color: "#FF5733" }}
-                  >
-                    {sessionError}
-                  </p>
-                )}
-                <button
-                  onClick={handleLogSession}
-                  disabled={sessionLoading || sessionSuccess}
-                  className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
-                  style={{
-                    background: sessionSuccess
-                      ? "#00E5A0"
-                      : sessionLoading
-                        ? "#ccc"
-                        : "#0F1923",
-                    color: sessionSuccess
-                      ? "#0F1923"
-                      : sessionLoading
-                        ? "#888"
-                        : "#00E5A0",
-                    cursor:
-                      sessionLoading || sessionSuccess
-                        ? "not-allowed"
-                        : "pointer",
-                    boxShadow:
-                      sessionLoading || sessionSuccess
-                        ? "none"
-                        : "3px 3px 0px #FF5733",
-                  }}
+                <h2
+                  className="font-sans text-xl font-extrabold mb-5"
+                  style={{ color: "#0F1923" }}
                 >
-                  {sessionSuccess
-                    ? "✓ Session Logged!"
-                    : sessionLoading
-                      ? "Logging..."
-                      : "Log Session"}
-                </button>
+                  Log a Work Session
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
+                      Hours Spent
+                    </label>
+                    <input
+                      type="number"
+                      min="0.5"
+                      step="0.5"
+                      value={sessionHours}
+                      onChange={(e) => setSessionHours(e.target.value)}
+                      placeholder="e.g. 2"
+                      className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
+                      style={{
+                        border: "2px solid #0F1923",
+                        background: "#F5F0E8",
+                        color: "#0F1923",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
+                      What did you work on?
+                    </label>
+                    <textarea
+                      value={sessionNotes}
+                      onChange={(e) => setSessionNotes(e.target.value)}
+                      placeholder="e.g. Built the Slack webhook integration and tested with 3 scenarios"
+                      rows={3}
+                      className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none resize-none"
+                      style={{
+                        border: "2px solid #0F1923",
+                        background: "#F5F0E8",
+                        color: "#0F1923",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
+                      style={{ color: "rgba(15,25,35,0.5)" }}
+                    >
+                      Lapse Session Link
+                    </label>
+                    <input
+                      type="url"
+                      value={sessionLapse}
+                      onChange={(e) => setSessionLapse(e.target.value)}
+                      placeholder="https://lapse.hackclub.com/..."
+                      className="w-full font-sans text-sm px-4 py-3 rounded-lg outline-none"
+                      style={{
+                        border: "2px solid #0F1923",
+                        background: "#F5F0E8",
+                        color: "#0F1923",
+                      }}
+                    />
+                  </div>
+                  {sessionError && (
+                    <p
+                      className="font-sans text-xs font-bold"
+                      style={{ color: "#FF5733" }}
+                    >
+                      {sessionError}
+                    </p>
+                  )}
+                  <button
+                    onClick={handleLogSession}
+                    disabled={sessionLoading || sessionSuccess}
+                    className="font-sans font-bold px-6 py-3 rounded-lg text-sm transition-all w-full"
+                    style={{
+                      background: sessionSuccess
+                        ? "#00E5A0"
+                        : sessionLoading
+                          ? "#ccc"
+                          : "#0F1923",
+                      color: sessionSuccess
+                        ? "#0F1923"
+                        : sessionLoading
+                          ? "#888"
+                          : "#00E5A0",
+                      cursor:
+                        sessionLoading || sessionSuccess
+                          ? "not-allowed"
+                          : "pointer",
+                      boxShadow:
+                        sessionLoading || sessionSuccess
+                          ? "none"
+                          : "3px 3px 0px #FF5733",
+                    }}
+                  >
+                    {sessionSuccess
+                      ? "✓ Session Logged!"
+                      : sessionLoading
+                        ? "Logging..."
+                        : "Log Session"}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Session history */}
+            {/* Session history — visible to everyone */}
             {sessions.length > 0 && (
               <div
                 className="rounded-xl p-6 bg-white"
