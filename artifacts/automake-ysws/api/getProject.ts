@@ -40,7 +40,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         screenshot: record.fields["Screenshot"] ?? null,
         creditsAwarded: record.fields["Credits Awarded"] ?? null,
         hoursLogged: record.fields["Hours Logged"] ?? null,
-        ownerSlackId: record.fields["Slack ID Formula"] ?? null,
+        ownerSlackId: record.fields["Slack Id Formula"] ?? null,
       },
     });
   } catch (err) {
