@@ -10,7 +10,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const { project_id, hours, notes, lapseSession } = req.body;
-
   if (!project_id || !hours || !notes || !lapseSession) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -20,20 +19,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: "Missing API key" });
   }
 
-  // Read caller's Slack ID from header
   const callerSlackId = req.headers["x-slack-id"] as string;
   if (!callerSlackId) {
     return res.status(401).json({ error: "Not authenticated" });
   }
 
   try {
-    // Verify the caller owns this project before logging a session
     const projectRes = await fetch(
       `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}/${project_id}`,
-      { headers: { Authorization: `Bearer ${apiKey}` } }
+      { headers: { Authorization: `Bearer ${apiKey}` } },
     );
     const projectRecord = await projectRes.json();
-    const ownerSlackId = projectRecord.fields?.["Slack ID Formula"];
+    const ownerSlackId = projectRecord.fields?.["Slack ID Formula"]?.[0];
 
     if (!ownerSlackId || ownerSlackId !== callerSlackId) {
       return res.status(403).json({ error: "Not authorized" });
@@ -56,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             Date: new Date().toISOString().split("T")[0],
           },
         }),
-      }
+      },
     );
 
     const data = await res2.json();

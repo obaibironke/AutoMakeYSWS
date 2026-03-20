@@ -24,7 +24,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: "Airtable not configured" });
   }
 
-  // Read caller's Slack ID from header
   const callerSlackId = req.headers["x-slack-id"] as string;
   if (!callerSlackId) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -44,28 +43,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: "No project_id provided" });
     }
 
-    // Verify the caller owns this project before doing anything
     const projectRes = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Projects/${projectId}`,
       { headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` } },
     );
     const projectRecord = await projectRes.json();
-    const ownerSlackId = projectRecord.fields?.["Slack ID Formula"];
+    const ownerSlackId = projectRecord.fields?.["Slack ID Formula"]?.[0];
 
     if (!ownerSlackId || ownerSlackId !== callerSlackId) {
-      fs.unlinkSync(file.filepath); // clean up temp file before rejecting
+      fs.unlinkSync(file.filepath);
       return res.status(403).json({ error: "Not authorized" });
     }
 
-    // Read temp file into a Buffer and wrap as Blob so native fetch
-    // can correctly construct the multipart body with its own boundary
     const fileBuffer = fs.readFileSync(file.filepath);
     const blob = new Blob([fileBuffer], { type: file.mimetype || "image/png" });
 
     const formData = new FormData();
     formData.append("file", blob, file.originalFilename || "screenshot.png");
 
-    // Clean up temp file before the network request
     fs.unlinkSync(file.filepath);
 
     const cdnResponse = await fetch("https://cdn.hackclub.com/api/v4/upload", {
