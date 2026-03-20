@@ -61,7 +61,6 @@ export default function ProjectDetail() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Derive ownership once project loads
   const currentSlackId = sessionStorage.getItem("slack_id");
   const isOwner = !!(
     project &&
@@ -131,7 +130,10 @@ export default function ProjectDetail() {
     try {
       const res = await fetch("/api/logSession", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-slack-id": currentSlackId ?? "",
+        },
         body: JSON.stringify({
           project_id: id,
           hours: Number(sessionHours),
@@ -199,6 +201,10 @@ export default function ProjectDetail() {
       formData.append("project_id", id);
       const response = await fetch("/api/uploadToCDN", {
         method: "POST",
+        headers: {
+          // No Content-Type here — let fetch set multipart boundary automatically
+          "x-slack-id": currentSlackId ?? "",
+        },
         body: formData,
       });
       if (!response.ok) {
@@ -226,7 +232,10 @@ export default function ProjectDetail() {
     try {
       const response = await fetch("/api/deleteScreenshot", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-slack-id": currentSlackId ?? "",
+        },
         body: JSON.stringify({ project_id: id }),
       });
       if (!response.ok) {
@@ -309,7 +318,6 @@ export default function ProjectDetail() {
             >
               {project.status}
             </span>
-            {/* Show a read-only badge if the viewer is not the owner */}
             {!isOwner && (
               <span
                 className="font-sans text-xs font-bold px-3 py-1 rounded-full"

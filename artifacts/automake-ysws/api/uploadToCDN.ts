@@ -24,6 +24,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: "Airtable not configured" });
   }
 
+  // Read caller's Slack ID from header
+  const callerSlackId = req.headers["x-slack-id"] as string;
+  if (!callerSlackId) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
   try {
     const form = formidable({});
     const [fields, files] = await form.parse(req);
@@ -38,6 +44,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: "No project_id provided" });
     }
 
+    // Verify the caller owns this project before doing anything
+    const projectRes = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Projects/${projectId}`,
+      { headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` } },
+    );
+    const projectRecord = await projectRes.json();
+    const ownerSlackId = projectRecord.fields?.["Slack ID Formula"];
+
+    if (!ownerSlackId || ownerSlackId !== callerSlackId) {
+      fs.unlinkSync(file.filepath); // clean up temp file before rejecting
+      return res.status(403).json({ error: "Not authorized" });
+    }
+
     // Read temp file into a Buffer and wrap as Blob so native fetch
     // can correctly construct the multipart body with its own boundary
     const fileBuffer = fs.readFileSync(file.filepath);
@@ -49,8 +68,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Clean up temp file before the network request
     fs.unlinkSync(file.filepath);
 
-    // Only set Authorization — never set Content-Type manually for multipart,
-    // letting fetch set it automatically ensures the boundary matches the body
     const cdnResponse = await fetch("https://cdn.hackclub.com/api/v4/upload", {
       method: "POST",
       headers: {
@@ -59,7 +76,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: formData,
     });
 
-    // Guard against HTML error pages before attempting to parse JSON
     const contentType = cdnResponse.headers.get("content-type") || "";
     if (!contentType.includes("application/json")) {
       const text = await cdnResponse.text();
@@ -78,8 +94,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // Save screenshot URL to Airtable — projectId is the record ID directly
-    // since the Project ID field is a formula returning the record ID
     const airtableResponse = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Projects/${projectId}`,
       {
@@ -90,7 +104,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         },
         body: JSON.stringify({
           fields: {
-            Screenshot: cdnData.url, // fixed: was "Screenshots"
+            Screenshot: cdnData.url,
           },
         }),
       },
