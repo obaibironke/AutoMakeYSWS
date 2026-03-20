@@ -19,13 +19,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}/${id}?fields[]=Project+Name&fields[]=Description&fields[]=Status&fields[]=Repo+URL&fields[]=How+to+test%3F&fields[]=Screenshot&fields[]=Credits+Awarded&fields[]=Hours+Logged&fields[]=Slack+ID+Formula`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}/${id}`;
 
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
     });
 
     const record = await airtableRes.json();
+
+    // Log all fields so we can see exact field names from Airtable
+    console.log("Airtable fields:", JSON.stringify(record.fields));
+
     if (!record?.id) {
       return res.status(404).json({ error: "Project not found" });
     }
