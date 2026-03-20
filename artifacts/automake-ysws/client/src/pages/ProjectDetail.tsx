@@ -59,6 +59,10 @@ export default function ProjectDetail() {
   const [deleteError, setDeleteError] = useState("");
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentSlackId = sessionStorage.getItem("slack_id");
@@ -109,6 +113,38 @@ export default function ProjectDetail() {
     fetchProject();
     fetchSessions();
   }, [id]);
+
+  const handleSubmitProject = async () => {
+    setSubmitLoading(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/updateProject", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-slack-id": currentSlackId ?? "",
+        },
+        body: JSON.stringify({
+          project_id: id,
+          fields: { Status: "Pending Review" },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit project");
+      }
+      setProject((prev) =>
+        prev ? { ...prev, status: "Pending Review" } : null,
+      );
+      setSubmitSuccess(true);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Failed to submit project.",
+      );
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   const handleLogSession = async () => {
     if (!sessionHours || Number(sessionHours) <= 0) {
@@ -202,7 +238,6 @@ export default function ProjectDetail() {
       const response = await fetch("/api/uploadToCDN", {
         method: "POST",
         headers: {
-          // No Content-Type here — let fetch set multipart boundary automatically
           "x-slack-id": currentSlackId ?? "",
         },
         body: formData,
@@ -760,6 +795,52 @@ export default function ProjectDetail() {
 
           {/* Sidebar */}
           <div className="space-y-5">
+            {/* Submit button — only for owner + Unsubmitted */}
+            {isOwner && project.status === "Unsubmitted" && (
+              <div>
+                {submitError && (
+                  <p
+                    className="font-sans text-xs font-bold mb-2"
+                    style={{ color: "#FF5733" }}
+                  >
+                    {submitError}
+                  </p>
+                )}
+                <button
+                  onClick={handleSubmitProject}
+                  disabled={submitLoading || submitSuccess}
+                  className="font-sans font-bold px-6 py-4 rounded-lg text-base transition-all w-full"
+                  style={{
+                    background: submitSuccess
+                      ? "#00E5A0"
+                      : submitLoading
+                        ? "#ccc"
+                        : "#0F1923",
+                    color: submitSuccess
+                      ? "#0F1923"
+                      : submitLoading
+                        ? "#888"
+                        : "#00E5A0",
+                    cursor:
+                      submitLoading || submitSuccess
+                        ? "not-allowed"
+                        : "pointer",
+                    boxShadow:
+                      submitLoading || submitSuccess
+                        ? "none"
+                        : "3px 3px 0px #FF5733",
+                  }}
+                >
+                  {submitSuccess
+                    ? "✓ Submitted for Review!"
+                    : submitLoading
+                      ? "Submitting..."
+                      : "Submit Project"}
+                </button>
+              </div>
+            )}
+
+            {/* Stats */}
             <div
               className="rounded-xl p-5 bg-white"
               style={{
