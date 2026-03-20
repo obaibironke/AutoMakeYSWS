@@ -27,9 +27,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const record = await airtableRes.json();
 
-    // Log all fields so we can see exact field names from Airtable
-    console.log("Airtable fields:", JSON.stringify(record.fields));
-
     if (!record?.id) {
       return res.status(404).json({ error: "Project not found" });
     }
@@ -45,7 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         screenshot: record.fields["Screenshot"] ?? null,
         creditsAwarded: record.fields["Credits Awarded"] ?? null,
         hoursLogged: record.fields["Hours Logged"] ?? null,
-        ownerSlackId: record.fields["Slack ID Formula"] ?? null,
+        ownerSlackId: record.fields["Slack ID Formula"]?.[0] ?? null,
       },
     });
   } catch (err) {
