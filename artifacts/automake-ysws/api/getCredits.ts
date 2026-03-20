@@ -8,8 +8,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const slack_id = req.method === "POST" ? req.body?.slack_id : req.query?.slack_id;
-
+  const slack_id =
+    req.method === "POST" ? req.body?.slack_id : req.query?.slack_id;
   if (!slack_id) {
     return res.status(400).json({ error: "Missing slack_id" });
   }
@@ -34,9 +34,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    console.log(
+      "Projects Submitted raw value:",
+      JSON.stringify(record.fields["Projects Submitted"]),
+    );
+
+    const rawProjectsSubmitted = record.fields["Projects Submitted"];
+    const projectsSubmitted = Array.isArray(rawProjectsSubmitted)
+      ? rawProjectsSubmitted.length
+      : typeof rawProjectsSubmitted === "number"
+        ? rawProjectsSubmitted
+        : 0;
+
     return res.status(200).json({
       credits: record.fields["Credits"] ?? 0,
-      projectsSubmitted: record.fields["Projects Submitted"] ?? 0,
+      projectsSubmitted,
     });
   } catch (err) {
     console.error("Airtable fetch error:", err);
