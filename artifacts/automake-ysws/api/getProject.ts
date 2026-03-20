@@ -19,7 +19,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}/${id}`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(PROJECTS_TABLE)}/${id}?fields[]=Project+Name&fields[]=Description&fields[]=Status&fields[]=Repo+URL&fields[]=How+to+test%3F&fields[]=Screenshot&fields[]=Credits+Awarded&fields[]=Hours+Logged&fields[]=Slack+ID+Formula`;
+
     const airtableRes = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
     });
@@ -40,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         screenshot: record.fields["Screenshot"] ?? null,
         creditsAwarded: record.fields["Credits Awarded"] ?? null,
         hoursLogged: record.fields["Hours Logged"] ?? null,
-        ownerSlackId: record.fields["Slack Id Formula"] ?? null,
+        ownerSlackId: record.fields["Slack ID Formula"] ?? null,
       },
     });
   } catch (err) {
