@@ -8,7 +8,7 @@ interface LeaderboardEntry {
 }
 
 const MEDAL_COLORS = ["#FFD700", "#C0C0C0", "#CD7F32"];
-const MEDAL_LABELS = ["🥇", "🥈", "🥉"];
+const RANK_LABELS = ["1st", "2nd", "3rd"];
 
 export default function Leaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -90,9 +90,17 @@ export default function Leaderboard() {
                     marginTop: isFirst ? 0 : "1.5rem",
                   }}
                 >
-                  <span className="text-3xl mb-2">
-                    {MEDAL_LABELS[actualRank]}
-                  </span>
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center mb-2"
+                    style={{ background: MEDAL_COLORS[actualRank] }}
+                  >
+                    <span
+                      className="font-sans font-extrabold text-xs"
+                      style={{ color: "#0F1923" }}
+                    >
+                      {RANK_LABELS[actualRank]}
+                    </span>
+                  </div>
                   <p
                     className="font-sans font-extrabold text-sm mb-1 truncate w-full"
                     style={{ color: isFirst ? "#F5F0E8" : "#0F1923" }}
@@ -201,18 +209,18 @@ export default function Leaderboard() {
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{
-                      background: isTop3 ? "#0F1923" : "rgba(15,25,35,0.06)",
+                      background: isTop3
+                        ? MEDAL_COLORS[entry.rank - 1]
+                        : "rgba(15,25,35,0.06)",
                     }}
                   >
                     <span
                       className="font-sans font-extrabold text-xs"
                       style={{
-                        color: isTop3
-                          ? MEDAL_COLORS[entry.rank - 1]
-                          : "rgba(15,25,35,0.4)",
+                        color: isTop3 ? "#0F1923" : "rgba(15,25,35,0.4)",
                       }}
                     >
-                      {isTop3 ? MEDAL_LABELS[entry.rank - 1] : `#${entry.rank}`}
+                      #{entry.rank}
                     </span>
                   </div>
 
