@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import ShippingGuide from "./pages/ShippingGuide";
 import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard";
+import Leaderboard from "./pages/Leaderboard";
 
 function ManifestoPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -162,6 +163,7 @@ function Router() {
           <Route path="/ship" component={ShippingGuide} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/auth" component={AuthCallback} />
+          <Route path="/leaderboard" component={Leaderboard} />
           <Route component={NotFound} />
         </Switch>
       </main>
