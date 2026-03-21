@@ -94,8 +94,8 @@ export default function ShippingGuide() {
               style={{ color: "#0F1923" }}
             >
               After your repository is set up and your Lapse videos are ready,
-              you are ready to submit. All that you have to do is fill out the
-              submission form so that it can be reviewed.
+              you are ready to submit. All that you have to do is fill out your
+              project details and submit so that it can be reviewed.
             </p>
           </div>
 
@@ -112,21 +112,8 @@ export default function ShippingGuide() {
               style={{ color: "#F5F0E8" }}
             >
               Make sure you have your public GitHub link and your Lapse video
-              URL ready before going to the form.
+              URL ready before submitting.
             </p>
-            <a
-              href="https://forms.fillout.com/t/3SiyMc86xGus"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-6 py-3 rounded-lg font-bold transition-transform hover:scale-105"
-              style={{
-                background: "#00E5A0",
-                color: "#0F1923",
-                textDecoration: "none",
-              }}
-            >
-              Open Submission Form
-            </a>
           </div>
         </div>
       </section>
