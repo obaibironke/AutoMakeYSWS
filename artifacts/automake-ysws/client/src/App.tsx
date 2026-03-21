@@ -119,7 +119,7 @@ function Router() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [input]);
 
-  const hideFlagRoutes = ["/dashboard", "/shop", "/projects"];
+  const hideFlagRoutes = ["/dashboard", "/shop", "/projects", "/admin"];
   const shouldHideFlag = hideFlagRoutes.some((route) =>
     location.startsWith(route),
   );
