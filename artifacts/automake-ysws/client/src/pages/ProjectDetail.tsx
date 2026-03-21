@@ -1172,7 +1172,7 @@ export default function ProjectDetail() {
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
                 >
-                  Fill in the remaining details and submit when ready.
+                  Fill in the remaining details and submit when you're ready.
                 </p>
               )}
               {project.status === "Pending Review" && (
@@ -1180,7 +1180,7 @@ export default function ProjectDetail() {
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
                 >
-                  Your project is in the queue. Hang tight!
+                  Your project has been submitted and willbe reviewed soon.
                 </p>
               )}
               {project.status === "Accepted" && (
@@ -1188,7 +1188,8 @@ export default function ProjectDetail() {
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
                 >
-                  Your project has been accepted and credits awarded.
+                  Your project has been approved and the credits have been added
+                  to your account.
                 </p>
               )}
               {project.status === "Approved" && (
@@ -1196,7 +1197,8 @@ export default function ProjectDetail() {
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
                 >
-                  Your project has been approved and credits awarded.
+                  Your project has been approved and the credits have been added
+                  to your account.
                 </p>
               )}
               {project.status === "Rejected" && (
@@ -1204,7 +1206,8 @@ export default function ProjectDetail() {
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
                 >
-                  Your project was not approved this time.
+                  Your project was rejected. Make changes and resubmit when
+                  you're ready.
                 </p>
               )}
             </div>
