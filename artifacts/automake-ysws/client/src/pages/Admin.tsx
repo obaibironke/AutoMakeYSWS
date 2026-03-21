@@ -35,7 +35,7 @@ interface Order {
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   Unsubmitted:      { bg: "rgba(15,25,35,0.08)", color: "#0F1923" },
   "Pending Review": { bg: "rgba(255,193,7,0.15)", color: "#856404" },
-  Approved:         { bg: "rgba(0,229,160,0.15)", color: "#007a52" },
+  Accepted:         { bg: "rgba(0,229,160,0.15)", color: "#007a52" },
   Rejected:         { bg: "rgba(255,87,51,0.15)", color: "#c0392b" },
 };
 
@@ -105,7 +105,7 @@ export default function Admin() {
     });
     const data = await res.json();
     if (data.success) {
-      setProjects((prev) => prev.map((p) => p.id === projectId ? { ...p, status: action === "approve" ? "Approved" : "Rejected", creditsAwarded: credits } : p));
+      setProjects((prev) => prev.map((p) => p.id === projectId ? { ...p, status: action === "approve" ? "Accepted" : "Rejected", creditsAwarded: credits } : p));
     } else {
       alert(data.error || "Action failed");
     }

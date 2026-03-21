@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useLocation, useParams } from "wouter";
 import { motion } from "framer-motion";
 
-const STATUSES = ["Pending Review", "Approved", "Rejected"];
+const STATUSES = ["Pending Review", "Accepted", "Rejected"];
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   Unsubmitted: { bg: "rgba(15,25,35,0.08)", color: "#0F1923" },
   "Pending Review": { bg: "rgba(255,193,7,0.15)", color: "#856404" },
-  Approved: { bg: "rgba(0,229,160,0.15)", color: "#007a52" },
+  Accepted: { bg: "rgba(0,229,160,0.15)", color: "#007a52" },
   Rejected: { bg: "rgba(255,87,51,0.15)", color: "#c0392b" },
 };
 
@@ -87,7 +87,7 @@ export default function AdminProject() {
         headers: { "Content-Type": "application/json", "x-slack-id": slackId },
         body: JSON.stringify({
           project_id: project.id,
-          action: selectedStatus === "Approved" ? "approve" : "reject",
+          action: selectedStatus === "Accepted" ? "approve" : "reject",
           status_override: selectedStatus,
           credits_awarded: Number(credits || 0),
         }),
@@ -335,7 +335,7 @@ export default function AdminProject() {
                       style={{
                         background:
                           selectedStatus === s
-                            ? s === "Approved"
+                            ? s === "Accepted"
                               ? "#00E5A0"
                               : s === "Rejected"
                                 ? "#FF5733"
@@ -343,7 +343,7 @@ export default function AdminProject() {
                             : "rgba(245,240,232,0.06)",
                         color:
                           selectedStatus === s
-                            ? s === "Approved"
+                            ? s === "Accepted"
                               ? "#0F1923"
                               : "white"
                             : "rgba(245,240,232,0.5)",

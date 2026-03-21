@@ -608,7 +608,7 @@ async function handleAdminReviewProject(
     return res.status(400).json({ error: "Missing fields" });
   try {
     const newStatus =
-      status_override || (action === "approve" ? "Approved" : "Rejected");
+      status_override || (action === "approve" ? "Accepted" : "Rejected");
     const fields: Record<string, any> = { Status: newStatus };
     if (action === "approve" && credits_awarded > 0) {
       fields["Credits Awarded"] = Number(credits_awarded);
