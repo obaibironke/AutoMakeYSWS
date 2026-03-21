@@ -17,6 +17,7 @@ interface Project {
   creditsAwarded: number | null;
   hoursLogged: number | null;
   ownerSlackId: string | null;
+  reviewerNotes: string | null;
 }
 
 interface Session {
@@ -222,7 +223,6 @@ function SubmitModal({
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
 
-  // Check auth synchronously before first render — prevents any flash
   const currentSlackId = sessionStorage.getItem("slack_id");
   if (!currentSlackId) {
     window.location.href = HACK_CLUB_AUTH_URL;
@@ -261,6 +261,8 @@ export default function ProjectDetail() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isOwner = !!(project && project.ownerSlackId === currentSlackId);
+  const isEditable =
+    project?.status === "Unsubmitted" || project?.status === "Rejected";
 
   const missingScreenshot = !project?.screenshot;
   const missingDescription = !project?.description?.trim();
@@ -274,8 +276,6 @@ export default function ProjectDetail() {
   ].filter(Boolean) as string[];
 
   useEffect(() => {
-    const slackId = currentSlackId;
-
     const fetchProject = async () => {
       try {
         const res = await fetch(`/api/getProject?id=${id}`);
@@ -336,9 +336,7 @@ export default function ProjectDetail() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to submit project");
-      }
+      if (!res.ok) throw new Error(data.error || "Failed to submit project");
       setProject((prev) =>
         prev ? { ...prev, status: "Pending Review", repoUrl, howToTest } : null,
       );
@@ -386,7 +384,6 @@ export default function ProjectDetail() {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         setSessionError(data.error || "Failed to log session.");
         setSessionLoading(false);
@@ -613,8 +610,8 @@ export default function ProjectDetail() {
               )}
             </div>
 
-            {/* Upload / Delete Image — only for owner + Unsubmitted */}
-            {isOwner && project.status === "Unsubmitted" && (
+            {/* Upload / Delete Image — owner + Unsubmitted or Rejected */}
+            {isOwner && isEditable && (
               <div
                 className="rounded-xl p-6 bg-white"
                 style={{
@@ -791,6 +788,37 @@ export default function ProjectDetail() {
                 {project.description}
               </p>
             </div>
+
+            {/* Reviewer's Notes — show on Accepted/Rejected */}
+            {(project.status === "Accepted" || project.status === "Rejected") &&
+              project.reviewerNotes && (
+                <div
+                  className="rounded-xl p-6 bg-white"
+                  style={{
+                    border:
+                      project.status === "Rejected"
+                        ? "2px solid #FF5733"
+                        : "2px solid #00A372",
+                    boxShadow:
+                      project.status === "Rejected"
+                        ? "3px 3px 0px #FF5733"
+                        : "3px 3px 0px #00A372",
+                  }}
+                >
+                  <h2
+                    className="font-sans text-xl font-extrabold mb-3"
+                    style={{ color: "#0F1923" }}
+                  >
+                    Reviewer's Notes
+                  </h2>
+                  <p
+                    className="font-sans text-sm leading-relaxed"
+                    style={{ color: "#0F1923" }}
+                  >
+                    {project.reviewerNotes}
+                  </p>
+                </div>
+              )}
 
             {/* How to test */}
             {project.howToTest && (
@@ -1012,8 +1040,8 @@ export default function ProjectDetail() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-            {/* Submit button — only for owner + Unsubmitted */}
-            {isOwner && project.status === "Unsubmitted" && (
+            {/* Submit button — owner + Unsubmitted or Rejected */}
+            {isOwner && isEditable && (
               <div className="space-y-3">
                 {!canSubmit && (
                   <div
@@ -1071,7 +1099,11 @@ export default function ProjectDetail() {
                         : "3px 3px 0px #FF5733",
                   }}
                 >
-                  {submitSuccess ? "✓ Submitted for Review!" : "Submit Project"}
+                  {submitSuccess
+                    ? "✓ Submitted for Review!"
+                    : project.status === "Rejected"
+                      ? "Resubmit Project"
+                      : "Submit Project"}
                 </button>
               </div>
             )}
@@ -1180,7 +1212,7 @@ export default function ProjectDetail() {
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
                 >
-                  Your project has been submitted and willbe reviewed soon.
+                  Your project has been submitted and will be reviewed soon.
                 </p>
               )}
               {project.status === "Accepted" && (

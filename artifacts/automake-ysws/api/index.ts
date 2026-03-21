@@ -27,8 +27,6 @@ const airtableTable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
   .base(process.env.AIRTABLE_BASE_ID!)
   .table(USERS_TABLE);
 
-/* ─── Route handlers ─────────────────────────────────────── */
-
 async function handleVerifyAuth(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });
@@ -48,9 +46,7 @@ async function handleVerifyAuth(req: VercelRequest, res: VercelResponse) {
     const { access_token } = tokenResponse.data;
     const userResponse = await axios.get(
       "https://auth.hackclub.com/api/v1/me",
-      {
-        headers: { Authorization: `Bearer ${access_token}` },
-      },
+      { headers: { Authorization: `Bearer ${access_token}` } },
     );
     const {
       slack_id,
@@ -93,12 +89,10 @@ async function handleVerifyAuth(req: VercelRequest, res: VercelResponse) {
       "Auth error:",
       error?.response?.data || error?.message || error,
     );
-    return res
-      .status(500)
-      .json({
-        error: "Authentication failed",
-        details: error?.response?.data || error?.message || "Unknown error",
-      });
+    return res.status(500).json({
+      error: "Authentication failed",
+      details: error?.response?.data || error?.message || "Unknown error",
+    });
   }
 }
 
@@ -216,6 +210,7 @@ async function handleGetProject(req: VercelRequest, res: VercelResponse) {
         creditsAwarded: record.fields["Credits Awarded"] ?? null,
         hoursLogged: record.fields["Hours Logged"] ?? null,
         ownerSlackId: record.fields["Slack ID Formula"]?.[0] ?? null,
+        reviewerNotes: record.fields["Reviewer's Notes"] ?? null,
       },
     });
   } catch (err) {
@@ -279,11 +274,9 @@ async function handleUpdateProject(req: VercelRequest, res: VercelResponse) {
     );
     const updateData = await updateRes.json();
     if (!updateRes.ok)
-      return res
-        .status(updateRes.status)
-        .json({
-          error: updateData.error?.message || "Failed to update project",
-        });
+      return res.status(updateRes.status).json({
+        error: updateData.error?.message || "Failed to update project",
+      });
     return res.status(200).json({ success: true, fields: updateData.fields });
   } catch (err) {
     console.error("Update project error:", err);
@@ -322,22 +315,16 @@ async function handleDeleteScreenshot(req: VercelRequest, res: VercelResponse) {
     );
     const airtableData = await airtableResponse.json();
     if (!airtableResponse.ok)
-      return res
-        .status(airtableResponse.status)
-        .json({
-          error: airtableData.error?.message || "Failed to delete screenshot",
-        });
+      return res.status(airtableResponse.status).json({
+        error: airtableData.error?.message || "Failed to delete screenshot",
+      });
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Delete screenshot error:", error);
-    return res
-      .status(500)
-      .json({
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to delete screenshot",
-      });
+    return res.status(500).json({
+      error:
+        error instanceof Error ? error.message : "Failed to delete screenshot",
+    });
   }
 }
 
@@ -399,18 +386,16 @@ async function handleLogSession(req: VercelRequest, res: VercelResponse) {
     const data = await sessionRes.json();
     if (!data?.id)
       return res.status(500).json({ error: "Failed to log session" });
-    return res
-      .status(200)
-      .json({
-        success: true,
-        session: {
-          id: data.id,
-          hours: data.fields["Hours"],
-          notes: data.fields["Notes"],
-          date: data.fields["Date"],
-          lapseSession: data.fields["Link to Lapse Session"],
-        },
-      });
+    return res.status(200).json({
+      success: true,
+      session: {
+        id: data.id,
+        hours: data.fields["Hours"],
+        notes: data.fields["Notes"],
+        date: data.fields["Date"],
+        lapseSession: data.fields["Link to Lapse Session"],
+      },
+    });
   } catch (err) {
     console.error("Log session error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -459,13 +444,11 @@ async function handlePurchaseItem(req: VercelRequest, res: VercelResponse) {
     const currentBalance: number = userRecord.fields["Credits"] ?? 0;
     const itemCost: number = itemData.fields["Cost"] ?? 0;
     if (currentBalance < itemCost)
-      return res
-        .status(400)
-        .json({
-          error: "Insufficient credits",
-          required: itemCost,
-          available: currentBalance,
-        });
+      return res.status(400).json({
+        error: "Insufficient credits",
+        required: itemCost,
+        available: currentBalance,
+      });
     const orderRes = await airtableFetch(encodeURIComponent(ORDERS_TABLE), {
       method: "POST",
       body: JSON.stringify({
@@ -479,13 +462,11 @@ async function handlePurchaseItem(req: VercelRequest, res: VercelResponse) {
     const orderData = await orderRes.json();
     if (!orderData?.id)
       return res.status(500).json({ error: "Failed to create order" });
-    return res
-      .status(200)
-      .json({
-        success: true,
-        orderId: orderData.id,
-        newBalance: currentBalance - itemCost,
-      });
+    return res.status(200).json({
+      success: true,
+      orderId: orderData.id,
+      newBalance: currentBalance - itemCost,
+    });
   } catch (err) {
     console.error("Purchase error:", err);
     return res.status(500).json({ error: "Internal server error" });
@@ -547,27 +528,21 @@ async function handleUploadToCDN(req: VercelRequest, res: VercelResponse) {
     );
     const airtableData = await airtableResponse.json();
     if (!airtableResponse.ok)
-      return res
-        .status(airtableResponse.status)
-        .json({
-          error: airtableData.error?.message || "Failed to save to Airtable",
-        });
+      return res.status(airtableResponse.status).json({
+        error: airtableData.error?.message || "Failed to save to Airtable",
+      });
     return res
       .status(200)
       .json({ url: cdnData.url, id: cdnData.id, filename: cdnData.filename });
   } catch (error) {
     console.error("Upload error:", error);
-    return res
-      .status(500)
-      .json({
-        error: error instanceof Error ? error.message : "Upload failed",
-      });
+    return res.status(500).json({
+      error: error instanceof Error ? error.message : "Upload failed",
+    });
   }
 }
 
-/* ─── Main router ────────────────────────────────────────── */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Allow CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -579,58 +554,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const route = req.query.route as string;
 
   switch (route) {
-    // kebab-case
     case "verify-auth":
-      return handleVerifyAuth(req, res);
-    case "get-leaderboard":
-      return handleGetLeaderboard(req, res);
-    case "get-credits":
-      return handleGetCredits(req, res);
-    case "create-project":
-      return handleCreateProject(req, res);
-    case "get-project":
-      return handleGetProject(req, res);
-    case "get-user-projects":
-      return handleGetUserProjects(req, res);
-    case "update-project":
-      return handleUpdateProject(req, res);
-    case "delete-screenshot":
-      return handleDeleteScreenshot(req, res);
-    case "get-sessions":
-      return handleGetSessions(req, res);
-    case "log-session":
-      return handleLogSession(req, res);
-    case "get-shop-items":
-      return handleGetShopItems(req, res);
-    case "purchase-item":
-      return handlePurchaseItem(req, res);
-    case "upload-to-cdn":
-      return handleUploadToCDN(req, res);
-    // camelCase aliases (matching original file names)
     case "verifyAuth":
       return handleVerifyAuth(req, res);
+    case "get-leaderboard":
     case "getLeaderboard":
       return handleGetLeaderboard(req, res);
+    case "get-credits":
     case "getCredits":
       return handleGetCredits(req, res);
+    case "create-project":
     case "createProject":
       return handleCreateProject(req, res);
+    case "get-project":
     case "getProject":
       return handleGetProject(req, res);
+    case "get-user-projects":
     case "getUserProjects":
       return handleGetUserProjects(req, res);
+    case "update-project":
     case "updateProject":
       return handleUpdateProject(req, res);
+    case "delete-screenshot":
     case "deleteScreenshot":
       return handleDeleteScreenshot(req, res);
+    case "get-sessions":
     case "getSessions":
       return handleGetSessions(req, res);
+    case "log-session":
     case "logSession":
       return handleLogSession(req, res);
+    case "get-shop-items":
     case "getShopItems":
       return handleGetShopItems(req, res);
+    case "purchase-item":
     case "purchaseItem":
       return handlePurchaseItem(req, res);
+    case "upload-to-cdn":
     case "uploadToCDN":
       return handleUploadToCDN(req, res);
     default:
