@@ -580,7 +580,7 @@ async function handleAdminGetProjects(req: VercelRequest, res: VercelResponse) {
       name: r.fields["Project Name"] ?? "",
       description: r.fields["Description"] ?? "",
       status: r.fields["Status"] ?? "Unsubmitted",
-      ownerName: r.fields["Owner Name"]?.[0] ?? "",
+      ownerName: r.fields["Name (from User)"]?.[0] ?? "",
       ownerSlackId: r.fields["Slack ID Formula"]?.[0] ?? "",
       hoursLogged: r.fields["Hours Logged"] ?? null,
       creditsAwarded: r.fields["Credits Awarded"] ?? null,
