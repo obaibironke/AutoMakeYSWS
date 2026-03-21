@@ -579,6 +579,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const route = req.query.route as string;
 
   switch (route) {
+    // kebab-case
     case "verify-auth":
       return handleVerifyAuth(req, res);
     case "get-leaderboard":
@@ -604,6 +605,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     case "purchase-item":
       return handlePurchaseItem(req, res);
     case "upload-to-cdn":
+      return handleUploadToCDN(req, res);
+    // camelCase aliases (matching original file names)
+    case "verifyAuth":
+      return handleVerifyAuth(req, res);
+    case "getLeaderboard":
+      return handleGetLeaderboard(req, res);
+    case "getCredits":
+      return handleGetCredits(req, res);
+    case "createProject":
+      return handleCreateProject(req, res);
+    case "getProject":
+      return handleGetProject(req, res);
+    case "getUserProjects":
+      return handleGetUserProjects(req, res);
+    case "updateProject":
+      return handleUpdateProject(req, res);
+    case "deleteScreenshot":
+      return handleDeleteScreenshot(req, res);
+    case "getSessions":
+      return handleGetSessions(req, res);
+    case "logSession":
+      return handleLogSession(req, res);
+    case "getShopItems":
+      return handleGetShopItems(req, res);
+    case "purchaseItem":
+      return handlePurchaseItem(req, res);
+    case "uploadToCDN":
       return handleUploadToCDN(req, res);
     default:
       return res.status(404).json({ error: `Unknown route: ${route}` });
