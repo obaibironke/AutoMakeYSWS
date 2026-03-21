@@ -28,6 +28,7 @@ export default function Navbar() {
   const links = [
     { label: "Showcase", href: "/showcase" },
     { label: "Guides", href: "/guides" },
+    { label: "Leaderboard", href: "/leaderboard" },
   ];
 
   return (
@@ -123,10 +124,7 @@ export default function Navbar() {
               handleSignIn();
             }}
             className="font-sans text-sm font-bold px-5 py-2 rounded-lg cursor-pointer inline-block border-none text-left"
-            style={{
-              background: "#00E5A0",
-              color: "#0F1923",
-            }}
+            style={{ background: "#00E5A0", color: "#0F1923" }}
           >
             {isSignedIn ? "Dashboard" : "Sign In"}
           </button>

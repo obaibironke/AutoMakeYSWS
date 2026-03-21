@@ -130,7 +130,6 @@ function useScrollBoundary(
   }) => void,
 ) {
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const checkScroll = useCallback(() => {
     if (!scrollRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
@@ -139,7 +138,6 @@ function useScrollBoundary(
       isAtBottom: scrollHeight - scrollTop - clientHeight < 5,
     });
   }, [onScrollStateChange]);
-
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -154,7 +152,6 @@ function useScrollBoundary(
       ro.disconnect();
     };
   }, [checkScroll]);
-
   return scrollRef;
 }
 
@@ -220,7 +217,6 @@ function HeroSection({
           y: blobY.b4,
         }}
       />
-
       <motion.div
         className="relative z-10 max-w-5xl mx-auto px-6"
         custom={dir}
@@ -1203,6 +1199,7 @@ function FooterSection({
               {[
                 { label: "Showcase", href: "/showcase", external: false },
                 { label: "Guides", href: "/guides", external: false },
+                { label: "Leaderboard", href: "/leaderboard", external: false },
                 {
                   label: "Github Repository",
                   href: "https://github.com/obaibironke/AutoMakeYSWS",
@@ -1324,7 +1321,6 @@ export default function Landing() {
     const onWheel = (e: WheelEvent) => {
       const scrollDir = e.deltaY > 0 ? 1 : -1;
       const isScrollableSection = SCROLLABLE_INDICES.includes(current);
-
       if (current === INTEG_SECTION && !transitioning.current) {
         e.preventDefault();
         intScrollCount.current += 1;
@@ -1340,7 +1336,6 @@ export default function Landing() {
         }
         return;
       }
-
       if (isScrollableSection) {
         if (scrollDir > 0 && !scrollState.isAtBottom) return;
         if (scrollDir < 0 && !scrollState.isAtTop) return;
@@ -1349,13 +1344,11 @@ export default function Landing() {
         go(current + scrollDir);
         return;
       }
-
       e.preventDefault();
       if (Math.abs(e.deltaY) < 25) return;
       if (transitioning.current) return;
       go(current + scrollDir);
     };
-
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
   }, [current, go, scrollState]);
@@ -1435,7 +1428,6 @@ export default function Landing() {
             )}
           </motion.div>
         </AnimatePresence>
-
         <div
           className="absolute bottom-0 left-0 right-0 h-[3px] z-50"
           style={{ background: "rgba(0,229,160,0.15)" }}

@@ -32,12 +32,13 @@ export default function Footer() {
               {[
                 { label: "Showcase", href: "/showcase" },
                 { label: "Guides", href: "/guides" },
+                { label: "Leaderboard", href: "/leaderboard" },
                 {
                   label: "Github Repository",
-                  href: "https://github.com/obaibironke/AutoMakeYSWS"
+                  href: "https://github.com/obaibironke/AutoMakeYSWS",
                 },
               ].map((l) => (
-                <li key={l.href}>
+                <li key={l.label}>
                   <Link href={l.href}>
                     <span
                       className="font-sans text-sm cursor-pointer transition-colors"
