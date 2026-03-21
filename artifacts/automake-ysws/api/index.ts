@@ -27,6 +27,18 @@ const airtableTable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
   .base(process.env.AIRTABLE_BASE_ID!)
   .table(USERS_TABLE);
 
+/* ─── Admin helpers ──────────────────────────────────────── */
+
+function isAdmin(slackId: string): boolean {
+  const admins = (process.env.ADMIN_SLACK_IDS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return admins.includes(slackId);
+}
+
+/* ─── Handlers ───────────────────────────────────────────── */
+
 async function handleVerifyAuth(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST")
     return res.status(405).json({ error: "Method not allowed" });
@@ -46,7 +58,9 @@ async function handleVerifyAuth(req: VercelRequest, res: VercelResponse) {
     const { access_token } = tokenResponse.data;
     const userResponse = await axios.get(
       "https://auth.hackclub.com/api/v1/me",
-      { headers: { Authorization: `Bearer ${access_token}` } },
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      },
     );
     const {
       slack_id,
@@ -542,6 +556,199 @@ async function handleUploadToCDN(req: VercelRequest, res: VercelResponse) {
   }
 }
 
+/* ─── Admin handlers ─────────────────────────────────────── */
+
+async function handleCheckAdmin(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "POST")
+    return res.status(405).json({ error: "Method not allowed" });
+  const { slack_id } = req.body;
+  return res.status(200).json({ isAdmin: isAdmin(slack_id || "") });
+}
+
+async function handleAdminGetProjects(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "GET")
+    return res.status(405).json({ error: "Method not allowed" });
+  const callerSlackId = req.headers["x-slack-id"] as string;
+  if (!isAdmin(callerSlackId))
+    return res.status(403).json({ error: "Not authorized" });
+  try {
+    const url = `${encodeURIComponent(PROJECTS_TABLE)}?sort[0][field]=Status&sort[0][direction]=asc`;
+    const airtableRes = await airtableFetch(url);
+    const data = await airtableRes.json();
+    const projects = (data.records || []).map((r: any) => ({
+      id: r.id,
+      name: r.fields["Project Name"] ?? "",
+      description: r.fields["Description"] ?? "",
+      status: r.fields["Status"] ?? "Unsubmitted",
+      ownerName: r.fields["Owner Name"]?.[0] ?? "",
+      ownerSlackId: r.fields["Slack ID Formula"]?.[0] ?? "",
+      hoursLogged: r.fields["Hours Logged"] ?? null,
+      creditsAwarded: r.fields["Credits Awarded"] ?? null,
+      repoUrl: r.fields["Repo URL"] ?? null,
+      howToTest: r.fields["How to test?"] ?? null,
+    }));
+    return res.status(200).json({ projects });
+  } catch (err) {
+    console.error("Admin get projects error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function handleAdminReviewProject(
+  req: VercelRequest,
+  res: VercelResponse,
+) {
+  if (req.method !== "POST")
+    return res.status(405).json({ error: "Method not allowed" });
+  const callerSlackId = req.headers["x-slack-id"] as string;
+  if (!isAdmin(callerSlackId))
+    return res.status(403).json({ error: "Not authorized" });
+  const { project_id, action, credits_awarded } = req.body;
+  if (!project_id || !action)
+    return res.status(400).json({ error: "Missing fields" });
+  try {
+    const newStatus = action === "approve" ? "Approved" : "Rejected";
+    const fields: Record<string, any> = { Status: newStatus };
+    if (action === "approve" && credits_awarded > 0) {
+      fields["Credits Awarded"] = Number(credits_awarded);
+      const projectRes = await airtableFetch(
+        `${encodeURIComponent(PROJECTS_TABLE)}/${project_id}`,
+      );
+      const projectRecord = await projectRes.json();
+      const ownerSlackId = projectRecord.fields?.["Slack ID Formula"]?.[0];
+      if (ownerSlackId) {
+        const userRes = await airtableFetch(
+          `${encodeURIComponent(USERS_TABLE)}?filterByFormula=${encodeURIComponent(`{Slack ID} = "${ownerSlackId}"`)}&fields[]=Credits+Earned`,
+        );
+        const userData = await userRes.json();
+        const userRecord = userData.records?.[0];
+        if (userRecord) {
+          const currentCredits = userRecord.fields["Credits Earned"] ?? 0;
+          await airtableFetch(
+            `${encodeURIComponent(USERS_TABLE)}/${userRecord.id}`,
+            {
+              method: "PATCH",
+              body: JSON.stringify({
+                fields: {
+                  "Credits Earned": currentCredits + Number(credits_awarded),
+                },
+              }),
+            },
+          );
+        }
+      }
+    }
+    const updateRes = await airtableFetch(
+      `${encodeURIComponent(PROJECTS_TABLE)}/${project_id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ fields }),
+      },
+    );
+    const updateData = await updateRes.json();
+    if (!updateRes.ok)
+      return res
+        .status(400)
+        .json({ error: updateData.error?.message || "Failed to update" });
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Admin review project error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function handleAdminGetUsers(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "GET")
+    return res.status(405).json({ error: "Method not allowed" });
+  const callerSlackId = req.headers["x-slack-id"] as string;
+  if (!isAdmin(callerSlackId))
+    return res.status(403).json({ error: "Not authorized" });
+  try {
+    const url = `${encodeURIComponent(USERS_TABLE)}?fields[]=Name&fields[]=Slack+ID&fields[]=Credits+Earned&sort[0][field]=Credits+Earned&sort[0][direction]=desc`;
+    const airtableRes = await airtableFetch(url);
+    const data = await airtableRes.json();
+    const users = (data.records || []).map((r: any) => ({
+      id: r.id,
+      name: r.fields["Name"] ?? "",
+      slackId: r.fields["Slack ID"] ?? "",
+      credits: r.fields["Credits Earned"] ?? 0,
+    }));
+    return res.status(200).json({ users });
+  } catch (err) {
+    console.error("Admin get users error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function handleAdminAwardCredits(
+  req: VercelRequest,
+  res: VercelResponse,
+) {
+  if (req.method !== "POST")
+    return res.status(405).json({ error: "Method not allowed" });
+  const callerSlackId = req.headers["x-slack-id"] as string;
+  if (!isAdmin(callerSlackId))
+    return res.status(403).json({ error: "Not authorized" });
+  const { target_slack_id, amount } = req.body;
+  if (!target_slack_id || !amount)
+    return res.status(400).json({ error: "Missing fields" });
+  try {
+    const userRes = await airtableFetch(
+      `${encodeURIComponent(USERS_TABLE)}?filterByFormula=${encodeURIComponent(`{Slack ID} = "${target_slack_id}"`)}&fields[]=Credits+Earned`,
+    );
+    const userData = await userRes.json();
+    const userRecord = userData.records?.[0];
+    if (!userRecord) return res.status(404).json({ error: "User not found" });
+    const currentCredits = userRecord.fields["Credits Earned"] ?? 0;
+    const updateRes = await airtableFetch(
+      `${encodeURIComponent(USERS_TABLE)}/${userRecord.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          fields: { "Credits Earned": currentCredits + Number(amount) },
+        }),
+      },
+    );
+    const updateData = await updateRes.json();
+    if (!updateRes.ok)
+      return res.status(400).json({
+        error: updateData.error?.message || "Failed to award credits",
+      });
+    return res
+      .status(200)
+      .json({ success: true, newBalance: currentCredits + Number(amount) });
+  } catch (err) {
+    console.error("Admin award credits error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function handleAdminGetOrders(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== "GET")
+    return res.status(405).json({ error: "Method not allowed" });
+  const callerSlackId = req.headers["x-slack-id"] as string;
+  if (!isAdmin(callerSlackId))
+    return res.status(403).json({ error: "Not authorized" });
+  try {
+    const url = `${encodeURIComponent(ORDERS_TABLE)}?sort[0][field]=Created&sort[0][direction]=desc`;
+    const airtableRes = await airtableFetch(url);
+    const data = await airtableRes.json();
+    const orders = (data.records || []).map((r: any) => ({
+      id: r.id,
+      userName: r.fields["User Name"]?.[0] ?? "",
+      itemName: r.fields["Item Name"]?.[0] ?? "",
+      creditsSpent: r.fields["Credits Spent"] ?? 0,
+      date: r.fields["Created"] ?? "",
+    }));
+    return res.status(200).json({ orders });
+  } catch (err) {
+    console.error("Admin get orders error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+/* ─── Main router ────────────────────────────────────────── */
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -593,6 +800,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     case "upload-to-cdn":
     case "uploadToCDN":
       return handleUploadToCDN(req, res);
+    case "check-admin":
+    case "checkAdmin":
+      return handleCheckAdmin(req, res);
+    case "admin-get-projects":
+    case "adminGetProjects":
+      return handleAdminGetProjects(req, res);
+    case "admin-review-project":
+    case "adminReviewProject":
+      return handleAdminReviewProject(req, res);
+    case "admin-get-users":
+    case "adminGetUsers":
+      return handleAdminGetUsers(req, res);
+    case "admin-award-credits":
+    case "adminAwardCredits":
+      return handleAdminAwardCredits(req, res);
+    case "admin-get-orders":
+    case "adminGetOrders":
+      return handleAdminGetOrders(req, res);
     default:
       return res.status(404).json({ error: `Unknown route: ${route}` });
   }
