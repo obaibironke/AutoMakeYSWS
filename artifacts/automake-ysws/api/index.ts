@@ -603,11 +603,12 @@ async function handleAdminReviewProject(
   const callerSlackId = req.headers["x-slack-id"] as string;
   if (!isAdmin(callerSlackId))
     return res.status(403).json({ error: "Not authorized" });
-  const { project_id, action, credits_awarded } = req.body;
+  const { project_id, action, status_override, credits_awarded } = req.body;
   if (!project_id || !action)
     return res.status(400).json({ error: "Missing fields" });
   try {
-    const newStatus = action === "approve" ? "Approved" : "Rejected";
+    const newStatus =
+      status_override || (action === "approve" ? "Approved" : "Rejected");
     const fields: Record<string, any> = { Status: newStatus };
     if (action === "approve" && credits_awarded > 0) {
       fields["Credits Awarded"] = Number(credits_awarded);
