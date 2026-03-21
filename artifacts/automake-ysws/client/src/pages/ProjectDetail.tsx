@@ -103,10 +103,9 @@ function SubmitModal({
             className="font-sans text-sm font-bold cursor-pointer"
             style={{ color: "rgba(15,25,35,0.4)" }}
           >
-            ✕
+            x
           </button>
         </div>
-
         <div className="space-y-5">
           <div>
             <label
@@ -128,7 +127,6 @@ function SubmitModal({
               }}
             />
           </div>
-
           <div>
             <label
               className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
@@ -149,7 +147,6 @@ function SubmitModal({
               }}
             />
           </div>
-
           <div>
             <label
               className="font-sans text-xs font-bold uppercase tracking-widest block mb-2"
@@ -176,7 +173,6 @@ function SubmitModal({
               }}
             />
           </div>
-
           {(validationError || error) && (
             <p
               className="font-sans text-xs font-bold"
@@ -185,7 +181,6 @@ function SubmitModal({
               {validationError || error}
             </p>
           )}
-
           <div className="flex gap-3 pt-2">
             <button
               onClick={onClose}
@@ -240,7 +235,6 @@ export default function ProjectDetail() {
   const [sessionLoading, setSessionLoading] = useState(false);
   const [sessionError, setSessionError] = useState("");
   const [sessionSuccess, setSessionSuccess] = useState(false);
-
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(
     null,
@@ -248,11 +242,9 @@ export default function ProjectDetail() {
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
-
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState("");
   const [deleteSuccess, setDeleteSuccess] = useState(false);
-
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -263,7 +255,6 @@ export default function ProjectDetail() {
   const isOwner = !!(project && project.ownerSlackId === currentSlackId);
   const isEditable =
     project?.status === "Unsubmitted" || project?.status === "Rejected";
-
   const missingScreenshot = !project?.screenshot;
   const missingDescription = !project?.description?.trim();
   const missingSessions = sessions.length === 0;
@@ -285,13 +276,12 @@ export default function ProjectDetail() {
         } else {
           setNotFound(true);
         }
-      } catch (err) {
+      } catch {
         setNotFound(true);
       } finally {
         setLoading(false);
       }
     };
-
     const fetchSessions = async () => {
       try {
         const res = await fetch(`/api/getSessions?project_id=${id}`);
@@ -306,7 +296,6 @@ export default function ProjectDetail() {
         console.error("Failed to fetch sessions:", err);
       }
     };
-
     fetchProject();
     fetchSessions();
   }, [id]);
@@ -364,10 +353,8 @@ export default function ProjectDetail() {
       setSessionError("Please provide a link to your Lapse session.");
       return;
     }
-
     setSessionLoading(true);
     setSessionError("");
-
     try {
       const res = await fetch("/api/logSession", {
         method: "POST",
@@ -382,14 +369,12 @@ export default function ProjectDetail() {
           lapseSession: sessionLapse,
         }),
       });
-
       const data = await res.json();
       if (!res.ok) {
         setSessionError(data.error || "Failed to log session.");
         setSessionLoading(false);
         return;
       }
-
       const newSession: Session = {
         id: data.session.id,
         hours: data.session.hours,
@@ -397,7 +382,6 @@ export default function ProjectDetail() {
         date: data.session.date,
         lapseSession: data.session.lapseSession,
       };
-
       setSessions((prev) => [newSession, ...prev]);
       setTotalHours((prev) => prev + newSession.hours);
       setSessionHours("");
@@ -405,7 +389,7 @@ export default function ProjectDetail() {
       setSessionLapse("");
       setSessionSuccess(true);
       setTimeout(() => setSessionSuccess(false), 3000);
-    } catch (err) {
+    } catch {
       setSessionError("Something went wrong.");
     } finally {
       setSessionLoading(false);
@@ -422,9 +406,7 @@ export default function ProjectDetail() {
       setScreenshotFile(file);
       setUploadError("");
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setScreenshotPreview(reader.result as string);
-      };
+      reader.onloadend = () => setScreenshotPreview(reader.result as string);
       reader.readAsDataURL(file);
     } else {
       setUploadError("Please select a valid image file");
@@ -537,7 +519,6 @@ export default function ProjectDetail() {
   return (
     <div className="min-h-screen" style={{ background: "#F5F0E8" }}>
       <DashboardNav />
-
       <AnimatePresence>
         {showSubmitModal && (
           <SubmitModal
@@ -610,7 +591,7 @@ export default function ProjectDetail() {
               )}
             </div>
 
-            {/* Upload / Delete Image — owner + Unsubmitted or Rejected */}
+            {/* Upload / Delete Image */}
             {isOwner && isEditable && (
               <div
                 className="rounded-xl p-6 bg-white"
@@ -713,7 +694,7 @@ export default function ProjectDetail() {
                     }}
                   >
                     {uploadSuccess
-                      ? "✓ Image Uploaded!"
+                      ? "Image Uploaded!"
                       : uploadLoading
                         ? "Uploading..."
                         : "Upload Image"}
@@ -756,7 +737,7 @@ export default function ProjectDetail() {
                         }}
                       >
                         {deleteSuccess
-                          ? "✓ Image Removed"
+                          ? "Image Removed"
                           : deleteLoading
                             ? "Removing..."
                             : "Delete Image"}
@@ -789,7 +770,7 @@ export default function ProjectDetail() {
               </p>
             </div>
 
-            {/* Reviewer's Notes — show on Accepted/Rejected */}
+            {/* Reviewer's Notes */}
             {(project.status === "Accepted" || project.status === "Rejected") &&
               project.reviewerNotes && (
                 <div
@@ -844,7 +825,7 @@ export default function ProjectDetail() {
               </div>
             )}
 
-            {/* Log a session — only for owner */}
+            {/* Log a session */}
             {isOwner && (
               <div
                 className="rounded-xl p-6 bg-white"
@@ -956,7 +937,7 @@ export default function ProjectDetail() {
                     }}
                   >
                     {sessionSuccess
-                      ? "✓ Session Logged!"
+                      ? "Session Logged!"
                       : sessionLoading
                         ? "Logging..."
                         : "Log Session"}
@@ -965,7 +946,7 @@ export default function ProjectDetail() {
               </div>
             )}
 
-            {/* Session history — visible to everyone */}
+            {/* Session history */}
             {sessions.length > 0 && (
               <div
                 className="rounded-xl p-6 bg-white"
@@ -1040,7 +1021,6 @@ export default function ProjectDetail() {
 
           {/* Sidebar */}
           <div className="space-y-5">
-            {/* Submit button — owner + Unsubmitted or Rejected */}
             {isOwner && isEditable && (
               <div className="space-y-3">
                 {!canSubmit && (
@@ -1073,11 +1053,23 @@ export default function ProjectDetail() {
                     className="font-sans text-xs font-bold"
                     style={{ color: "#00A372" }}
                   >
-                    ✓ Submitted for Review!
+                    Submitted for Review!
                   </p>
                 )}
                 <button
-                  onClick={() => canSubmit && setShowSubmitModal(true)}
+                  onClick={() => {
+                    if (!canSubmit) return;
+                    // If repo and how to test already filled, skip modal and submit directly
+                    if (project.repoUrl && project.howToTest) {
+                      handleSubmitProject(
+                        project.repoUrl,
+                        project.howToTest,
+                        "",
+                      );
+                    } else {
+                      setShowSubmitModal(true);
+                    }
+                  }}
                   disabled={!canSubmit || submitSuccess}
                   className="font-sans font-bold px-6 py-4 rounded-lg text-base transition-all w-full"
                   style={{
@@ -1100,7 +1092,7 @@ export default function ProjectDetail() {
                   }}
                 >
                   {submitSuccess
-                    ? "✓ Submitted for Review!"
+                    ? "Submitted for Review!"
                     : project.status === "Rejected"
                       ? "Resubmit Project"
                       : "Submit Project"}
@@ -1215,16 +1207,8 @@ export default function ProjectDetail() {
                   Your project has been submitted and will be reviewed soon.
                 </p>
               )}
-              {project.status === "Accepted" && (
-                <p
-                  className="font-sans text-xs mt-2"
-                  style={{ color: "rgba(245,240,232,0.5)" }}
-                >
-                  Your project has been approved and the credits have been added
-                  to your account.
-                </p>
-              )}
-              {project.status === "Approved" && (
+              {(project.status === "Accepted" ||
+                project.status === "Approved") && (
                 <p
                   className="font-sans text-xs mt-2"
                   style={{ color: "rgba(245,240,232,0.5)" }}
