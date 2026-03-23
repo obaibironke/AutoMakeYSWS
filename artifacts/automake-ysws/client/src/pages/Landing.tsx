@@ -18,6 +18,40 @@ const steps = [
   { label: "Earn credits & shop rewards" },
 ];
 
+const tiers = [
+  {
+    tier: 1,
+    label: "Basic Automation",
+    example: "Scheduled Personal Briefing",
+    rate: 5,
+  },
+  {
+    tier: 2,
+    label: "Intermediate Automation",
+    example: "Priority Notification Router",
+    rate: 8,
+  },
+  {
+    tier: 3,
+    label: "Advanced Automation",
+    example: "Daily Activity Summarizer",
+    rate: 12,
+  },
+  {
+    tier: 4,
+    label: "Autonomous Agent",
+    example: "Autonomous AI Agent",
+    rate: 15,
+  },
+];
+
+const tierColors = [
+  { bg: "rgba(245,240,232,0.07)", accent: "#F5F0E8" },
+  { bg: "rgba(0,229,160,0.08)", accent: "#00E5A0" },
+  { bg: "rgba(255,87,51,0.08)", accent: "#FF5733" },
+  { bg: "rgba(96,165,250,0.08)", accent: "#60A5FA" },
+];
+
 const faqItems = [
   {
     q: "Who can join?",
@@ -327,8 +361,12 @@ function HeroSection({
           style={{ color: "#F5F0E8" }}
         >
           <motion.span
-            className="inline-block relative text-8xl sm:text-9xl pb-5"
-            style={{ transform: "rotate(-2deg)", display: "inline-block" }}
+            className="inline-block relative pb-5"
+            style={{
+              transform: "rotate(-2deg)",
+              display: "inline-block",
+              fontSize: "clamp(5rem, 10vw, 10rem)",
+            }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -361,8 +399,11 @@ function HeroSection({
           </motion.span>
         </h1>
         <motion.p
-          className="font-sans text-lg sm:text-xl max-w-xl mx-auto mb-9 leading-relaxed"
-          style={{ color: "rgba(245,240,232,0.8)" }}
+          className="font-sans max-w-xl mx-auto mb-9 leading-relaxed"
+          style={{
+            color: "rgba(245,240,232,0.8)",
+            fontSize: "clamp(1rem, 1.8vw, 1.4rem)",
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.65, duration: 0.5 }}
@@ -492,7 +533,7 @@ function AboutSection({ dir }: { dir: number }) {
         </div>
         <h2
           className="font-sans font-extrabold mb-8 leading-tight"
-          style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
+          style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 7rem)" }}
         >
           <span
             style={{
@@ -511,7 +552,7 @@ function AboutSection({ dir }: { dir: number }) {
           className="font-sans leading-relaxed"
           style={{
             color: "#0F1923",
-            fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)",
+            fontSize: "clamp(1.1rem, 2.2vw, 2rem)",
             maxWidth: "780px",
           }}
         >
@@ -574,14 +615,17 @@ function HowItWorksSection({ dir }: { dir: number }) {
         <div className="max-w-6xl mx-auto px-6 w-full">
           <div className="text-center mb-12">
             <h2
-              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4"
-              style={{ color: "#0F1923" }}
+              className="font-sans font-extrabold mb-4"
+              style={{ color: "#0F1923", fontSize: "clamp(2rem, 4.5vw, 5rem)" }}
             >
               Here's <mark>How</mark> It Works
             </h2>
             <p
-              className="font-sans text-lg max-w-2xl mx-auto"
-              style={{ color: "#0F1923" }}
+              className="font-sans max-w-2xl mx-auto"
+              style={{
+                color: "#0F1923",
+                fontSize: "clamp(1rem, 1.8vw, 1.5rem)",
+              }}
             >
               Four simple steps from idea to reward. Anyone can do it.
             </p>
@@ -590,7 +634,7 @@ function HowItWorksSection({ dir }: { dir: number }) {
             {steps.map((step, i) => (
               <motion.div
                 key={i}
-                whileHover={{ y: -6, rotate: 0, transition: { duration: 0.2 } }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="relative bg-white rounded-xl p-7 text-center overflow-hidden"
                 style={{
                   boxShadow: "3px 3px 0px #0F1923",
@@ -638,6 +682,139 @@ function HowItWorksSection({ dir }: { dir: number }) {
         <div className="w-full mt-10">
           <MarqueeStrip />
         </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function TiersSection({ dir }: { dir: number }) {
+  return (
+    <div
+      className="w-full h-full flex items-center justify-center overflow-hidden relative"
+      style={{ background: "#0F1923" }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-4%",
+          right: "-1%",
+          fontSize: "22vw",
+          fontWeight: 900,
+          color: "rgba(245,240,232,0.03)",
+          lineHeight: 1,
+          userSelect: "none",
+          pointerEvents: "none",
+          fontFamily: "sans-serif",
+          letterSpacing: "-0.04em",
+        }}
+      >
+        EARN
+      </div>
+      <motion.div
+        className="w-full max-w-5xl mx-auto px-8 sm:px-12"
+        custom={dir}
+        variants={contentVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+      >
+        <div className="mb-8">
+          <span
+            className="font-sans text-xs font-bold uppercase tracking-[0.25em]"
+            style={{ color: "#FF5733" }}
+          >
+            Credit Tiers
+          </span>
+          <h2
+            className="font-sans font-extrabold mt-2 leading-tight"
+            style={{ color: "#F5F0E8", fontSize: "clamp(2.8rem, 6vw, 7rem)" }}
+          >
+            How much do <mark>you earn?</mark>
+          </h2>
+          <p
+            className="font-sans mt-4"
+            style={{
+              color: "rgba(245,240,232,0.55)",
+              fontSize: "clamp(1rem, 1.8vw, 1.4rem)",
+              maxWidth: "600px",
+            }}
+          >
+            Your project is reviewed and assigned a tier based on complexity.
+            More ambitious automations earn more credits per hour logged.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {tiers.map((tier, i) => {
+            const c = tierColors[i];
+            const isTop = i === 3;
+            return (
+              <motion.div
+                key={tier.tier}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="rounded-xl p-6 flex flex-col"
+                style={{ background: c.bg, border: `1px solid ${c.accent}30` }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center"
+                    style={{ background: `${c.accent}18` }}
+                  >
+                    <span
+                      className="font-sans font-extrabold text-sm"
+                      style={{ color: c.accent }}
+                    >
+                      {tier.tier}
+                    </span>
+                  </div>
+                  {isTop && (
+                    <span
+                      className="font-sans text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{
+                        background: "rgba(0,229,160,0.15)",
+                        color: "#00E5A0",
+                      }}
+                    >
+                      Top tier
+                    </span>
+                  )}
+                </div>
+                <p
+                  className="font-sans font-extrabold text-base mb-1"
+                  style={{ color: "#F5F0E8" }}
+                >
+                  {tier.label}
+                </p>
+                <p
+                  className="font-sans text-xs mb-5"
+                  style={{ color: "rgba(245,240,232,0.4)" }}
+                >
+                  e.g. {tier.example}
+                </p>
+                <div className="mt-auto">
+                  <p
+                    className="font-sans font-extrabold"
+                    style={{ color: c.accent, fontSize: "2rem", lineHeight: 1 }}
+                  >
+                    {tier.rate}
+                  </p>
+                  <p
+                    className="font-sans text-xs mt-1"
+                    style={{ color: "rgba(245,240,232,0.35)" }}
+                  >
+                    credits per hour
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+        <p
+          className="font-sans text-xs mt-5"
+          style={{ color: "rgba(245,240,232,0.25)" }}
+        >
+          *The tier assigned to your project is based upon the discretion of the
+          reviewer.
+        </p>
       </motion.div>
     </div>
   );
@@ -877,14 +1054,17 @@ function IntegrationsSection({ dir, logoY }: { dir: number; logoY: number }) {
             }}
           >
             <h2
-              className="font-sans text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
-              style={{ color: "#00E5A0" }}
+              className="font-sans font-extrabold mb-4 leading-tight"
+              style={{ color: "#00E5A0", fontSize: "clamp(2rem, 4.5vw, 5rem)" }}
             >
               We'll fund the tools you need
             </h2>
             <p
-              className="font-sans text-base sm:text-lg leading-relaxed"
-              style={{ color: "rgba(245,240,232,0.8)" }}
+              className="font-sans leading-relaxed"
+              style={{
+                color: "rgba(245,240,232,0.8)",
+                fontSize: "clamp(1rem, 1.8vw, 1.5rem)",
+              }}
             >
               We will pay for any integration you may need. Completely free.
             </p>
@@ -936,7 +1116,7 @@ function RsvpSection({ dir }: { dir: number }) {
         </div>
         <h2
           className="font-sans font-extrabold mb-6 leading-tight"
-          style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
+          style={{ color: "#0F1923", fontSize: "clamp(2.8rem, 6vw, 7rem)" }}
         >
           Ready to{" "}
           <span
@@ -954,7 +1134,7 @@ function RsvpSection({ dir }: { dir: number }) {
           className="font-sans leading-relaxed mb-10 mx-auto"
           style={{
             color: "#0F1923",
-            fontSize: "clamp(1rem, 2vw, 1.3rem)",
+            fontSize: "clamp(1rem, 2vw, 1.8rem)",
             maxWidth: "600px",
           }}
         >
@@ -1263,11 +1443,11 @@ function FooterSection({
   );
 }
 
-const TOTAL = 7;
+const TOTAL = 8;
 const TRANSITION_MS = 900;
-const INTEG_SECTION = 3;
+const INTEG_SECTION = 4;
 const INTEG_HOLD = 2;
-const SCROLLABLE_INDICES = [5, 6];
+const SCROLLABLE_INDICES = [6, 7];
 
 export default function Landing() {
   const [current, setCurrent] = useState(0);
@@ -1413,17 +1593,18 @@ export default function Landing() {
             {current === 0 && <HeroSection dir={dir} {...blobProps} />}
             {current === 1 && <AboutSection dir={dir} />}
             {current === 2 && <HowItWorksSection dir={dir} />}
-            {current === 3 && (
+            {current === 3 && <TiersSection dir={dir} />}
+            {current === 4 && (
               <IntegrationsSection dir={dir} logoY={integLogoY} />
             )}
-            {current === 4 && <RsvpSection dir={dir} />}
-            {current === 5 && (
+            {current === 5 && <RsvpSection dir={dir} />}
+            {current === 6 && (
               <FaqSectionContent
                 dir={dir}
                 onScrollStateChange={setScrollState}
               />
             )}
-            {current === 6 && (
+            {current === 7 && (
               <FooterSection dir={dir} onScrollStateChange={setScrollState} />
             )}
           </motion.div>
