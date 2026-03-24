@@ -1,6 +1,7 @@
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import Showcase from "./pages/Showcase";
@@ -179,6 +180,7 @@ function App() {
   return (
     <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
       <Router />
+      <Analytics />
     </WouterRouter>
   );
 }
